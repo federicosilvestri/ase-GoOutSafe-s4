@@ -1,5 +1,6 @@
-<html>
-  <body>
+{% extends "base.html" %}
+{% block page_title %} Home {% endblock %}
+{% block body %}
     <h1>{{name}} -- Likes: {{likes}}</h1> 
     <h2>Phone: {{phone}}</h2> 
     <ul>
@@ -9,6 +10,4 @@
       
       {% endif %}
     </ul>
-  </body>
-</html>
-
+{% endblock %}
