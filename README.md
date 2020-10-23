@@ -8,7 +8,7 @@
 |Leonardo Calamita |                               |
 |Chiara Boni       |c.boni5@studenti.unipi.it      |
 |Nunzio Lopardo    |n.lopardo@studenti.unipi.it    |
-|Paolo Murgia      |                               |
+|Paolo Murgia      |p.murgia1@studenti.unipi.it    |
 |Usman Shahzad     |                               |
 
 
