@@ -6,7 +6,7 @@
 |------------------|-------------------------------|
 |Federico Silvestri|f.silvestri10@studenti.unipi.it|
 |Leonardo Calamita |                               |
-|Chiara Boni       |                               |
+|Chiara Boni       |c.boni5@studenti.unipi.it                               |
 |Nunzio Lopardo    |                               |
 |Paolo Murgia      |                               |
 |Usman Shahzad     |                               |
