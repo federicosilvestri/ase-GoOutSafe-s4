@@ -70,15 +70,15 @@ class Table(db.Model):
     __tablename__= 'Table'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    resturant_id = relationship('rRsturant', foreign_keys='resturant.resturant_id')
+    resturant_id = relationship('Resturant', foreign_keys='resturant.resturant_id')
     capacity = db.Column(db.Integer)
+    reservetions = relationship("Reservetions")
 
     def __init__(self, id, capacity, resturant):
         self.id = id
         self.capacity = capacity
         self.resturant = resturant
 
-    
 
 class Reservation(db.Model):
     __tablename__ = 'Reservation'
@@ -87,7 +87,7 @@ class Reservation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key = True)
     user = relationship('User', foreign_keys='Reservation.user_id')
     table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
-    table = relationship('Table', foreign_keys='Table.table_id')
+    table = relationship('Table', foreign_keys='Table.table_id', back_populates="Reservations")
     timestamp = db.Column(db.DataTime)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
