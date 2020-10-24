@@ -3,6 +3,7 @@ import enum
 from sqlalchemy.orm import relationship
 import datetime as dt
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 
 db = SQLAlchemy()
@@ -15,6 +16,7 @@ class User(db.Model):
     lastname = db.Column(db.Unicode(128))
     password = db.Column(db.Unicode(128))
     dateofbirth = db.Column(db.DateTime)
+    role = db.Column(db.Unicode(128))
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
     is_anonymous = False

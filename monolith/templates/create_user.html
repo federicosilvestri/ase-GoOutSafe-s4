@@ -1,6 +1,9 @@
 {% extends "base.html" %}
-{% block page_title %} Home {% endblock %}
+
+{% block page_title %} Create user {% endblock %}
+
 {% block body %}
+
   <form action="" method="POST">
     {{ form.hidden_tag() }}
     <dl>
@@ -17,4 +20,5 @@
     <p>
     <input type=submit value="Submit">
   </form>
+
 {% endblock %}
