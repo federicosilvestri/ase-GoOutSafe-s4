@@ -3,6 +3,7 @@ import enum
 from sqlalchemy.orm import relationship
 import datetime as dt
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 
 db = SQLAlchemy()
@@ -15,6 +16,7 @@ class User(db.Model):
     lastname = db.Column(db.Unicode(128))
     password = db.Column(db.Unicode(128))
     dateofbirth = db.Column(db.DateTime)
+    role = db.Column(db.Unicode(128))
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
     is_anonymous = False
@@ -63,3 +65,30 @@ class Like(db.Model):
     restaurant = relationship('Restaurant', foreign_keys='Like.restaurant_id')
 
     marked = db.Column(db.Boolean, default = False) # True iff it has been counted in Restaurant.likes 
+
+class Reservation(db.Model):
+    __tablename__ = 'Reservation'
+
+    reservation_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key = True)
+    user = relationship('User', foreign_keys='Reservation.user_id')
+    table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    table = relationship('Table', foreign_keys='Table.table_id')
+    timestamp = db.Column(db.DataTime)
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
+
+    def __init__(self, user, table, timestamp, start_time, active = True, end_time = None):
+        self.user = user
+        self.table = table
+        self.timestamp = timestamp
+        self.start_time = start_time
+        #Automatically end_time will be set as start_time + 3 hours
+        self.end_time =  start_time + 10800
+
+
+    def setActiveToFalse(self):
+        self.active = False
+
+    def isActive(self):
+        return self.active

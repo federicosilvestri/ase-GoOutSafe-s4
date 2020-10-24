@@ -11,8 +11,8 @@ class Reservation:
         self.end_time =  start_time + 10800
 
 
-    def setActive(self, active):
-        self.active = active
+    def setActiveToFalse(self):
+        self.active = False
 
     def isActive(self):
         return self.active
