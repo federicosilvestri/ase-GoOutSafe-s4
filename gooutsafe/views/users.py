@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request
 
-from gooutsafe.database import db
+from gooutsafe import db
 from gooutsafe.forms import UserForm
 from gooutsafe.models.user import User
 

@@ -1,9 +1,8 @@
-from gooutsafe.database import db
+from gooutsafe import db
 
 
 class Restaurant(db.Model):
-    
-    __tablename__ = 'restaurant'
+    __tablename__ = 'Restaurant'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # TODO: add owner relationship when its model is created
     name = db.Column(db.Text(100))

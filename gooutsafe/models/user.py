@@ -1,17 +1,13 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from gooutsafe.database import db
+from gooutsafe import db
 
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.Unicode(128), nullable=False)
-    firstname = db.Column(db.Unicode(128))
-    lastname = db.Column(db.Unicode(128))
     password = db.Column(db.Unicode(128))
-    date_of_birth = db.Column(db.DateTime)
-    role = db.Column(db.Unicode(128))
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
     is_anonymous = False

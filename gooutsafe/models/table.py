@@ -1,13 +1,13 @@
 from sqlalchemy.orm import relationship
 
-from gooutsafe.database import db
+from gooutsafe import db
 
 
 class Table(db.Model):
     __tablename__ = 'Table'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    restaurant_id = relationship('Restaurant', foreign_keys='restaurant.restaurant_id')
+    restaurant_id = relationship('Restaurant', foreign_keys='Restaurant.restaurant_id')
     capacity = db.Column(db.Integer)
     reservations = relationship("Reservations")
 

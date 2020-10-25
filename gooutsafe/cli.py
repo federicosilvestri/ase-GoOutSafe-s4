@@ -3,8 +3,6 @@
 import click
 from flask.cli import with_appcontext
 
-from .database import db
-
 
 @click.command('reset-db')
 @with_appcontext
