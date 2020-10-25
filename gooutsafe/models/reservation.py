@@ -11,7 +11,7 @@ class Reservation(db.Model):
     user = relationship('User', foreign_keys='Reservation.user_id')
     table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
     table = relationship('Table', foreign_keys='Table.table_id', back_populates="Reservations")
-    timestamp = db.Column(db.DataTime)
+    timestamp = db.Column(db.DateTime)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
 
