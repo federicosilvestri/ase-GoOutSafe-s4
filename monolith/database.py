@@ -66,18 +66,19 @@ class Like(db.Model):
 
     marked = db.Column(db.Boolean, default = False) # True iff it has been counted in Restaurant.likes 
 
+
 class Table(db.Model):
     __tablename__= 'Table'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    resturant_id = relationship('Resturant', foreign_keys='resturant.resturant_id')
+    restaurant_id = relationship('Restaurant', foreign_keys='restaurant.restaurant_id')
     capacity = db.Column(db.Integer)
-    reservetions = relationship("Reservetions")
+    reservations = relationship("Reservations")
 
-    def __init__(self, id, capacity, resturant):
+    def __init__(self, id, capacity, restaurant):
         self.id = id
         self.capacity = capacity
-        self.resturant = resturant
+        self.restaurant = restaurant
 
 
 class Reservation(db.Model):
