@@ -32,8 +32,6 @@ def create_app(config_object):
         db=db
     )
 
-    db.get_engine().table_names()
-
     # register_cli is only called when necessary
     return app
 
