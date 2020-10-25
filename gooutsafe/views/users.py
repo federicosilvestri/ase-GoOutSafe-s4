@@ -11,17 +11,18 @@ users = Blueprint('users', __name__)
 def _users():
     users = db.session.query(User)
     return render_template("users.html", users=users)
-    
+
 
 @users.route('/create_user/<string:type>', methods=['GET', 'POST'])
 def create_user_type(type):
-    print(type)
     if (type == "<customer>"):
         form = UserForm()
     elif (type == "<operator>"):
         form = OperatorForm()
     else:
         form = HealthAuthForm()
+
+    #TODO: signup
     """  
     if request.method == 'POST':
 
