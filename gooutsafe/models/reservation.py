@@ -1,4 +1,5 @@
 from sqlalchemy.orm import relationship
+from datetime import timedelta
 
 from gooutsafe import db
 
@@ -21,4 +22,5 @@ class Reservation(db.Model):
         self.timestamp = timestamp
         self.start_time = start_time
         # end_time will be set automatically as start_time + 3 hours
-        self.end_time = start_time + 10800
+        self.end_time = start_time + timedelta(hours=3)
+        #TODO: change the 3 with a constant

@@ -9,7 +9,7 @@ class Customer(User):
     firstname = db.Column(db.Unicode(128))
     lastname = db.Column(db.Unicode(128))
     date_of_birth = db.Column(db.DateTime)
-    health_status = db.column(db.Boolean, default=False)
+    health_status = db.Column(db.Boolean, default=False)
 
     def __init__(self, *args, **kw):
         super(User, self).__init__(*args, **kw)

@@ -13,7 +13,6 @@ class Table(db.Model):
     reservation_id = db.Column(db.Integer, db.ForeignKey('Reservation.id'))
     reservations = relationship("Reservation", foreign_keys='Table.reservation_id')
 
-    def __init__(self, id, capacity, restaurant):
-        self.id = id
+    def __init__(self, capacity, restaurant):
         self.capacity = capacity
         self.restaurant = restaurant

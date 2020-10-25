@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 
 __version__ = '0.1'
 
-db = None
+db = SQLAlchemy()
 migrate = None
 
 
