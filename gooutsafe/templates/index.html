@@ -9,7 +9,7 @@
 
       Hi {{ current_user.firstname }}! <br>
       <ul class="navbar-nav">
-        <li class="nav-item active">
+        <li class="nav justify-content-end">
           <button type="button" class="btn btn-outline-dark"
             onclick="location.href='/logout'">Logout</button>
         </li>
@@ -33,7 +33,7 @@
 
   Hi Anonymous, <br>
   <button type="button" class="btn btn-outline-primary"
-    onclick="location.href='/create_user'">Sign up</button>
+    onclick="location.href='/create_user/<customer>'">Sign up</button>
   
   <button type="button" class="btn btn-outline-success"
     onclick="location.href='/login'">Login</button>

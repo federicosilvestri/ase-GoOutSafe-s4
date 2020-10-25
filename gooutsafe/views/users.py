@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, request
 
 from gooutsafe import db
-from gooutsafe.forms import UserForm
+from gooutsafe.forms import UserForm, OperatorForm, HealthAuthForm
 from gooutsafe.models.user import User
 
 users = Blueprint('users', __name__)
@@ -11,11 +11,18 @@ users = Blueprint('users', __name__)
 def _users():
     users = db.session.query(User)
     return render_template("users.html", users=users)
+    
 
-
-@users.route('/create_user', methods=['GET', 'POST'])
-def create_user():
-    form = UserForm()
+@users.route('/create_user/<string:type>', methods=['GET', 'POST'])
+def create_user_type(type):
+    print(type)
+    if (type == "<customer>"):
+        form = UserForm()
+    elif (type == "<operator>"):
+        form = OperatorForm()
+    else:
+        form = HealthAuthForm()
+    """  
     if request.method == 'POST':
 
         if form.validate_on_submit():
@@ -25,5 +32,5 @@ def create_user():
             db.session.add(new_user)
             db.session.commit()
             return redirect('/users')
-
+    """
     return render_template('create_user.html', form=form)
