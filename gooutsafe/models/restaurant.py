@@ -6,7 +6,7 @@ class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # TODO: add owner relationship when its model is created
     name = db.Column(db.Text(100))
-    likes = db.Column(db.Integer)
+    likes = db.Column(db.Integer) # obsolete
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
     phone = db.Column(db.Integer)
