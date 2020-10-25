@@ -1,6 +1,6 @@
 # Go Out Safe
 
-This is the source code of GoOutSafe application, a
+This is the source code of GoOutSafe application, self
 project of *Advanced Software Engineering* course,
 University of Pisa.
  

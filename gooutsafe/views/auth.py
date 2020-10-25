@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, redirect, request
-from flask_login import (current_user, login_user, logout_user,
-                         login_required)
+from flask import Blueprint, render_template, redirect
+from flask_login import (login_user, logout_user)
 
-from monolith.database import db, User
-from monolith.forms import LoginForm
+from gooutsafe.database import db
+from gooutsafe.forms import LoginForm
+from gooutsafe.models.user import User
 
 auth = Blueprint('auth', __name__)
 

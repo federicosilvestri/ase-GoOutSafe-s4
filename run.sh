@@ -1,4 +1,4 @@
 #!/bin/bash
 
-export FLASK_APP=monolith/app.py
+export FLASK_APP=dev
 flask run

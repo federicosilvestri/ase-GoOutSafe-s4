@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template
 
-from monolith.database import db, Restaurant, Like
-from monolith.auth import current_user
-
+from gooutsafe.auth import current_user
+from gooutsafe.database import db
+from gooutsafe.models.restaurant import Restaurant
 
 home = Blueprint('home', __name__)
 
