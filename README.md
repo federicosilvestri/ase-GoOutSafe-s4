@@ -21,13 +21,13 @@ University of Pisa.
 |Usman Shahzad     |u.shahzad1@studenti.unipi.it   |
 
 
-### Diagrams
+## Diagrams
 We have created the Class Diagram using UML to simplify
 and document the project.
 
 [Class Diagram schema](https://app.diagrams.net/#G1fXT6PbLfamFTwbCxVI-jCJrf9b1DjUMB)
 
-### Instructions
+## Instructions
 
 #### Initialization
 
