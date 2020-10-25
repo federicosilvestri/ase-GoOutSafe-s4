@@ -7,9 +7,9 @@ class Reservation(db.Model):
     __tablename__ = 'Reservation'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     user = relationship('User', foreign_keys='Reservation.user_id')
-    table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    table_id = db.Column(db.Integer, db.ForeignKey('Table.id'))
     table = relationship('Table', foreign_keys='Table.id', back_populates="Reservations")
     timestamp = db.Column(db.DateTime)
     start_time = db.Column(db.DateTime)
@@ -20,9 +20,5 @@ class Reservation(db.Model):
         self.table = table
         self.timestamp = timestamp
         self.start_time = start_time
-        """
-        end_time will be set automatically as start_time + 3 hours
-        """
+        # end_time will be set automatically as start_time + 3 hours
         self.end_time = start_time + 10800
-
-    
