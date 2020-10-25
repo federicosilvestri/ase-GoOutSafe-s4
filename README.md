@@ -1,6 +1,15 @@
-# ASE - GoOutSafe
+# Go Out Safe
 
-### Members
+This is the source code of GoOutSafe application, a
+project of *Advanced Software Engineering* course,
+University of Pisa.
+ 
+## Team info
+
+- The *squad id* is **4**
+- The *team leader* is *TBD*
+
+#### Members
 
 |Name and Surname  | Email                         |
 |------------------|-------------------------------|
@@ -11,6 +20,12 @@
 |Paolo Murgia      |p.murgia1@studenti.unipi.it    |
 |Usman Shahzad     |u.shahzad1@studenti.unipi.it   |
 
+
+### Diagrams
+We have created the Class Diagram using UML to simplify
+and document the project.
+
+[Class Diagram schema](https://app.diagrams.net/#G1fXT6PbLfamFTwbCxVI-jCJrf9b1DjUMB)
 
 ### Instructions
 
