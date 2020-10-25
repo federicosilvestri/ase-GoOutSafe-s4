@@ -9,5 +9,4 @@ class UserForm(FlaskForm):
     lastname = f.StringField('lastname', validators=[DataRequired()])
     password = f.PasswordField('password', validators=[DataRequired()])
     dateofbirth = f.DateField('dateofbirth', format='%d/%m/%Y')
-    role = f.StringField('role', validators=[DataRequired()])
-    display = ['email', 'firstname', 'lastname', 'password', 'dateofbirth', 'role']
+    display = ['email', 'firstname', 'lastname', 'password', 'dateofbirth']
