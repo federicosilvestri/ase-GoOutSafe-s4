@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
 
-from gooutsafe.database import db
+from gooutsafe import db
 
 
 class Like(db.Model):

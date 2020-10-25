@@ -1,4 +1,4 @@
-from gooutsafe.database import db
+from gooutsafe import db
 
 
 class Restaurant(db.Model):
