@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 
 from gooutsafe.auth import current_user
-from gooutsafe.database import db
+from gooutsafe import db
 from gooutsafe.models.restaurant import Restaurant
 
 home = Blueprint('home', __name__)

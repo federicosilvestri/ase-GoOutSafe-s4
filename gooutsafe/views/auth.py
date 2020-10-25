@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect
 from flask_login import (login_user, logout_user)
 
-from gooutsafe.database import db
+from gooutsafe import db
 from gooutsafe.forms import LoginForm
 from gooutsafe.models.user import User
 

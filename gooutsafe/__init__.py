@@ -1,20 +1,36 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 __version__ = '0.1'
 
+db = None
+migrate = None
+
 
 def create_app(config_object):
-    app = Flask(__name__, instance_relative_config=True)
+    global db
+    global migrate
+
+    app = Flask(__name__)
 
     # Load config
     app.config.from_object(config_object)
 
+    # registering db
+    db = SQLAlchemy(app)
+
+    # requiring the list of models
+    import gooutsafe.models
+
     register_extensions(app)
     register_blueprints(app)
 
-    from .database import db, migrate
-    db.init_app(app)
-    migrate.init_app(app, db)
+    # creating migrate
+    migrate = Migrate(
+        app=app,
+        db=db
+    )
 
     # register_cli is only called when necessary
     return app
