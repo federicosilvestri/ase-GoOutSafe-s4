@@ -5,7 +5,7 @@
 |Name and Surname  | Email                         |
 |------------------|-------------------------------|
 |Federico Silvestri|f.silvestri10@studenti.unipi.it|
-|Leonardo Calamita |                               |
+|Leonardo Calamita |l.calamita@studenti.unipi.it   |
 |Chiara Boni       |c.boni5@studenti.unipi.it      |
 |Nunzio Lopardo    |n.lopardo@studenti.unipi.it    |
 |Paolo Murgia      |p.murgia1@studenti.unipi.it    |
