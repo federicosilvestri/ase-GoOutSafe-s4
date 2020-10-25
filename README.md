@@ -45,7 +45,7 @@ inside the project's root.
 To run the project you have to setup the flask application name,
 you can do it by executing the following command:
 
-`export FLASK_APP=monolith/app.py`
+`export FLASK_APP=dev`
 
 and now you can run the application
 
@@ -53,3 +53,14 @@ and now you can run the application
 
 To **run application** without executing the previous command you can
 run the bash script named `run.sh` 
+
+### Apply migrations
+
+If you change something in the models package or you create a new model,
+you have to run these commands to apply the modifications:
+
+`flask db migrate -m '<message>'`
+
+and
+ 
+`flask db upgrade`

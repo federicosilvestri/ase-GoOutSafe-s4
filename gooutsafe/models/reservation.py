@@ -1,10 +1,11 @@
 from sqlalchemy.orm import relationship
 
-from gooutsafe.database import db
+from gooutsafe import db
 
 
 class Reservation(db.Model):
-    __tablename__ = 'reservation'
+    __tablename__ = 'Reservation'
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     user = relationship('User', foreign_keys='Reservation.user_id')
