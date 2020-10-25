@@ -4,7 +4,7 @@ from gooutsafe import db
 
 
 class Like(db.Model):
-    __tablename__ = 'like'
+    __tablename__ = 'Like'
 
     liker_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     liker = relationship('User', foreign_keys='Like.liker_id')
