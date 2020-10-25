@@ -45,7 +45,8 @@ inside the project's root.
 To run the project you have to setup the flask application name,
 you can do it by executing the following command:
 
-`export FLASK_APP=monolith/app.py`
+`export FLASK_APP=dev`
+
 
 and now you can run the application
 
