@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block page_title %} Operator Profile {% endblock %}
+
+{% block body %}
+
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="/">
+
+      Hi {{ current_user.email}}! <br>
+      <ul class="navbar-nav">
+        <li class="nav justify-content-end">
+          <button type="button" class="btn btn-outline-dark"
+            onclick="location.href='/logout'">Logout</button>
+        </li>
+      </ul>
+    </a>
+  </nav>
+
+  
+{% endblock %}
