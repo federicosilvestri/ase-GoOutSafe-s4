@@ -64,3 +64,14 @@ you have to run these commands to apply the modifications:
 and
  
 `flask db upgrade`
+
+### Run tests
+
+To run all tests, you execute the following command:
+
+`python -m pytest`
+
+You can also specify a specific test file, in order to run only those specific test.
+In case you also want to see the overall coverage of the test, execute the following command:
+
+`python -m pytest --cov=gooutsafe`

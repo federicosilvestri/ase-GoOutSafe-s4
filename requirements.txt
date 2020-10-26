@@ -12,6 +12,7 @@ click-didyoumean==0.0.3
 click-repl==0.1.6
 colorama==0.4.3
 contextlib2==0.6.0
+coverage==5.3
 distlib==0.3.0
 distro==1.4.0
 Flask==1.1.2
@@ -39,6 +40,7 @@ prompt-toolkit==3.0.8
 py==1.9.0
 pyparsing==2.4.6
 pytest==6.1.1
+pytest-cov==2.10.1
 python-dateutil==2.8.1
 python-editor==1.0.4
 pytoml==0.1.21
