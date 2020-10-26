@@ -10,18 +10,24 @@ class TestReservation(unittest.TestCase):
 
 
     def test_reservation_init(self):
-        actual_time = datetime(2020, 10, 25, 10)
+        start_time = datetime(2020, 12, 26, 13)
+        user = User()
+        table = Table(3, "Pizza da Stefano")
+        reservation = Reservation(user, table, start_time)
+        self.assertEqual(reservation.user, user)
+        self.assertEqual(reservation.table, table)
+        self.assertEqual(reservation.start_time, start_time)
+        end_time =  start_time + timedelta(hours=3)
+        self.assertEqual(reservation.end_time, end_time)
+
+    def test_start_time(self, start_time):
         start_time = datetime(2020, 10, 26, 13)
         user = User()
         table = Table(3, "Pizza da Stefano")
-        reservation = Reservation(user, table, actual_time, start_time)
-        self.assertEqual(reservation.user, user)
-        self.assertEqual(reservation.table, table)
-        self.assertEqual(reservation.timestamp, actual_time)
-        self.assertEqual(reservation.start_time, start_time)
-        end_time =  start_time + timedelta(hours=3)
-        print(end_time)
-        self.assertEqual(reservation.end_time, end_time)
+        with self.assertRaises(ValueError):
+            reservation = Reservation(user, table, start_time)
+            print(reservation.actual_time)
+
 
 if __name__ == '__main__':
     unittest.main()
