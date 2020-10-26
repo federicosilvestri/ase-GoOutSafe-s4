@@ -21,33 +21,33 @@ class Authority(User):
         self._authenticated = False
 
     @property
-    def firstname(self):
-        return self.__firstname
+    def name(self):
+        return self.__name
 
-    @firstname.setter
-    def firstname(self, name):
-        self.__firstname = name
-
-    @property
-    def lastname(self):
-        return self.__lastname
-
-    @lastname.setter
-    def lastname(self, name):
-        self.__lastname = name
+    @name.setter
+    def name(self, name):
+        self.__name = name
 
     @property
-    def date_of_birth(self):
-        return self.__date_of_birth
+    def city(self):
+        return self.__city
 
-    @date_of_birth.setter
-    def date_of_birth(self, dateBirth):
-        self.__date_of_birth = dateBirth
+    @city.setter
+    def city(self, city):
+        self.__city = city
 
     @property
-    def health_status(self):
-        return self.__health_status
+    def address(self):
+        return self.__address
 
-    @health_status.setter
-    def health_status(self, status):
-        self.__health_status = status
+    @address.setter
+    def address(self, address):
+        self.__address = address
+
+    @property
+    def phone(self):
+        return self.__phone
+
+    @phone.setter
+    def phone(self, phone):
+        self.__phone = phone
