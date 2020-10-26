@@ -67,11 +67,11 @@ and
 
 ### Run tests
 
-To run all tests, you execute the following command:
+To run all the tests, execute the following command:
 
 `python -m pytest`
 
-You can also specify a specific test file, in order to run only those specific test.
-In case you also want to see the overall coverage of the test, execute the following command:
+You can also specify one or more specific test files, in order to run only those specific tests.
+In case you also want to see the overall coverage of the tests, execute the following command:
 
 `python -m pytest --cov=gooutsafe`
