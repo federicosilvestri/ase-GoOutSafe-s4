@@ -17,10 +17,14 @@ def _users():
 def create_user_type(type):
     if (type == "<customer>"):
         form = UserForm()
-    elif (type == "<operator>"):
+    else:
         form = OperatorForm()
+
+    """
+    TODO: leave it for the tests
     else:
         form = HealthAuthForm()
+    """
 
     #TODO: signup
     """  
