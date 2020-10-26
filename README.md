@@ -75,3 +75,11 @@ You can also specify one or more specific test files, in order to run only those
 In case you also want to see the overall coverage of the tests, execute the following command:
 
 `python -m pytest --cov=gooutsafe`
+
+
+## Conventions
+
+- Name of files must be snake_cased
+- Name of methods, properties, variables must be snake_cased
+- Name of classes must be PascalCased 
+- Name of constants must be UPPERCASE 

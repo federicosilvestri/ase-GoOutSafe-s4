@@ -15,6 +15,3 @@ class Operator(User):
     def __init__(self, *args, **kw):
         super(Operator, self).__init__(*args, **kw)
         self._authenticated = False
-
-    def get_id(self):
-        return self.id

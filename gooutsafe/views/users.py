@@ -1,8 +1,12 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import (login_user, logout_user, current_user, login_user, login_required)
 
 from gooutsafe import db
 from gooutsafe.forms import UserForm, OperatorForm, HealthAuthForm
 from gooutsafe.models.user import User
+from gooutsafe.models.customer import Customer
+from gooutsafe.models.operator import Operator
 
 users = Blueprint('users', __name__)
 
@@ -17,8 +21,10 @@ def _users():
 def create_user_type(type):
     if (type == "<customer>"):
         form = UserForm()
+        user = Customer()
     else:
         form = OperatorForm()
+        user = Operator()
 
     """
     TODO: leave it for the tests
@@ -26,16 +32,20 @@ def create_user_type(type):
         form = HealthAuthForm()
     """
 
-    #TODO: signup
-    """  
     if request.method == 'POST':
 
-        if form.validate_on_submit():
-            new_user = User()
-            form.populate_obj(new_user)
-            new_user.set_password(form.password.data)  # pw should be hashed with some salt
-            db.session.add(new_user)
+        if form.validate_on_submit():                        
+            form.populate_obj(user)
+            user.set_password(generate_password_hash(form.password.data)) 
+            
+            db.session.add(user)
             db.session.commit()
-            return redirect('/users')
-    """
+
+            login_user(user)
+
+            if (user.type == 'operator'):
+                return redirect('/operator')
+            else:
+                return redirect('/profile')
+    
     return render_template('create_user.html', form=form)

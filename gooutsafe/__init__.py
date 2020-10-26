@@ -1,21 +1,26 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+import flask_login
 
 __version__ = '0.1'
 
-db = SQLAlchemy()
+db = None
 migrate = None
-
+login = None
 
 def create_app(config_object):
     global db
     global migrate
+    global login
 
-    app = Flask(__name__)
+    app = Flask(__name__)    
+    login = flask_login.LoginManager(app)
+    login.login_view = 'login'
 
     # Load config
     app.config.from_object(config_object)
+    login_required = flask_login.login_required
 
     # registering db
     db = SQLAlchemy(app)

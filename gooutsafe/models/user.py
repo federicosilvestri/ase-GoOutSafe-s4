@@ -1,12 +1,18 @@
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
-from gooutsafe import db
+from gooutsafe import db, login
 
 
-class User(db.Model):
+@login.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+
+class User(UserMixin, db.Model):
     __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email = db.Column(db.Unicode(128), nullable=False)
+    email = db.Column(db.Unicode(128), nullable=False, unique=True)
     password = db.Column(db.Unicode(128))
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
