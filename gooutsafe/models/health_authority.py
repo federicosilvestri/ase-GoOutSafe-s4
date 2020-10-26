@@ -1,6 +1,5 @@
-from .user import User
-
 from gooutsafe import db
+from .user import User
 
 
 class Authority(User):
@@ -13,7 +12,7 @@ class Authority(User):
     phone = db.Column(db.Unicode(128))
 
     __mapper_args__ = {
-        'polymorphic_identity':'authority',
+        'polymorphic_identity': 'authority',
     }
 
     def __init__(self, *args, **kw):

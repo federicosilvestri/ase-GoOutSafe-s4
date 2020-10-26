@@ -1,6 +1,5 @@
-from .user import User
-
 from gooutsafe import db
+from .user import User
 
 
 class Customer(User):
@@ -13,7 +12,7 @@ class Customer(User):
     health_status = db.Column(db.Boolean, default=False)
 
     __mapper_args__ = {
-        'polymorphic_identity':'customer',
+        'polymorphic_identity': 'customer',
     }
 
     def __init__(self, *args, **kw):

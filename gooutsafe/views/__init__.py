@@ -1,7 +1,6 @@
-from .home import home
 from .auth import auth
-from .users import users
+from .home import home
 from .restaurants import restaurants
-
+from .users import users
 
 blueprints = [home, auth, users, restaurants]

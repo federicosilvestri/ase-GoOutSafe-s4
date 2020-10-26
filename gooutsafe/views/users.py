@@ -1,12 +1,12 @@
-from flask import Blueprint, redirect, render_template, request, flash
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import (login_user, logout_user, current_user, login_user, login_required)
+from flask import Blueprint, redirect, render_template, request
+from flask_login import (login_user)
+from werkzeug.security import generate_password_hash
 
 from gooutsafe import db
-from gooutsafe.forms import UserForm, OperatorForm, HealthAuthForm
-from gooutsafe.models.user import User
+from gooutsafe.forms import UserForm, OperatorForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.operator import Operator
+from gooutsafe.models.user import User
 
 users = Blueprint('users', __name__)
 
@@ -34,10 +34,10 @@ def create_user_type(type):
 
     if request.method == 'POST':
 
-        if form.validate_on_submit():                        
+        if form.validate_on_submit():
             form.populate_obj(user)
-            user.set_password(generate_password_hash(form.password.data)) 
-            
+            user.set_password(generate_password_hash(form.password.data))
+
             db.session.add(user)
             db.session.commit()
 
@@ -47,5 +47,5 @@ def create_user_type(type):
                 return redirect('/operator')
             else:
                 return redirect('/profile')
-    
+
     return render_template('create_user.html', form=form)
