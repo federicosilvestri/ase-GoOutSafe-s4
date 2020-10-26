@@ -1,4 +1,3 @@
-from werkzeug.security import generate_password_hash, check_password_hash
 from .user import User
 
 from gooutsafe import db

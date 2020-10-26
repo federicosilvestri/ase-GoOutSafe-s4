@@ -7,3 +7,5 @@ from .restaurant import Restaurant
 from .reservation import Reservation
 from .table import Table
 from .user import User
+from .customer import Customer
+from .operator import Operator
