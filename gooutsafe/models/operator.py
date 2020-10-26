@@ -1,25 +1,25 @@
 from werkzeug.security import generate_password_hash, check_password_hash
+from .user import User
 
 from gooutsafe import db
 
 
-class User(db.Model):
-    __tablename__ = 'User'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+class Operator(User):
+    __tablename__ = 'Operator'
+
+    id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
     email = db.Column(db.Unicode(128), nullable=False)
     password = db.Column(db.Unicode(128))
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
     is_anonymous = False
-    type = db.Column(db.Unicode(128))
 
     __mapper_args__ = {
-        'polymorphic_identity':'user',
-        'polymorphic_on':type
+        'polymorphic_identity':'operator',
     }
 
     def __init__(self, *args, **kw):
-        super(User, self).__init__(*args, **kw)
+        super(Operator, self).__init__(*args, **kw)
         self._authenticated = False
 
     def set_password(self, password):
