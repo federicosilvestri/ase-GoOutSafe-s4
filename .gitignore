@@ -158,3 +158,6 @@ Temporary Items
 
 # PyCharm
 .idea/
+
+# Pytest
+.pytest_cache

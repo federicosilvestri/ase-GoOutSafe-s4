@@ -1,5 +1,5 @@
-from flask_wtf import FlaskForm
 import wtforms as f
+from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 
 

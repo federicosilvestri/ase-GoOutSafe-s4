@@ -1,7 +1,7 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 import flask_login
+from flask import Flask
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 __version__ = '0.1'
 
@@ -9,12 +9,13 @@ db = None
 migrate = None
 login = None
 
+
 def create_app(config_object):
     global db
     global migrate
     global login
 
-    app = Flask(__name__)    
+    app = Flask(__name__)
     login = flask_login.LoginManager(app)
     login.login_view = 'login'
 
@@ -72,8 +73,11 @@ def register_blueprints(app):
 
 
 def register_cli(app):
-    import click
-
     @app.cli.command(short_help="Display list of URLs")
     def urls():
         print(app.url_map)
+
+
+if __name__ == '__main__':
+    app = create_app('config.BaseConfig')
+    register_cli(app)

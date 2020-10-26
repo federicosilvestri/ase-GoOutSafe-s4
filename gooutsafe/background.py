@@ -1,5 +1,6 @@
 from celery import Celery
-from gooutsafe import db, User, Restaurant
+
+from gooutsafe import db
 
 BACKEND = BROKER = 'redis://localhost:6379'
 celery = Celery(__name__, backend=BACKEND, broker=BROKER)
@@ -19,4 +20,3 @@ def do_task():
         app = _APP
 
     return []
-

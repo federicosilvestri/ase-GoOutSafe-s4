@@ -2,41 +2,44 @@
 {% block page_title %} Home {% endblock %}
 {% block body %}
 
-{% if current_user.is_authenticated %} 
+    {% if current_user.is_authenticated %}
 
-  <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="/">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="/">
 
-      Hi {{ current_user.firstname }}! <br>
-      <ul class="navbar-nav">
-        <li class="nav justify-content-end">
-          <button type="button" class="btn btn-outline-dark"
-            onclick="location.href='/logout'">Logout</button>
-        </li>
-      </ul>
-    </a>
-  </nav>
+                Hi {{ current_user.firstname }}! <br>
+                <ul class="navbar-nav">
+                    <li class="nav justify-content-end">
+                        <button type="button" class="btn btn-outline-dark"
+                                onclick="location.href='/logout'">Logout
+                        </button>
+                    </li>
+                </ul>
+            </a>
+        </nav>
 
-  <br>
-  
-    <h2>Your Restaurants</h2>
-    {% for restaurant in restaurants%}
-      <div>
-        <li>
-          {{restaurant.name}} -- Likes:{{restaurant.likes}}
-        </li>
-      </div>
-    {% endfor %}
+        <br>
+
+        <h2>Your Restaurants</h2>
+        {% for restaurant in restaurants %}
+            <div>
+                <li>
+                    {{ restaurant.name }} -- Likes:{{ restaurant.likes }}
+                </li>
+            </div>
+        {% endfor %}
 
 
-{% else %}
+    {% else %}
 
-  Hi Anonymous, <br>
-  <button type="button" class="btn btn-outline-primary"
-    onclick="location.href='/create_user/<customer>'">Sign up</button>
-  
-  <button type="button" class="btn btn-outline-success"
-    onclick="location.href='/login'">Login</button>
+        Hi Anonymous, <br>
+        <button type="button" class="btn btn-outline-primary"
+                onclick="location.href='/create_user/<customer>'">Sign up
+        </button>
 
-{% endif %}
+        <button type="button" class="btn btn-outline-success"
+                onclick="location.href='/login'">Login
+        </button>
+
+    {% endif %}
 {% endblock %}

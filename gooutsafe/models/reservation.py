@@ -1,6 +1,7 @@
-from sqlalchemy.orm import relationship
 from datetime import timedelta
 from datetime import datetime
+
+from sqlalchemy.orm import relationship
 
 from gooutsafe import db
 

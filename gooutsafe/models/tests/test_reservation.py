@@ -1,13 +1,13 @@
 import unittest
-from gooutsafe.models.reservation import Reservation
-from gooutsafe.models.user import User
-from gooutsafe.models.table import Table
 from datetime import datetime
 from datetime import timedelta
 
+from gooutsafe.models.reservation import Reservation
+from gooutsafe.models.table import Table
+from gooutsafe.models.user import User
+
 
 class TestReservation(unittest.TestCase):
-
 
     def test_reservation_init(self):
         start_time = datetime(2020, 12, 26, 13)

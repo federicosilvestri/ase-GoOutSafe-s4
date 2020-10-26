@@ -1,6 +1,5 @@
-from .user import User
-
 from gooutsafe import db
+from .user import User
 
 
 class Operator(User):
@@ -9,7 +8,7 @@ class Operator(User):
     id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
 
     __mapper_args__ = {
-        'polymorphic_identity':'operator',
+        'polymorphic_identity': 'operator',
     }
 
     def __init__(self, *args, **kw):
