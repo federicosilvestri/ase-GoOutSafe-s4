@@ -9,4 +9,4 @@ from .table import Table
 from .user import User
 from .customer import Customer
 from .operator import Operator
-from .healthAuthority import Authority
+from .health_authority import Authority

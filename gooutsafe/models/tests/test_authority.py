@@ -1,6 +1,6 @@
 import unittest
 #from gooutsafe.models.user import User
-from gooutsafe.models.healthAuthority import Authority
+from gooutsafe.models.health_authority import Authority
 
 
 class TestAuthority(unittest.TestCase):

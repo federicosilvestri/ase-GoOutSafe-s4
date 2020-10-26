@@ -1,6 +1,6 @@
 from .login import LoginForm
 from .user import UserForm
-from .operatorSignUp import OperatorForm
-from .healthSignUp import HealthAuthForm
+from .operator_signup import OperatorForm
+from .health_signup import HealthAuthForm
 
 all_forms = [LoginForm, UserForm, OperatorForm, HealthAuthForm]
