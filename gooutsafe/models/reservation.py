@@ -18,14 +18,19 @@ class Reservation(db.Model):
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
 
+    ### CONSTANTS ####
+    MAX_TIME_RESERVATION = 3
+
+
     def __init__(self, user, table, start_time, is_active=True, end_time=None):
         self.user = user
         self.table = table
-        self.actual_time = datetime.now()
+        print(datetime.now())
+        Reservation.actual_time = datetime.now()       
         self.start_time = start_time
         # end_time will be set automatically as start_time + 3 hours
-        self.end_time = start_time + timedelta(hours=3)
-        #TODO: change the 3 with a constant
+        Reservation.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
+        #TODO: change the 3 with a constant0
 
     @property
     def user(self):
@@ -53,7 +58,7 @@ class Reservation(db.Model):
     
     @start_time.setter
     def start_time(self, start_time):
-        if(start_time > actual_time):
+        if(start_time > self.actual_time):
             self.__start_time = start_time
         else:
             raise ValueError("Invalid reservation start time")
