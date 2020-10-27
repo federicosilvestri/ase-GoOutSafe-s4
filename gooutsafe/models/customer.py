@@ -19,18 +19,14 @@ class Customer(User):
         super(Customer, self).__init__(*args, **kw)
         self._authenticated = False
 
-
     def set_firstname(self, name):
         self.firstname = name
-
 
     def set_lastname(self, name):
         self.lastname = name
 
-
     def set_date_of_birth(self, dateBirth):
         self.date_of_birth = dateBirth
-
 
     def set_health_status(self, status):
         self.health_status = status
