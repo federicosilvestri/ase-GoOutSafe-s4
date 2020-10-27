@@ -42,9 +42,12 @@ class Reservation(db.Model):
             self.start_time = start_time
         else:
             raise ValueError("Invalid reservation start time")
-
-    def set_table(self, end_time):
-        self.end_time = end_time
+    
+    def get_end_time(self):
+        return self.__end_time
+    
+    def set_end_time(self, end_time):
+        self.__end_time = end_time
 
     def set_is_active(self, is_active):
         self.is_active = is_active
