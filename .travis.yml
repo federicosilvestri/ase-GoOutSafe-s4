@@ -1,0 +1,9 @@
+language: python
+python:
+  - "3.6"
+# installing deps
+install:
+  - pip install -r requirements.txt
+  - flask db upgrade
+script:
+  - python -m pytest
