@@ -1,4 +1,6 @@
 # Go Out Safe
+[![Build Status](https://travis-ci.com/federicosilvestri/ase-GoOutSafe-s4.svg?token=wrPAra8ynq6rYZess6c1&branch=master)](https://travis-ci.com/federicosilvestri/ase-GoOutSafe-s4)
+
 
 This is the source code of GoOutSafe application, self
 project of *Advanced Software Engineering* course,

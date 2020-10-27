@@ -1,9 +1,17 @@
 language: python
 python:
   - "3.6"
+before_install:
+  - pip install -U pip
+  - pip install -U pytest
+  - pip install codecov
+  - pip install pytest-cov
 # installing deps
 install:
   - pip install -r requirements.txt
+  - export FLASK_APP=test
   - flask db upgrade
 script:
   - python -m pytest
+after_success:
+  - codecov
