@@ -25,7 +25,7 @@ class Reservation(db.Model):
     def __init__(self, user, table, start_time, is_active=True, end_time=None):
         self.__user = user
         self.__table = table
-        Reservation.actual_time = datetime.now()       
+        Reservation.__actual_time = datetime.now()       
         self.__start_time = start_time
         # end_time will be set automatically as start_time + 3 hours
         Reservation.__end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
@@ -54,7 +54,7 @@ class Reservation(db.Model):
         return self.__start_time
     
     def set_start_time(self, start_time):
-        if(start_time > self.actual_time):
+        if(start_time > self.__actual_time):
             self.__start_time = start_time
         else:
             raise ValueError("Invalid reservation start time")
