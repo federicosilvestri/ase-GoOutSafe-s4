@@ -21,32 +21,32 @@ class Customer(User):
 
     @property
     def firstname(self):
-        return self.__firstname
+        return self.firstname
 
     @firstname.setter
     def firstname(self, name):
-        self.__firstname = name
+        self.firstname = name
 
     @property
     def lastname(self):
-        return self.__lastname
+        return self.lastname
 
     @lastname.setter
     def lastname(self, name):
-        self.__lastname = name
+        self.lastname = name
 
     @property
     def date_of_birth(self):
-        return self.__date_of_birth
+        return self.date_of_birth
 
     @date_of_birth.setter
     def date_of_birth(self, dateBirth):
-        self.__date_of_birth = dateBirth
+        self.date_of_birth = dateBirth
 
     @property
     def health_status(self):
-        return self.__health_status
+        return self.health_status
 
     @health_status.setter
     def health_status(self, status):
-        self.__health_status = status
+        self.health_status = status
