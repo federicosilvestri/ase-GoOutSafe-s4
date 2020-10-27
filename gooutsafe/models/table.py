@@ -7,11 +7,11 @@ class Table(db.Model):
     __tablename__ = 'Table'
 
     __id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    __restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'))
-    __restaurant = relationship('Restaurant', foreign_keys='Table.restaurant_id')
+    __restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.__id'))
+    __restaurant = relationship('Restaurant', foreign_keys='Table.__restaurant_id')
     __capacity = db.Column(db.Integer)
-    __reservation_id = db.Column(db.Integer, db.ForeignKey('Reservation.id'))
-    __reservations = relationship("Reservation", foreign_keys='Table.reservation_id')
+    __reservation_id = db.Column(db.Integer, db.ForeignKey('Reservation.__id'))
+    __reservations = relationship("Reservation", foreign_keys='Table.__reservation_id')
 
     def __init__(self, capacity, restaurant):
         self.__capacity = capacity

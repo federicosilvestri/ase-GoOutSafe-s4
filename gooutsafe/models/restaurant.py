@@ -91,5 +91,5 @@ class Restaurant(db.Model):
     def get_is_open(self):
         return self.__is_open
 
-    def get_is_open(self, is_open):
+    def set_is_open(self, is_open):
         self.__is_open = is_open

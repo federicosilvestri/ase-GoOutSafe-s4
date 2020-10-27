@@ -6,10 +6,10 @@ from gooutsafe import db
 class Like(db.Model):
     __tablename__ = 'Like'
 
-    liker_id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
-    liker = relationship('User', foreign_keys='Like.liker_id')
+    liker_id = db.Column(db.Integer, db.ForeignKey('User.__id'), primary_key=True)
+    liker = relationship('User', foreign_keys='Like.__liker_id')
 
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'), primary_key=True)
-    restaurant = relationship('Restaurant', foreign_keys='Like.restaurant_id')
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.__id'), primary_key=True)
+    restaurant = relationship('Restaurant', foreign_keys='Like.__restaurant_id')
 
     marked = db.Column(db.Boolean, default=False)  # True iff it has been counted in Restaurant.likes

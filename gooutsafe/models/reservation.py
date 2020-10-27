@@ -10,10 +10,10 @@ class Reservation(db.Model):
     __tablename__ = 'Reservation'
 
     __id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    __user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-    __user = relationship('User', foreign_keys='Reservation.user_id')
-    __table_id = db.Column(db.Integer, db.ForeignKey('Table.id'))
-    __table = relationship('Table', foreign_keys='Reservation.table_id', back_populates="reservations")
+    __user_id = db.Column(db.Integer, db.ForeignKey('User.__id'))
+    __user = relationship('User', foreign_keys='Reservation.__user_id')
+    __table_id = db.Column(db.Integer, db.ForeignKey('Table.__id'))
+    __table = relationship('Table', foreign_keys='Reservation.__table_id', back_populates="__reservations")
     __actual_time = db.Column(db.DateTime)
     __start_time = db.Column(db.DateTime)
     __end_time = db.Column(db.DateTime)
@@ -62,7 +62,7 @@ class Reservation(db.Model):
     def get_end_time(self):
         return self.__end_time
     
-    def set_table(self, end_time):
+    def set_end_time(self, end_time):
         self.__end_time = end_time
 
     def get_is_active(self):

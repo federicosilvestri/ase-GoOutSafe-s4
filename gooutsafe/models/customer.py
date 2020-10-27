@@ -5,7 +5,7 @@ from .user import User
 class Customer(User):
     __tablename__ = 'Customer'
 
-    __id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
+    __id = db.Column(db.Integer, db.ForeignKey('User.__id'), primary_key=True)
     __firstname = db.Column(db.Unicode(128))
     __lastname = db.Column(db.Unicode(128))
     __date_of_birth = db.Column(db.DateTime)

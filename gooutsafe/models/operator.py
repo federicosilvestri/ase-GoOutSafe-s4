@@ -5,7 +5,7 @@ from .user import User
 class Operator(User):
     __tablename__ = 'Operator'
 
-    _id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
+    _id = db.Column(db.Integer, db.ForeignKey('User.__id'), primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'operator',
