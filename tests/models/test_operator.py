@@ -1,13 +1,17 @@
 import unittest
 
-# from gooutsafe.models.user import User
-from gooutsafe.models.operator import Operator
-
 
 class TestOperator(unittest.TestCase):
 
+    def setUp(self):
+        from gooutsafe import create_app
+        create_app('config.TestConfig')
+
+        from gooutsafe.models import operator
+        self.operator = operator
+
     def test_cust_init(self):
-        operator = Operator(email='operator@operator.com', password='admin')
+        operator = self.operator.Operator(email='operator@operator.com', password='admin')
         self.assertEqual(operator.email, 'operator@operator.com')
 
 

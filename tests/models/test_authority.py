@@ -1,14 +1,19 @@
 import unittest
 
-# from gooutsafe.models.user import User
-from gooutsafe.models.health_authority import Authority
-
 
 class TestAuthority(unittest.TestCase):
 
+    def setUp(self):
+        from gooutsafe import create_app
+        create_app('config.TestConfig')
+
+        from gooutsafe.models import health_authority
+        self.health_authority = health_authority
+
     def test_cust_init(self):
-        authority = Authority(email='authority@authority.com', password='admin', name='ASL1', city='Pisa',
-                              address='Largo Bruno Pontecorvo 3', phone='050 221 2111')
+        authority = self.health_authority.Authority(email='authority@authority.com', password='admin', name='ASL1',
+                                                    city='Pisa',
+                                                    address='Largo Bruno Pontecorvo 3', phone='050 221 2111')
 
         self.assertEqual(authority.email, 'authority@authority.com')
         self.assertEqual(authority.name, 'ASL1')
