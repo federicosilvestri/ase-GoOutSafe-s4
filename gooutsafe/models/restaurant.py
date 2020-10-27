@@ -68,13 +68,5 @@ class Restaurant(db.Model):
         else:
             raise ValueError("Invalid menu type")
 
-<<<<<<< HEAD
-    def get_is_open(self):
-        return self.__is_open
-
-    def set_is_open(self, is_open):
-        self.__is_open = is_open
-=======
     def set_is_open(self, is_open):
         self.is_open = is_open
->>>>>>> a3d7a2792655935ded85d6573efabb59ec9b3abd
