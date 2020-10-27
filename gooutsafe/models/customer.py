@@ -5,11 +5,11 @@ from .user import User
 class Customer(User):
     __tablename__ = 'Customer'
 
-    id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
-    firstname = db.Column(db.Unicode(128))
-    lastname = db.Column(db.Unicode(128))
-    date_of_birth = db.Column(db.DateTime)
-    health_status = db.Column(db.Boolean, default=False)
+    __id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
+    __firstname = db.Column(db.Unicode(128))
+    __lastname = db.Column(db.Unicode(128))
+    __date_of_birth = db.Column(db.DateTime)
+    __health_status = db.Column(db.Boolean, default=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'customer',
@@ -19,34 +19,30 @@ class Customer(User):
         super(Customer, self).__init__(*args, **kw)
         self._authenticated = False
 
-    @property
-    def firstname(self):
-        return self.firstname
+    
+    def get_id(self):
+        return self.__id
 
-    @firstname.setter
-    def firstname(self, name):
-        self.firstname = name
+    def get_firstname(self):
+        return self.__firstname
 
-    @property
-    def lastname(self):
-        return self.lastname
+    def set_firstname(self, name):
+        self.__firstname = name
 
-    @lastname.setter
-    def lastname(self, name):
-        self.lastname = name
+    def get_lastname(self):
+        return self.__lastname
 
-    @property
-    def date_of_birth(self):
-        return self.date_of_birth
+    def set_lastname(self, name):
+        self.__lastname = name
 
-    @date_of_birth.setter
-    def date_of_birth(self, dateBirth):
-        self.date_of_birth = dateBirth
+    def get_date_of_birth(self):
+        return self.__date_of_birth
 
-    @property
-    def health_status(self):
-        return self.health_status
+    def set_date_of_birth(self, dateBirth):
+        self.__date_of_birth = dateBirth
 
-    @health_status.setter
-    def health_status(self, status):
-        self.health_status = status
+    def get_health_status(self):
+        return self.__health_status
+
+    def set_health_status(self, status):
+        self.__health_status = status

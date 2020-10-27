@@ -5,11 +5,11 @@ from .user import User
 class Authority(User):
     __tablename__ = 'Authority'
 
-    id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
-    name = db.Column(db.Unicode(128))
-    city = db.Column(db.Unicode(128))
-    address = db.Column(db.Unicode(128))
-    phone = db.Column(db.Unicode(128))
+    __id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
+    __name = db.Column(db.Unicode(128))
+    __city = db.Column(db.Unicode(128))
+    __address = db.Column(db.Unicode(128))
+    __phone = db.Column(db.Unicode(128))
 
     __mapper_args__ = {
         'polymorphic_identity': 'authority',
@@ -19,34 +19,30 @@ class Authority(User):
         super(Authority, self).__init__(*args, **kw)
         self._authenticated = False
 
-    @property
-    def name(self):
+    def get_id (self):
+        return self.__id
+
+
+    def get_name(self):
         return self.__name
 
-    @name.setter
-    def name(self, name):
+    def set_name(self, name):
         self.__name = name
 
-    @property
-    def city(self):
+    def get_city(self):
         return self.__city
 
-    @city.setter
-    def city(self, city):
+    def set_city(self, city):
         self.__city = city
 
-    @property
-    def address(self):
+    def get_address(self):
         return self.__address
 
-    @address.setter
-    def address(self, address):
+    def set_address(self, address):
         self.__address = address
 
-    @property
-    def phone(self):
+    def get_phone(self):
         return self.__phone
 
-    @phone.setter
-    def phone(self, phone):
+    def set_phone(self, phone):
         self.__phone = phone

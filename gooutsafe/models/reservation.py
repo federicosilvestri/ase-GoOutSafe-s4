@@ -9,72 +9,64 @@ from gooutsafe import db
 class Reservation(db.Model):
     __tablename__ = 'Reservation'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-    user = relationship('User', foreign_keys='Reservation.user_id')
-    table_id = db.Column(db.Integer, db.ForeignKey('Table.id'))
-    table = relationship('Table', foreign_keys='Reservation.table_id', back_populates="reservations")
-    actual_time = db.Column(db.DateTime)
-    start_time = db.Column(db.DateTime)
-    end_time = db.Column(db.DateTime)
+    __id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    __user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    __user = relationship('User', foreign_keys='Reservation.user_id')
+    __table_id = db.Column(db.Integer, db.ForeignKey('Table.id'))
+    __table = relationship('Table', foreign_keys='Reservation.table_id', back_populates="reservations")
+    __actual_time = db.Column(db.DateTime)
+    __start_time = db.Column(db.DateTime)
+    __end_time = db.Column(db.DateTime)
 
     ### CONSTANTS ####
     MAX_TIME_RESERVATION = 3
 
 
     def __init__(self, user, table, start_time, is_active=True, end_time=None):
-        self.user = user
-        self.table = table
-        print(datetime.now())
+        self.__user = user
+        self.__table = table
         Reservation.actual_time = datetime.now()       
-        self.start_time = start_time
+        self.__start_time = start_time
         # end_time will be set automatically as start_time + 3 hours
-        Reservation.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
+        Reservation.__end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
         #TODO: change the 3 with a constant0
 
-    @property
-    def user(self):
+
+    def get_id(self):
+        return self.__id
+
+    def get_user(self):
         return self.__user
-    
-    @user.setter
-    def user(self, user):
+
+    def set_user(self, user):
         self.__user = user
 
-    @property
-    def table(self):
+    def get_table(self):
         return self.__table
-    
-    @table.setter
-    def table(self, table):
+  
+    def set_table(self, table):
         self.__table = table
 
-    @property
-    def actual_time(self):
+    def get_actual_time(self):
         return self.__actual_time
 
-    @property
-    def start_time(self):
+    def get_start_time(self):
         return self.__start_time
     
-    @start_time.setter
-    def start_time(self, start_time):
+    def set_start_time(self, start_time):
         if(start_time > self.actual_time):
             self.__start_time = start_time
         else:
             raise ValueError("Invalid reservation start time")
     
-    @property
-    def end_time(self):
+    def get_end_time(self):
         return self.__end_time
     
-    @end_time.setter
-    def table(self, end_time):
+    def set_table(self, end_time):
         self.__end_time = end_time
 
-    @property
-    def is_active(self):
+    def get_is_active(self):
         return self.__is_active
     
-    @is_active.setter
-    def is_active(self, is_active):
+    def set_is_active(self, is_active):
         self.__is_active = is_active

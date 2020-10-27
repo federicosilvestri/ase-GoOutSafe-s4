@@ -5,7 +5,7 @@ from .user import User
 class Operator(User):
     __tablename__ = 'Operator'
 
-    id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
+    _id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'operator',
@@ -14,3 +14,6 @@ class Operator(User):
     def __init__(self, *args, **kw):
         super(Operator, self).__init__(*args, **kw)
         self._authenticated = False
+
+    def get_id(self):
+        return self.__id
