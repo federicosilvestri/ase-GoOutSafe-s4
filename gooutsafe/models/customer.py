@@ -21,16 +21,16 @@ class Customer(User):
 
 
     def set_firstname(self, name):
-        self.__firstname = name
+        self.firstname = name
 
 
     def set_lastname(self, name):
-        self.__lastname = name
+        self.lastname = name
 
 
     def set_date_of_birth(self, dateBirth):
-        self.__date_of_birth = dateBirth
-        
+        self.date_of_birth = dateBirth
+
 
     def set_health_status(self, status):
-        self.__health_status = status
+        self.health_status = status
