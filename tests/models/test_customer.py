@@ -1,5 +1,5 @@
 import unittest
-
+from datetime import datetime
 
 class TestCustomer(unittest.TestCase):
 
@@ -11,14 +11,15 @@ class TestCustomer(unittest.TestCase):
         self.customer = customer
 
     def test_cust_init(self):
+        birthday = datetime(1995, 12, 31)
         customer = self.customer.Customer(email='example@example.com', password='admin', firstname='example_name',
                                           lastname='example_lastname',
-                                          date_of_birth='2017-03-02T15:34:10.000272', health_status=False)
+                                          birthday=birthday, health_status=False)
 
         self.assertEqual(customer.email, 'example@example.com')
         self.assertEqual(customer.firstname, 'example_name')
         self.assertEqual(customer.lastname, 'example_lastname')
-        self.assertEqual(customer.date_of_birth, '2017-03-02T15:34:10.000272')
+        self.assertEqual(customer.birthday, birthday)
         self.assertEqual(customer.health_status, False)
 
 

@@ -1,5 +1,5 @@
 from datetime import timedelta
-
+import datetime
 from sqlalchemy.orm import relationship
 
 from gooutsafe import db
@@ -13,17 +13,17 @@ class Reservation(db.Model):
     user = relationship('User', foreign_keys='Reservation.user_id')
     table_id = db.Column(db.Integer, db.ForeignKey('Table.id'))
     table = relationship('Table', foreign_keys='Reservation.table_id', back_populates="reservations")
-    actual_time = db.Column(db.DateTime)
+    actual_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
+    is_active = db.Column(db.Boolean, default=True)
 
     ### CONSTANTS ####
     MAX_TIME_RESERVATION = 3
 
-    def __init__(self, user, table, start_time, is_active=True, actual_time=None, end_time=None):
+    def __init__(self, user, table, start_time, end_time=None):
         self.user = user
         self.table = table
-        self.actual_time = actual_time
         self.start_time = start_time
         # end_time will be set automatically as start_time + 3 hours
         self.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
@@ -36,6 +36,8 @@ class Reservation(db.Model):
         self.table = table
 
     def set_start_time(self, start_time):
+        self.actual_time = datetime.datetime.now()
+        print(self.actual_time)
         if start_time > self.actual_time:
             self.start_time = start_time
         else:
