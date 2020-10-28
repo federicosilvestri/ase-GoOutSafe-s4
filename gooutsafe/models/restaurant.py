@@ -12,7 +12,7 @@ class Restaurant(db.Model):
     MIN_LAT = -85
     MAX_LON = 180
     MIN_LON = -180
-    MAX_PHONE_LEN = 15
+    MAX_PHONE_LEN = 25
     MAX_MENU_TYPE_LENGTH = 100
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

@@ -11,3 +11,4 @@ from .restaurant import Restaurant
 from .table import Table
 from .user import User
 from .restaurant_availability import RestaurantAvailability
+from .restaurant_rating import RestaurantRating

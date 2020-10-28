@@ -1,13 +1,12 @@
-import unittest
+from .model_test import ModelTest
 from datetime import datetime
 from datetime import timedelta
 
 
-class TestReservation(unittest.TestCase):
+class TestReservation(ModelTest):
 
     def setUp(self):
-        from gooutsafe import create_app
-        create_app('config.TestConfig')
+        super(TestReservation, self).setUp()
 
         from gooutsafe.models import reservation
         from gooutsafe.models import table
@@ -39,8 +38,3 @@ class TestReservation(unittest.TestCase):
         wrong_start_time = datetime(2020, 10, 26, 13)
         with self.assertRaises(ValueError):
             self.reservation.Reservation(user, table, wrong_start_time, end_time=wrong_start_time - timedelta(days=4))
-            
-            
-
-if __name__ == '__main__':
-    unittest.main()

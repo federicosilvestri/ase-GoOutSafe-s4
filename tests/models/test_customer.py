@@ -1,27 +1,48 @@
-import unittest
 from datetime import datetime
 
-class TestCustomer(unittest.TestCase):
+from .model_test import ModelTest
+
+
+class TestCustomer(ModelTest):
 
     def setUp(self):
-        from gooutsafe import create_app
-        create_app('config.TestConfig')
-
+        super(TestCustomer, self).setUp()
         from gooutsafe.models import customer
         self.customer = customer
 
     def test_cust_init(self):
-        birthday = datetime(1995, 12, 31)
-        customer = self.customer.Customer(email='example@example.com', password='admin', firstname='example_name',
-                                          lastname='example_lastname',
-                                          birthday=birthday, health_status=False)
+        for i in range(0, 10):
+            customer, (name, surname, password, email, birthdate, health_status) = TestCustomer.generate_random_customer()
 
-        self.assertEqual(customer.email, 'example@example.com')
-        self.assertEqual(customer.firstname, 'example_name')
-        self.assertEqual(customer.lastname, 'example_lastname')
-        self.assertEqual(customer.birthday, birthday)
-        self.assertEqual(customer.health_status, False)
+            self.assertEqual(customer.email, email)
+            self.assertEqual(customer.firstname, name)
+            self.assertEqual(customer.lastname, surname)
+            self.assertEqual(customer.birthday, birthdate)
+            self.assertEqual(customer.health_status, health_status)
 
+    @staticmethod
+    def generate_random_customer():
+        from faker import Faker
+        import datetime
+        from datetime import date
+        from gooutsafe.models import Customer
 
-if __name__ == '__main__':
-    unittest.main()
+        faker = Faker()
+
+        complete_name = faker.name().split(' ')
+        name, surname = complete_name[::len(complete_name) - 1]
+        password = faker.password()
+        email = faker.email()
+        birthdate = faker.date(end_datetime=date.today() - datetime.timedelta(days= 365 * 20))
+        health_status = faker.boolean()
+
+        customer = Customer(
+            firstname=name,
+            lastname=surname,
+            email=email,
+            password=password,
+            birthday=birthdate,
+            health_status=health_status
+        )
+
+        return customer, (name, surname, password, email, birthdate, health_status)

@@ -1,11 +1,10 @@
-import unittest
+from .model_test import ModelTest
 
 
-class TestRestaurantAvailability(unittest.TestCase):
+class TestRestaurantAvailability(ModelTest):
 
     def setUp(self):
-        from gooutsafe import create_app
-        create_app('config.TestConfig')
+        super(TestRestaurantAvailability, self).setUp()
 
         from gooutsafe.models import restaurant
         from gooutsafe.models import restaurant_availability
