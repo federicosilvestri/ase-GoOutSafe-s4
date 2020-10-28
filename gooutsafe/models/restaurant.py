@@ -12,7 +12,7 @@ class Restaurant(db.Model):
     MIN_LAT = -85
     MAX_LON = 180
     MIN_LON = -180
-    MAX_PHONE_LEN = 15
+    MAX_PHONE_LEN = 25
     MAX_MENU_TYPE_LENGTH = 100
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -20,6 +20,7 @@ class Restaurant(db.Model):
     name = db.Column(db.String(
         length=MAX_NAME_LENGTH
     ))
+    reservations = relationship("Reservation", back_populates="restaurant")
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
     phone = db.Column(db.String(

@@ -24,7 +24,10 @@ def create_app(config_object):
     login_required = flask_login.login_required
 
     # registering db
-    db = SQLAlchemy(app)
+    db = SQLAlchemy(
+        app=app,
+        session_options={'autocommit': True}
+    )
 
     # requiring the list of models
     import gooutsafe.models
