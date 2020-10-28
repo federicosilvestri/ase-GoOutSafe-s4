@@ -51,9 +51,9 @@ def create_user_type(type):
 
     return render_template('create_user.html', form=form)
 
-@users.route('/delete_user/<id>', methods=['GET', 'POST'])
-def delete_user(id):
-    q = db.session.query(User).filter(User.id == id)
-    user = q.first().delete()
 
+@users.route('/delete_user/<int:id>', methods=['GET', 'POST'])
+def delete_user(id):
+    db.session.query(User).filter(User.id == id).delete()
+    db.session.commit()
     return redirect('/')
