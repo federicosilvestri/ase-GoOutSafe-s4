@@ -10,9 +10,15 @@
             Hi {{ current_user.firstname }}! <br>
             <ul class="nav justify-content-end">
                 <li class="nav-item">
-                    <a class="btn btn-outline-primary"
-                        onclick="location.href='/logout'">Profile
-                    </a>
+                    {% if current_user.type == "operator" %}
+                        <a class="btn btn-outline-primary"
+                            onclick="location.href='/operator'">Profile
+                        </a>
+                    {% elif current_user.type == "customer" %}
+                        <a class="btn btn-outline-primary"
+                            onclick="location.href='/profile'">Profile
+                        </a>
+                    {% endif %}  
                 </li>
             </ul>
             
