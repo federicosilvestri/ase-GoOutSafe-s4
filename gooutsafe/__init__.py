@@ -17,7 +17,7 @@ def create_app(config_object):
 
     app = Flask(__name__)
     login = flask_login.LoginManager(app)
-    login.login_view = 'login'
+    login.login_view = 'auth.login'
 
     # Load config
     app.config.from_object(config_object)

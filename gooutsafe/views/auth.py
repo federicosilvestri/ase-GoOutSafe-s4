@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect
 from flask_login import (logout_user, login_user, login_required)
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from gooutsafe import db
 from gooutsafe.forms import LoginForm
@@ -16,32 +17,32 @@ def login():
         q = db.session.query(User).filter(User.email == email)
         user = q.first()
 
-        if user is not None and user.authenticate(password):
+        if user is not None and check_password_hash(user.password, password):
             login_user(user)
-
-            if (user.type == 'operator'):
-                return redirect('/operator')
+            if user.type == 'operator':
+                return render_template('operator_profile.html', current_user=user)
             else:
-                return redirect('/profile')
+                return render_template('customer_profile.html', current_user=user)
 
     return render_template('login.html', form=form)
 
 
 # TODO: put the current_user
 @auth.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
     return render_template('customer_profile.html')
 
 
 # TODO: put the current_user
 @auth.route('/operator', methods=['GET', 'POST'])
+@login_required
 def operator():
     return render_template('operator_profile.html')
 
 
-@auth.route("/logout")
+@auth.route('/logout')
 @login_required
 def logout():
     logout_user()
-    user.authenticated = False
     return redirect('/')

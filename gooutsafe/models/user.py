@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.Unicode(128))
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
+    authenticated = db.Column(db.Boolean, default=True)
     is_anonymous = False
     type = db.Column(db.Unicode(128))
 
@@ -26,19 +27,18 @@ class User(UserMixin, db.Model):
 
     def __init__(self, *args, **kw):
         super(User, self).__init__(*args, **kw)
-        self._authenticated = False
+        self.authenticated = False
 
     def set_password(self, password):
-        self.password = generate_password_hash(password)
+        self.password = password
 
-    @property
     def is_authenticated(self):
-        return self._authenticated
+        return self.authenticated
 
     def authenticate(self, password):
         checked = check_password_hash(self.password, password)
-        self._authenticated = checked
-        return self._authenticated
+        self.authenticated = checked
+        return self.authenticated
 
     def get_id(self):
         return self.id

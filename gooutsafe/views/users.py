@@ -42,6 +42,7 @@ def create_user_type(type):
             db.session.commit()
 
             login_user(user)
+            user.authenticated = True
 
             if user.type == 'operator':
                 return redirect('/operator')
