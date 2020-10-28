@@ -23,7 +23,7 @@ class TestRestaurant(ModelTest):
         lat = TestRestaurant.faker.latitude()
         lon = TestRestaurant.faker.longitude()
         phone = TestRestaurant.faker.phone_number()
-        menu_type = TestRestaurant.faker.city()
+        menu_type = TestRestaurant.faker.country()
 
         restaurant = Restaurant(
             name=name,
