@@ -7,7 +7,7 @@ class Table(db.Model):
     __tablename__ = 'Table'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id', ondelete="CASCADE"))
     restaurant = relationship('Restaurant', back_populates="tables")
     capacity = db.Column(db.Integer)
 

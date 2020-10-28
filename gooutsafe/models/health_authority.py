@@ -5,7 +5,7 @@ from .user import User
 class Authority(User):
     __tablename__ = 'Authority'
 
-    id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('User.id', ondelete="CASCADE"), primary_key=True)
     name = db.Column(db.Unicode(128))
     city = db.Column(db.Unicode(128))
     address = db.Column(db.Unicode(128))
