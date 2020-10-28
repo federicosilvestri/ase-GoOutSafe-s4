@@ -50,3 +50,10 @@ def create_user_type(type):
                 return redirect('/profile')
 
     return render_template('create_user.html', form=form)
+
+@users.route('/delete_user/<id>', methods=['GET', 'POST'])
+def delete_user(id):
+    q = db.session.query(User).filter(User.id == id)
+    user = q.first().delete()
+
+    return redirect('/')
