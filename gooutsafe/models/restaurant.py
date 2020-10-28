@@ -4,7 +4,6 @@ from gooutsafe import db
 class Restaurant(db.Model):
     __tablename__ = 'Restaurant'
 
-    #### CONSTANTS ####
     MAX_NAME_LENGTH = 100
     # taken from Google Maps bounds
     MAX_LAT = 85
@@ -39,25 +38,25 @@ class Restaurant(db.Model):
         self.is_open = False
 
     def set_name(self, name):
-        if len(name) <= self.MAX_NAME_LENGTH and len(name) > 0:
+        if self.MAX_NAME_LENGTH >= len(name) > 0:
             self.name = name
         else:
             raise ValueError("Invalid restaurant name length")
 
     def set_lat(self, lat):
-        if lat >= self.MIN_LAT and lat <= self.MAX_LAT:
+        if self.MIN_LAT <= lat <= self.MAX_LAT:
             self.lat = lat
         else:
             raise ValueError("Invalid latitude value")
 
     def set_lon(self, lon):
-        if lon >= self.MIN_LON and lon <= self.MAX_LON:
+        if self.MIN_LON <= lon <= self.MAX_LON:
             self.lon = lon
         else:
             raise ValueError("Invalid longitude value")
 
     def set_phone(self, phone):
-        if phone >= self.MIN_PHONE_VALUE and phone <= self.MAX_PHONE_VALUE:
+        if self.MIN_PHONE_VALUE <= phone <= self.MAX_PHONE_VALUE:
             self.phone = phone
         else:
             raise ValueError("Invalid phone number")
