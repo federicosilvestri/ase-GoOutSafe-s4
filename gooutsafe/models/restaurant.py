@@ -16,7 +16,6 @@ class Restaurant(db.Model):
     MAX_MENU_TYPE_LENGTH = 100
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # TODO: add owner relationship when its model is created
     name = db.Column(db.String(
         length=MAX_NAME_LENGTH
     ))
@@ -34,9 +33,15 @@ class Restaurant(db.Model):
     )
     tables = relationship("Table", back_populates="restaurant")
     availabilities = relationship("RestaurantAvailability", back_populates="restaurant")
+    owner_id = db.Column(
+        db.Integer,
+        db.ForeignKey('Operator.id'),
+    )
+    owner = relationship('Operator', back_populates='restaurant')
+    ratings = relationship('RestaurantRatings', back_populates='restaurant')
 
     # TODO: add ratings relationship when their model is created
-    # TODO: add availability relationship when their model is created
+
     # TODO: add hybrid property or method to calculate the number of likes
 
     def __init__(self, name, lat, lon, phone, menu_type):

@@ -1,4 +1,5 @@
 from gooutsafe import db
+from sqlalchemy.orm import relationship
 
 
 class RestaurantRating(db.Model):
@@ -20,6 +21,8 @@ class RestaurantRating(db.Model):
         db.ForeignKey('Restaurant.id'),
         primary_key=True
     )
+
+    restaurant = relationship('Restaurant', back_populates='ratings')
 
     value = db.Column(
         db.SmallInteger,
