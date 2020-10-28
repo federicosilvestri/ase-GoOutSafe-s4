@@ -1,4 +1,5 @@
 from gooutsafe import db
+from sqlalchemy.orm import relationship
 
 
 class Restaurant(db.Model):
@@ -10,24 +11,30 @@ class Restaurant(db.Model):
     MIN_LAT = -85
     MAX_LON = 180
     MIN_LON = -180
-    # based on italian phone numbers, composed by 10 digits
-    # (TODO needs better lower bound)
-    MAX_PHONE_VALUE = 9999999999
-    MIN_PHONE_VALUE = 0
+    MAX_PHONE_LEN = 15
     MAX_MENU_TYPE_LENGTH = 100
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # TODO: add owner relationship when its model is created
-    name = db.Column(db.Text(MAX_NAME_LENGTH))
-    likes = db.Column(db.Integer)  # obsolete
+    name = db.Column(db.String(
+        length=MAX_NAME_LENGTH
+    ))
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
-    phone = db.Column(db.Integer)
-    menu_type = db.Column(db.Text(MAX_MENU_TYPE_LENGTH))
-    is_open = db.Column(db.Boolean, default=False)
+    phone = db.Column(db.String(
+        length=MAX_PHONE_LEN
+    ))
+    menu_type = db.Column(db.String(
+        length=MAX_MENU_TYPE_LENGTH
+    ))
+    is_open = db.Column(
+        db.Boolean, default=False
+    )
+    tables = relationship("Table")
 
     # TODO: add ratings relationship when their model is created
     # TODO: add availability relationship when their model is created
+    # TODO: add hybrid property or method to calculate the number of likes
 
     def __init__(self, name, lat, lon, phone, menu_type):
         self.name = name
