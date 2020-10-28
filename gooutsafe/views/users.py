@@ -54,8 +54,6 @@ def create_user_type(type):
 
 @users.route('/delete_user/<int:id>', methods=['GET', 'POST'])
 def delete_user(id):
-    q = User.query.filter(User.id == id)
-    q.delete()
-    """db.session.query(User).filter(User.id == id).delete()
-    db.session.commit()"""
+    db.session.query(User).filter(User.id == id).delete()
+    db.session.commit()
     return redirect('/')
