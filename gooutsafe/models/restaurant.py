@@ -20,6 +20,7 @@ class Restaurant(db.Model):
     name = db.Column(db.String(
         length=MAX_NAME_LENGTH
     ))
+    reservations = relationship("Reservation", back_populates="restaurant")
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
     phone = db.Column(db.String(
