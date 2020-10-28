@@ -25,8 +25,7 @@ def create_app(config_object):
 
     # registering db
     db = SQLAlchemy(
-        app=app,
-        session_options={'autocommit': True}
+        app=app
     )
 
     # requiring the list of models

@@ -7,7 +7,7 @@ class Table(db.Model):
     __tablename__ = 'Table'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id', ondelete="CASCADE"))
     restaurant = relationship('Restaurant', back_populates="tables")
     capacity = db.Column(db.Integer)
 
@@ -19,3 +19,6 @@ class Table(db.Model):
         if capacity <= 0:
             raise ValueError('You can\'t set a negative value or zero')
         self.capacity = capacity
+
+    def set_restaurant(self, restaurant):
+        self.restaurant = restaurant

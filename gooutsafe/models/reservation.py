@@ -11,9 +11,9 @@ class Reservation(db.Model):
     MAX_TIME_RESERVATION = 3
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id', ondelete="CASCADE"))
     user = relationship('User', foreign_keys='Reservation.user_id')
-    table_id = db.Column(db.Integer, db.ForeignKey('Table.id'))
+    table_id = db.Column(db.Integer, db.ForeignKey('Table.id', ondelete="CASCADE"))
     table = relationship('Table')
     restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'))
     restaurant = relationship("Restaurant", back_populates="reservations")

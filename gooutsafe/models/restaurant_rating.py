@@ -1,4 +1,5 @@
 from gooutsafe import db
+from sqlalchemy.orm import relationship
 
 
 class RestaurantRating(db.Model):
@@ -21,6 +22,8 @@ class RestaurantRating(db.Model):
         primary_key=True
     )
 
+    restaurant = relationship('Restaurant', back_populates='ratings')
+
     value = db.Column(
         db.SmallInteger,
     )
@@ -32,7 +35,7 @@ class RestaurantRating(db.Model):
         nullable=True
     )
 
-    def __init__(self, customer_id, restaurant_id, value:int, review=None):
+    def __init__(self, customer_id, restaurant_id, value: int, review=None):
         self.customer_id = customer_id
         self.restaurant_id = restaurant_id
         self.value = value
@@ -44,10 +47,15 @@ class RestaurantRating(db.Model):
             raise ValueError('Invalid value for rating!')
 
     @staticmethod
+<<<<<<< HEAD
     def check_review(review:str):
         if review is None:
             raise ValueError('Review must not be None!')
         if len(review) > RestaurantRating.MAX_VALUE:
+=======
+    def check_review(review: str):
+        if len(review) > RestaurantRating.REVIEW_MAX_LENGTH:
+>>>>>>> 8e25b93769f2fce48e59cade2f7dc807bc1c1bba
             raise ValueError('Review\'s length must not be greater than MAX_SIZE')
 
     def set_value(self, value):
