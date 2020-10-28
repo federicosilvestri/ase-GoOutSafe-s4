@@ -78,6 +78,9 @@ In case you also want to see the overall coverage of the tests, execute the foll
 
 `python -m pytest --cov=gooutsafe`
 
+In order to know what are the lines of codes which are not covered by the tests, execute the command:
+
+`python -m pytest --cov-report term-missing`
 
 ## Conventions
 
