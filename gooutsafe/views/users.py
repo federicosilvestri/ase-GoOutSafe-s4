@@ -13,13 +13,13 @@ users = Blueprint('users', __name__)
 
 @users.route('/users')
 def _users():
-    users = db.session.query(User)
-    return render_template("users.html", users=users)
+    usrs = db.session.query(User)
+    return render_template("users.html", users=usrs)
 
 
 @users.route('/create_user/<string:type>', methods=['GET', 'POST'])
 def create_user_type(type):
-    if (type == "<customer>"):
+    if type == "<customer>":
         form = UserForm()
         user = Customer()
     else:
@@ -43,7 +43,7 @@ def create_user_type(type):
 
             login_user(user)
 
-            if (user.type == 'operator'):
+            if user.type == 'operator':
                 return redirect('/operator')
             else:
                 return redirect('/profile')

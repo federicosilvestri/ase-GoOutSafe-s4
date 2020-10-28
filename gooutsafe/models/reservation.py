@@ -8,18 +8,17 @@ from gooutsafe import db
 class Reservation(db.Model):
     __tablename__ = 'Reservation'
 
+    MAX_TIME_RESERVATION = 3
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     user = relationship('User', foreign_keys='Reservation.user_id')
     table_id = db.Column(db.Integer, db.ForeignKey('Table.id'))
-    table = relationship('Table', foreign_keys='Reservation.table_id', back_populates="reservations")
+    table = relationship('Table', foreign_keys='Reservation.table_id')
     actual_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
     is_active = db.Column(db.Boolean, default=True)
-
-    ### CONSTANTS ####
-    MAX_TIME_RESERVATION = 3
 
     def __init__(self, user, table, start_time, end_time=None):
         self.user = user
@@ -47,7 +46,7 @@ class Reservation(db.Model):
         return self.__end_time
     
     def set_end_time(self, end_time):
-        self.__end_time = end_time
+        self.end_time = end_time
 
     def set_is_active(self, is_active):
         self.is_active = is_active
