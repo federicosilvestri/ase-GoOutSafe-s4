@@ -45,7 +45,7 @@ class RestaurantRating(db.Model):
 
     @staticmethod
     def check_review(review: str):
-        if len(review) > RestaurantRating.MAX_VALUE:
+        if len(review) > RestaurantRating.REVIEW_MAX_LENGTH:
             raise ValueError('Review\'s length must not be greater than MAX_SIZE')
 
     def set_value(self, value):

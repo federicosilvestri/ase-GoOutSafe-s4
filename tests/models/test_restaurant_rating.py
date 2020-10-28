@@ -28,6 +28,15 @@ class TestRestaurantRating(ModelTest):
             self.assertEqual(restaurant_rating.customer_id, customer.id)
             self.assertEqual(restaurant_rating.restaurant_id, restaurant.id)
 
+    def test_value(self):
+        from gooutsafe.models.restaurant_rating import RestaurantRating
+
+        for _ in range(0, 10):
+            restaurant_rating, _ = TestRestaurantRating.generate_random_rating()
+            restaurant_rating.set_value(
+                random.randint(RestaurantRating.MIN_VALUE, RestaurantRating.MAX_VALUE)
+            )
+
     def test_bad_value(self):
         from gooutsafe.models.restaurant_rating import RestaurantRating
 
@@ -45,6 +54,15 @@ class TestRestaurantRating(ModelTest):
             with self.assertRaises(ValueError):
                 text = ''.join(['a' for _ in range(0, RestaurantRating.REVIEW_MAX_LENGTH + random.randint(1, 100))])
                 restaurant_rating.set_review(text)
+
+    def test_review(self):
+        from gooutsafe.models.restaurant_rating import RestaurantRating
+        import textwrap
+
+        for _ in range(0, 10):
+            restaurant_rating, _ = TestRestaurantRating.generate_random_rating()
+            text = textwrap.shorten(TestRestaurantRating.fake.text(), RestaurantRating.REVIEW_MAX_LENGTH-1)
+            restaurant_rating.set_review(text)
 
     @staticmethod
     def generate_random_rating():
