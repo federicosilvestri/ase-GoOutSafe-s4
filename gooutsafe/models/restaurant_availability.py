@@ -4,13 +4,13 @@ from gooutsafe import db
 
 
 class RestaurantAvailability(db.Model):
-    __tablename__ = 'Availability'
+    __tablename__ = 'RestaurantAvailability'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'))
-    restaurant = relationship('Restaurant', foreign_keys='Availability.restaurant_id')
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey("Restaurant.id"))
+    restaurant = relationship("Restaurant", back_populates="availabilities")
 
     def __init__(self, restaurant_id, start_time, end_time):
         self.restaurant_id = restaurant_id

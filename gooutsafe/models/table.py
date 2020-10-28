@@ -8,7 +8,7 @@ class Table(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'))
-    restaurant = relationship('Restaurant', foreign_keys='Restaurant.restaurant_id')
+    restaurant = relationship('Restaurant', back_populates="tables")
     capacity = db.Column(db.Integer)
 
     def __init__(self, capacity, restaurant):

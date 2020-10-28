@@ -1,5 +1,6 @@
-from gooutsafe import db
 from sqlalchemy.orm import relationship
+
+from gooutsafe import db
 
 
 class Restaurant(db.Model):
@@ -30,19 +31,26 @@ class Restaurant(db.Model):
     is_open = db.Column(
         db.Boolean, default=False
     )
-    tables = relationship("Table")
+    tables = relationship("Table", back_populates="restaurant")
+    availabilities = relationship("RestaurantAvailability", back_populates="restaurant")
 
     # TODO: add ratings relationship when their model is created
     # TODO: add availability relationship when their model is created
     # TODO: add hybrid property or method to calculate the number of likes
 
     def __init__(self, name, lat, lon, phone, menu_type):
+        Restaurant.check_phone_number(phone)
         self.name = name
         self.lat = lat
         self.lon = lon
         self.phone = phone
         self.menu_type = menu_type
         self.is_open = False
+
+    @staticmethod
+    def check_phone_number(phone):
+        if len(phone) > Restaurant.MAX_PHONE_LEN or len(phone) <= 0:
+            raise ValueError("Invalid phone number")
 
     def set_name(self, name):
         if self.MAX_NAME_LENGTH >= len(name) > 0:
@@ -63,10 +71,8 @@ class Restaurant(db.Model):
             raise ValueError("Invalid longitude value")
 
     def set_phone(self, phone):
-        if self.MIN_PHONE_VALUE <= phone <= self.MAX_PHONE_VALUE:
-            self.phone = phone
-        else:
-            raise ValueError("Invalid phone number")
+        Restaurant.check_phone_number(phone)
+        self.phone = phone
 
     def set_menu_type(self, menu_type):
         if 0 < len(menu_type) <= self.MAX_MENU_TYPE_LENGTH:

@@ -10,3 +10,4 @@ from .reservation import Reservation
 from .restaurant import Restaurant
 from .table import Table
 from .user import User
+from .restaurant_availability import RestaurantAvailability

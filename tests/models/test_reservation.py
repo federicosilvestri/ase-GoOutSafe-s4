@@ -12,16 +12,20 @@ class TestReservation(unittest.TestCase):
         from gooutsafe.models import reservation
         from gooutsafe.models import table
         from gooutsafe.models import user
+        from gooutsafe.models import restaurant
 
         self.reservation = reservation
         self.table = table
         self.user = user
+        self.restaurant = restaurant
 
     def test_reservation_init(self):
         start_time = datetime(2020, 12, 26, 13)
         end_time = start_time + timedelta(hours=3)
         user = self.user.User()
-        table = self.table.Table(3, "Pizza da Bepper")
+
+        restaurant = self.restaurant.Restaurant('Quello Buono', 10, 20, "55555555", 'Vegetarian')
+        table = self.table.Table(3, restaurant.id)
         reservation = self.reservation.Reservation(user, table, start_time, end_time=end_time)
         self.assertEqual(reservation.user, user)
         self.assertEqual(reservation.table, table)
@@ -29,13 +33,12 @@ class TestReservation(unittest.TestCase):
         self.assertEqual(reservation.end_time, end_time)
 
     def test_start_time(self):
-        start_time = datetime(2020, 10, 26, 13)
         user = self.user.User()
-        table = self.table.Table(3, "Pizza da Bepper") 
-        reservation = self.reservation.Reservation(user, table, start_time)
+        restaurant = self.restaurant.Restaurant('Quello Buono', 10, 20, "55555555", 'Vegetarian')
+        table = self.table.Table(3, restaurant.id)
         wrong_start_time = datetime(2020, 10, 26, 13)
         with self.assertRaises(ValueError):
-            reservation.set_start_time(wrong_start_time)
+            self.reservation.Reservation(user, table, wrong_start_time, end_time=wrong_start_time - timedelta(days=4))
             
             
 

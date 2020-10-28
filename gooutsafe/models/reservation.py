@@ -15,18 +15,26 @@ class Reservation(db.Model):
     user = relationship('User', foreign_keys='Reservation.user_id')
     table_id = db.Column(db.Integer, db.ForeignKey('Table.id'))
     table = relationship('Table')
-    actual_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
-    is_active = db.Column(db.Boolean, default=True)
 
     def __init__(self, user, table, start_time, end_time=None):
         self.user = user
         self.table = table
         self.start_time = start_time
-        # end_time will be set automatically as start_time + 3 hours
-        self.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
-        # TODO: change the 3 with a constant0
+
+        if end_time is None:
+            # end_time will be set automatically as start_time + 3 hours
+            self.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
+        else:
+            Reservation.check_time(start_time, end_time)
+            self.end_time = end_time
+
+    @staticmethod
+    def check_time(start_time, end_time):
+        if start_time >= end_time:
+            raise ValueError('The start time cannot be greater than end_time')
 
     def set_user(self, user):
         self.user = user
@@ -35,18 +43,12 @@ class Reservation(db.Model):
         self.table = table
 
     def set_start_time(self, start_time):
-        self.actual_time = datetime.datetime.now()
-        print(self.actual_time)
-        if start_time > self.actual_time:
-            self.start_time = start_time
-        else:
-            raise ValueError("Invalid reservation start time")
+        Reservation.check_time(start_time, self.end_time)
+        self.timestamp = datetime.datetime.now()
     
     def get_end_time(self):
         return self.__end_time
     
     def set_end_time(self, end_time):
+        Reservation.check_time(self.start_time, end_time)
         self.end_time = end_time
-
-    def set_is_active(self, is_active):
-        self.is_active = is_active

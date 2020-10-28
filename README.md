@@ -85,3 +85,7 @@ In case you also want to see the overall coverage of the tests, execute the foll
 - Name of methods, properties, variables must be snake_cased
 - Name of classes must be PascalCased 
 - Name of constants must be UPPERCASE 
+
+### Future implementations
+
+- [Checking phone numbers](https://pypi.org/project/phonenumbers/)
