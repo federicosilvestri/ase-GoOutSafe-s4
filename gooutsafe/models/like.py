@@ -1,4 +1,5 @@
 from sqlalchemy.orm import relationship
+import datetime
 
 from gooutsafe import db
 
@@ -12,4 +13,9 @@ class Like(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'), primary_key=True)
     restaurant = relationship('Restaurant', foreign_keys='Like.restaurant_id')
 
-    marked = db.Column(db.Boolean, default=False)  # True iff it has been counted in Restaurant.likes
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    def __init__(self, *args, **kw):
+        super(Like, self).__init__(*args, **kw)
+
+
