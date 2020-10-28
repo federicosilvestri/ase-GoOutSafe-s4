@@ -1,7 +1,6 @@
-from gooutsafe import db
-from datetime import datetime
-
 from sqlalchemy.orm import relationship
+
+from gooutsafe import db
 
 
 class RestaurantAvailability(db.Model):
@@ -12,7 +11,6 @@ class RestaurantAvailability(db.Model):
     restaurant = relationship('Restaurant', foreign_keys='Availability.restaurant_id')
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
-
 
     def __init__(self, restaurant_id, start_time, end_time):
         self.restaurant_id = restaurant_id

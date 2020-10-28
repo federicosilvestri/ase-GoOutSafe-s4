@@ -63,7 +63,7 @@ class Restaurant(db.Model):
             raise ValueError("Invalid phone number")
 
     def set_menu_type(self, menu_type):
-        if len(menu_type) > 0 and len(menu_type) <= self.MAX_MENU_TYPE_LENGTH:
+        if 0 < len(menu_type) <= self.MAX_MENU_TYPE_LENGTH:
             self.menu_type = menu_type
         else:
             raise ValueError("Invalid menu type")
