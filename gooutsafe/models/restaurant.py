@@ -33,20 +33,15 @@ class Restaurant(db.Model):
     )
     tables = relationship("Table", back_populates="restaurant")
     availabilities = relationship("RestaurantAvailability", back_populates="restaurant")
-<<<<<<< HEAD
-    operator = relationship("Operator", back_populates="restaurant")
-    ratings = relationship("Ratings", back_populates="restaurant")
-=======
     owner_id = db.Column(
         db.Integer,
         db.ForeignKey('Operator.id'),
     )
     owner = relationship('Operator', back_populates='restaurant')
-    ratings = relationship('RestaurantRatings', back_populates='restaurant')
+    ratings = relationship('RestaurantRating', back_populates='restaurant')
 
     # TODO: add ratings relationship when their model is created
 
->>>>>>> 8e25b93769f2fce48e59cade2f7dc807bc1c1bba
     # TODO: add hybrid property or method to calculate the number of likes
 
     def __init__(self, name, lat, lon, phone, menu_type):
