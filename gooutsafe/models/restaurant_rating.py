@@ -46,7 +46,7 @@ class RestaurantRating(db.Model):
     @staticmethod
     def check_review(review:str):
         if review is None:
-            raise ValueError('Review must not None!')
+            raise ValueError('Review must not be None!')
         if len(review) > RestaurantRating.MAX_VALUE:
             raise ValueError('Review\'s length must not be greater than MAX_SIZE')
 
