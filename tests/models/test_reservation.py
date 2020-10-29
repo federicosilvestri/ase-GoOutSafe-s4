@@ -28,7 +28,7 @@ class TestReservation(ModelTest):
         #using the generate_random_restaurant() static method
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         table = self.table.Table(3, restaurant)
-        reservation = self.reservation.Reservation(user, table, restaurant, start_time, end_time=end_time)
+        reservation = self.reservation.Reservation(user, table, restaurant, 5,start_time, end_time=end_time)
         self.assertEqual(reservation.user, user)
         self.assertEqual(reservation.table, table)
         self.assertEqual(reservation.start_time, start_time) 
@@ -39,7 +39,7 @@ class TestReservation(ModelTest):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         table = self.table.Table(3, restaurant)
         start_time = datetime(2020, 12, 26, 13)
-        resvation = self.reservation.Reservation(user, table, restaurant, start_time, end_time=start_time + timedelta(hours=4))
+        resvation = self.reservation.Reservation(user, table, restaurant, 5,start_time, end_time=start_time + timedelta(hours=4))
         wrong_start_time = start_time + timedelta(days=4)
         with self.assertRaises(ValueError):
                 resvation.set_start_time(wrong_start_time)

@@ -15,6 +15,9 @@ def create_reservation(id):
     
     return render_template("create_reservation.html")
 
+
+
+
 @reservation.route('<restaurant_id>/delete_reservation/<int:id>')
 def delete_reservation():
     #TODO: implement this method

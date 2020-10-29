@@ -20,7 +20,7 @@ class TestTable(ModelTest):
         self.restaurant = restaurant
 
     def test_table_init(self):
-        restaurant = TestRestaurant.generate_random_restaurant()
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
         capacity = 3
         table = self.table.Table(3, restaurant)
         self.assertEqual(table.capacity, capacity)
