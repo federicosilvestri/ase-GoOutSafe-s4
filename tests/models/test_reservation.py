@@ -23,6 +23,8 @@ class TestReservation(ModelTest):
         end_time = start_time + timedelta(hours=3)
         user = self.user.User()
 
+        # TODO: update the creation of test restaurants by importing the test_restaurant file and 
+        #using the generate_random_restaurant() static method
         restaurant = self.restaurant.Restaurant('Quello Buono', 10, 20, "55555555", 'Vegetarian')
         table = self.table.Table(3, restaurant.id)
         reservation = self.reservation.Reservation(user, table, restaurant, start_time, end_time=end_time)

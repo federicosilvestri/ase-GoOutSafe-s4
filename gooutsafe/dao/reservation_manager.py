@@ -3,7 +3,7 @@ from gooutsafe import db
 from .manager import Manager
 
 #CRUD: Create Retrieve Update Delete
-class Reservation_Manager(Manager):
+class ReservationManager(Manager):
 
     @staticmethod
     def create_reservation():
@@ -20,6 +20,3 @@ class Reservation_Manager(Manager):
     @staticmethod
     def delete_reservation():
         pass
-
-        
-

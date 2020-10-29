@@ -5,7 +5,7 @@ from gooutsafe import db
 from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.forms.restaurant import RestaurantForm
-from gooutsafe.dao.restaurant_manager import Restaurant_Manager
+from gooutsafe.dao.restaurant_manager import RestaurantManager
 
 
 restaurants = Blueprint('restaurants', __name__)
@@ -59,7 +59,7 @@ def add(id_op):
             restaurant = Restaurant(name,address, city, 0, 0, phone, menu_type)
             restaurant.owner_id = id_op
 
-            Restaurant_Manager.create_restaurant(restaurant)
+            RestaurantManager.create_restaurant(restaurant)
 
             return redirect('/operator/'+ str(id_op))
 
