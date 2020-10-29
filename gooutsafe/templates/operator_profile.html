@@ -52,6 +52,12 @@
             </ul>
         </a>
         </nav>
+
+        <!-- TODO: check if there's already a restaurant -->
+        <a class="nav-link active"
+            onclick="location.href='/restaurants/add/{{current_user.id}}'">
+            Add your restaurant
+        </a>
     {% endif %}
 
 {% endblock %}

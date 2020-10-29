@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from gooutsafe import db
 from gooutsafe.forms import LoginForm
 from gooutsafe.models.user import User
+from gooutsafe.models.restaurant import Restaurant
 
 auth = Blueprint('auth', __name__)
 
@@ -27,17 +28,15 @@ def login():
     return render_template('login.html', form=form)
 
 
-# TODO: put the current_user
 @auth.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     return render_template('customer_profile.html')
 
 
-# TODO: put the current_user
-@auth.route('/operator', methods=['GET', 'POST'])
+@auth.route('/operator/<int:id>', methods=['GET', 'POST'])
 @login_required
-def operator():
+def operator(id):
     return render_template('operator_profile.html')
 
 

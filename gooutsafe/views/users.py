@@ -33,7 +33,6 @@ def create_user_type(type):
     """
 
     if request.method == 'POST':
-
         if form.validate_on_submit():
             form.populate_obj(user)
             user.set_password(generate_password_hash(form.password.data))
@@ -45,7 +44,7 @@ def create_user_type(type):
             user.authenticated = True
 
             if user.type == 'operator':
-                return redirect('/operator')
+                return redirect('/operator/{{ user.id }}')
             else:
                 return redirect('/profile')
 

@@ -1,9 +1,12 @@
 from flask import Blueprint, render_template
-from flask_login import (current_user, login_required)
+from flask_login import (logout_user, login_user, login_required)
 
 from gooutsafe import db
 from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
+
+from gooutsafe.forms.restaurant import RestaurantForm
+
 
 restaurants = Blueprint('restaurants', __name__)
 
@@ -16,6 +19,7 @@ def _restaurants(message=''):
 
 
 @restaurants.route('/restaurants/<restaurant_id>')
+@login_required
 def restaurant_sheet(restaurant_id):
     record = db.session.query(Restaurant).filter_by(id=int(restaurant_id)).all()[0]
     return render_template("restaurantsheet.html", name=record.name, likes=record.likes, lat=record.lat, lon=record.lon,
@@ -37,3 +41,28 @@ def _like(restaurant_id):
     else:
         message = 'You\'ve already liked this place!'
     return _restaurants(message)
+
+
+@restaurants.route('/restaurants/add/<int:id_op>', methods=['GET', 'POST'])
+@login_required
+def add(id_op):
+    form = RestaurantForm()
+
+    """if request.method == 'POST':
+        if form.validate_on_submit():
+            name = form.data['name']
+            address = form.data['address']
+            phone = form.data['phone']
+            menu_type = form.data['menu_type']
+            start_time = form.data['start_time']
+            end_time = form.data['end_time']
+
+            restaurant = Restaurant()
+            restaurant.owner_id = id_op
+            form.populate_obj(restaurant)
+            db.session.add(restaurant)
+            db.session.commit()
+
+            return redirect('/operator/{{ id_op }}')"""
+
+    return render_template('create_restaurant.html', form=form)
