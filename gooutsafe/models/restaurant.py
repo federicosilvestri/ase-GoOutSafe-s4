@@ -9,8 +9,8 @@ class Restaurant(db.Model):
     MAX_STRING_LENGTH = 100
 
     # taken from Google Maps bounds
-    MAX_LAT = 85
-    MIN_LAT = -85
+    MAX_LAT = 90
+    MIN_LAT = -90
     MAX_LON = 180
     MIN_LON = -180
 
