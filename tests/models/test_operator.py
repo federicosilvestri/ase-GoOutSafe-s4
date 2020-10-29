@@ -1,4 +1,5 @@
 from .model_test import ModelTest
+import unittest
 
 
 class TestOperator(ModelTest):
@@ -19,6 +20,15 @@ class TestOperator(ModelTest):
             self.assertEqual(operator.is_active, is_active)
             self.assertEqual(operator.authenticated, False)
             self.assertEqual(operator.is_anonymous, is_anonymous)
+
+    @staticmethod
+    def assertOperatorsEquals(value, expected):
+        t = unittest.FunctionTestCase(TestOperator)
+        t.assertEqual(value.email, expected.email)
+        t.assertEqual(value.password, expected.password)
+        t.assertEqual(value.is_active, expected.is_active)
+        t.assertEqual(value.authenticated, False)
+        t.assertEqual(value.is_anonymous, expected.is_anonymous)
 
     @staticmethod
     def generator_random_operator():
