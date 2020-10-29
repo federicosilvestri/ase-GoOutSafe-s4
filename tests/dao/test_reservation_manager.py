@@ -35,7 +35,7 @@ class TestReservationManager(DaoTest):
     def test_update_reservation(self):
         base_reservation, _ = TestReservation.generate_random_reservation()
         self.reservation_manager.create_reservation(reservation=base_reservation)
-        base_reservation.set_people_number(TestReservationManager.faker.random_int(max=15))
+        base_reservation.set_people_number(TestReservationManager.faker.random_int(min=0,max=15))
         start_time = TestReservationManager.faker.date_time_between('now','+6w')
         base_reservation.set_start_time(start_time)
         updated_reservation = self.reservation_manager.retrieve_by_id(id_=base_reservation.id)

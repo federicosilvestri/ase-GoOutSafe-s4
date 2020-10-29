@@ -35,6 +35,6 @@ class TestTableManager(DaoTest):
     def test_update_table(self):
         base_table, _ = TestTable.generate_random_table()
         self.table_manager.create_table(table=base_table)
-        base_table.set_capacity(TestTableManager.faker.random_int(max=15))
+        base_table.set_capacity(TestTableManager.faker.random_int(min=0,max=15))
         updated_table = self.table_manager.retrieve_by_id(id_=base_table.id)
         TestTable.assertEqualTables(base_table, updated_table)

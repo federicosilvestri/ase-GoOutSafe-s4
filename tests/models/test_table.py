@@ -23,7 +23,7 @@ class TestTable(ModelTest):
     @staticmethod
     def generate_random_table():
         from gooutsafe.models.table import Table
-        capacity = TestTable.faker.random_int(max = 15)
+        capacity = TestTable.faker.random_int(min=0,max=15)
         restaurant, _ = TestRestaurant.generate_random_restaurant()
 
         table = Table(capacity=capacity, restaurant=restaurant)

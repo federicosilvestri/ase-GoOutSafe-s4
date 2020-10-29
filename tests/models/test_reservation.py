@@ -34,7 +34,7 @@ class TestReservation(ModelTest):
         user = TestUser.create_random_user()
         table, _ = TestTable.generate_random_table()
         restaurant, _ = TestRestaurant.generate_random_restaurant()
-        people_number = TestReservation.faker.random_int(max=table.MAX_TABLE_CAPACITY)
+        people_number = TestReservation.faker.random_int(min=0,max=table.MAX_TABLE_CAPACITY)
         start_time = TestReservation.faker.date_time_between('now', '+6w')
         reservation = Reservation(
             user = user,
