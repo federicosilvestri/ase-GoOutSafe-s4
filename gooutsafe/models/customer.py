@@ -12,7 +12,7 @@ class Customer(User):
     id = db.Column(db.Integer, db.ForeignKey('User.id', ondelete="CASCADE"), primary_key=True)
     firstname = db.Column(db.Unicode(128))
     lastname = db.Column(db.Unicode(128))
-    birthday = db.Column(db.DateTime)
+    birthday = db.Column(db.Date)
     social_number = db.Column(db.Unicode(SOCIAL_CODE_LENGTH))
     health_status = db.Column(db.Boolean, default=False)
     likes = relationship('Like', back_populates='liker')

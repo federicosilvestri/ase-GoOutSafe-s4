@@ -1,8 +1,10 @@
+import unittest
 from datetime import datetime
+
+from faker import Faker
 
 from .model_test import ModelTest
 
-from faker import Faker
 
 class TestCustomer(ModelTest):
 
@@ -25,9 +27,19 @@ class TestCustomer(ModelTest):
             self.assertEqual(customer.health_status, health_status)
 
     @staticmethod
+    def assertEqualCustomers(c1, c2):
+        t = unittest.FunctionTestCase(TestCustomer)
+        t.assertEqual(c1.firstname, c2.firstname)
+        t.assertEqual(c1.lastname, c2.lastname)
+        t.assertEqual(c1.birthday, c2.birthday)
+        t.assertEqual(c1.social_number, c2.social_number)
+        t.assertEqual(c1.health_status, c2.health_status)
+
+    @staticmethod
     def generate_random_customer():
         import datetime
         from datetime import date
+
         from gooutsafe.models import Customer
 
 
@@ -35,7 +47,7 @@ class TestCustomer(ModelTest):
         name, surname = complete_name[::len(complete_name) - 1]
         password = TestCustomer.faker.password()
         email = TestCustomer.faker.email()
-        birthdate = TestCustomer.faker.date(end_datetime=date.today() - datetime.timedelta(days= 365 * 20))
+        birthdate = date.fromisoformat(TestCustomer.faker.date(end_datetime=date.today() - datetime.timedelta(days= 365 * 20)))
         social_number = TestCustomer.faker.ssn()
         health_status = TestCustomer.faker.boolean()
         
