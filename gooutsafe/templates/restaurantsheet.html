@@ -5,6 +5,8 @@
 {% block body %}
     <h1>{{ name }} -- Likes: {{ likes }}</h1>
     <h2>Phone: {{ phone }}</h2>
+    <h2>Address: {{ address }} --  City: {{ city }}</h2>
+    <h2>Menu type: {{ menu_type }}</h2>
     <ul>
         {% if current_user.is_authenticated %}
             <iframe width="600" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
