@@ -45,6 +45,12 @@ class TestRestaurant(ModelTest):
             self.assertEqual(restaurant.phone, phone)
             self.assertEqual(restaurant.menu_type, menu_type)
 
+    def test_valid_name(self):
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        name = TestRestaurant.faker.company()
+        restaurant.set_name(name)
+        self.assertEqual(restaurant.name, name)
+
     def test_long_name(self):
         long_name = ''.join(
             random.choice(string.ascii_letters) for _ in
@@ -60,6 +66,12 @@ class TestRestaurant(ModelTest):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         with self.assertRaises(ValueError):
             restaurant.set_name(short_name)
+    
+    def test_valid_lat(self):
+        lat = TestRestaurant.faker.latitude()
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        restaurant.set_lat(lat)
+        self.assertEqual(restaurant.lat, lat)
 
     def test_too_high_lat1(self):
         lat = 1000
@@ -85,6 +97,12 @@ class TestRestaurant(ModelTest):
         with self.assertRaises(ValueError):
             restaurant.set_lat(lat)
 
+    def test_valid_lon(self):
+        lon = TestRestaurant.faker.longitude()
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        restaurant.set_lon(lon)
+        self.assertEqual(restaurant.lon, lon)
+
     def test_too_high_lon1(self):
         lon = 1000
         restaurant, _ = TestRestaurant.generate_random_restaurant()
@@ -109,6 +127,12 @@ class TestRestaurant(ModelTest):
         with self.assertRaises(ValueError):
             restaurant.set_lon(lon)
 
+    def test_valid_phone(self):
+        phone = TestRestaurant.faker.phone_number()
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        restaurant.set_phone(phone)
+        self.assertEqual(restaurant.phone, phone)
+
     def test_too_high_phone1(self):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
 
@@ -121,6 +145,12 @@ class TestRestaurant(ModelTest):
         with self.assertRaises(ValueError):
             phone = ""
             restaurant.set_phone(phone)
+
+    def test_valid_menu_type(self):
+        menu_type = TestRestaurant.faker.country()
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        restaurant.set_menu_type(menu_type)
+        self.assertEqual(restaurant.menu_type, menu_type)
 
     def test_long_menu_type(self):
         long_name = ''.join(
@@ -144,11 +174,10 @@ class TestRestaurant(ModelTest):
 
     def test_is_open_false(self):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
-        restaurant.is_open = True
-        restaurant.is_open = False
+        restaurant.set_is_open(False)
         self.assertEqual(restaurant.is_open, False)
 
     def test_is_open_true(self):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
-        restaurant.is_open = True
+        restaurant.set_is_open(True)
         self.assertEqual(restaurant.is_open, True)
