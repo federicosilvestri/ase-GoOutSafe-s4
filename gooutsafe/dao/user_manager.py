@@ -1,4 +1,3 @@
-from gooutsafe import db
 from gooutsafe.models.user import User
 from gooutsafe.dao.manager import Manager
 
@@ -7,25 +6,25 @@ class UserManager(Manager):
 
     @staticmethod
     def create_user(user: User):
-        Manager.check_none(user=user)
-
-        db.session.add(user)
-        db.session.commit()
+        Manager.create(user=user)
 
     @staticmethod
-    def retrieve(id):
-        Manager.check_none(id=id)
-        return User.query.get(id)
+    def retrieve_by_id(id_):
+        Manager.check_none(id=id_)
+        return User.query.get(id_)
 
     @staticmethod
     def update_user(user: User):
-        Manager.check_none(user=user)
+        Manager.update(user=user)
 
     @staticmethod
     def delete_user(user: User):
-        Manager.check_none(user=user)
-        db.session.delete(user)
-        db.session.commit()
+        Manager.delete(user=user)
+
+    @staticmethod
+    def delete_user_by_id(id_: int):
+        user = UserManager.retrieve_by_id(id_)
+        UserManager.delete_user(user)
 
 
 

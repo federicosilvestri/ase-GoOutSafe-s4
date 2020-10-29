@@ -7,7 +7,7 @@ from .model_test import ModelTest
 
 
 class TestRestaurant(ModelTest):
-    faker = Faker()
+    faker = Faker('it_IT')
 
     def setUp(self):
         super(TestRestaurant, self).setUp()
@@ -20,6 +20,8 @@ class TestRestaurant(ModelTest):
         from gooutsafe.models.restaurant import Restaurant
 
         name = TestRestaurant.faker.company()
+        address = TestRestaurant.faker.street_address()
+        city = TestRestaurant.faker.city()
         lat = TestRestaurant.faker.latitude()
         lon = TestRestaurant.faker.longitude()
         phone = TestRestaurant.faker.phone_number()
@@ -27,19 +29,23 @@ class TestRestaurant(ModelTest):
 
         restaurant = Restaurant(
             name=name,
+            address=address,
+            city=city,
             lat=lat,
             lon=lon,
             phone=phone,
             menu_type=menu_type
         )
 
-        return restaurant, (name, lat, lon, phone, menu_type)
+        return restaurant, (name, address, city, lat, lon, phone, menu_type)
 
     def test_rest_init(self):
         for _ in range(0, 10):
-            restaurant, (name, lat, lon, phone, menu_type) = TestRestaurant.generate_random_restaurant()
+            restaurant, (name, address, city, lat, lon, phone, menu_type) = TestRestaurant.generate_random_restaurant()
 
             self.assertEqual(restaurant.name, name)
+            self.assertEqual(restaurant.address, address)
+            self.assertEqual(restaurant.city, city)
             self.assertEqual(restaurant.lat, lat)
             self.assertEqual(restaurant.lon, lon)
             self.assertEqual(restaurant.phone, phone)
@@ -54,7 +60,7 @@ class TestRestaurant(ModelTest):
     def test_long_name(self):
         long_name = ''.join(
             random.choice(string.ascii_letters) for _ in
-            range(0, self.restaurant.Restaurant.MAX_NAME_LENGTH + random.randint(1, 100))
+            range(0, self.restaurant.Restaurant.MAX_STRING_LENGTH + random.randint(1, 100))
         )
 
         restaurant, _ = TestRestaurant.generate_random_restaurant()
@@ -67,6 +73,48 @@ class TestRestaurant(ModelTest):
         with self.assertRaises(ValueError):
             restaurant.set_name(short_name)
     
+    def test_valid_address(self):
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        address = TestRestaurant.faker.street_address()
+        restaurant.set_address(address)
+        self.assertEqual(restaurant.address, address)
+
+    def test_long_address(self):
+        long_name = ''.join(
+            random.choice(string.ascii_letters) for _ in
+            range(0, self.restaurant.Restaurant.MAX_STRING_LENGTH + random.randint(1, 100))
+        )
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        with self.assertRaises(ValueError):
+            restaurant.set_address(long_name)
+    
+    def test_short_address(self):
+        short_name = ''
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        with self.assertRaises(ValueError):
+            restaurant.set_address(short_name)
+
+    def test_valid_city(self):
+        city = TestRestaurant.faker.city()
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        restaurant.set_city(city)
+        self.assertEqual(restaurant.city, city)
+
+    def test_long_city(self):
+        long_name = ''.join(
+            random.choice(string.ascii_letters) for _ in
+            range(0, self.restaurant.Restaurant.MAX_STRING_LENGTH + random.randint(1, 100))
+        )
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        with self.assertRaises(ValueError):
+            restaurant.set_city(long_name)
+    
+    def test_short_city(self):
+        short_name = ''
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        with self.assertRaises(ValueError):
+            restaurant.set_city(short_name)
+
     def test_valid_lat(self):
         lat = TestRestaurant.faker.latitude()
         restaurant, _ = TestRestaurant.generate_random_restaurant()
@@ -155,7 +203,7 @@ class TestRestaurant(ModelTest):
     def test_long_menu_type(self):
         long_name = ''.join(
             random.choice(string.ascii_letters) for _ in
-            range(0, self.restaurant.Restaurant.MAX_MENU_TYPE_LENGTH + random.randint(1, 100))
+            range(0, self.restaurant.Restaurant.MAX_STRING_LENGTH + random.randint(1, 100))
         )
 
         restaurant, _ = TestRestaurant.generate_random_restaurant()

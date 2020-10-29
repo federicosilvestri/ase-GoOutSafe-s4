@@ -6,7 +6,7 @@ from gooutsafe import db
 class Restaurant(db.Model):
     __tablename__ = 'Restaurant'
 
-    MAX_NAME_LENGTH = 100
+    MAX_STRING_LENGTH = 100
 
     # taken from Google Maps bounds
     MAX_LAT = 85
@@ -15,7 +15,6 @@ class Restaurant(db.Model):
     MIN_LON = -180
 
     MAX_PHONE_LEN = 25
-    MAX_MENU_TYPE_LENGTH = 100
 
     id = db.Column(
         db.Integer,
@@ -23,7 +22,13 @@ class Restaurant(db.Model):
         autoincrement=True
     )
     name = db.Column(
-        db.String(length=MAX_NAME_LENGTH)
+        db.String(length=MAX_STRING_LENGTH)
+    )
+    address = db.Column(
+        db.String(length=MAX_STRING_LENGTH)
+    )
+    city = db.Column(
+        db.String(length=MAX_STRING_LENGTH)
     )
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
@@ -31,7 +36,7 @@ class Restaurant(db.Model):
         db.String(length=MAX_PHONE_LEN)
     )
     menu_type = db.Column(
-        db.String(length=MAX_MENU_TYPE_LENGTH)
+        db.String(length=MAX_STRING_LENGTH)
     )
     is_open = db.Column(
         db.Boolean,
@@ -50,9 +55,11 @@ class Restaurant(db.Model):
 
     # TODO: add hybrid property or method to calculate the number of likes
 
-    def __init__(self, name, lat, lon, phone, menu_type):
+    def __init__(self, name, address, city, lat, lon, phone, menu_type):
         Restaurant.check_phone_number(phone)
         self.name = name
+        self.address = address
+        self.city = city
         self.lat = lat
         self.lon = lon
         self.phone = phone
@@ -64,11 +71,22 @@ class Restaurant(db.Model):
         if len(phone) > Restaurant.MAX_PHONE_LEN or len(phone) <= 0:
             raise ValueError("Invalid phone number")
 
+    @staticmethod
+    def check_string_attribute(string_attribute):
+        if len(string_attribute) > Restaurant.MAX_STRING_LENGTH or len(string_attribute) <= 0:
+            raise ValueError("Invalid attribute length")
+
     def set_name(self, name):
-        if self.MAX_NAME_LENGTH >= len(name) > 0:
-            self.name = name
-        else:
-            raise ValueError("Invalid restaurant name length")
+        Restaurant.check_string_attribute(name)
+        self.name = name
+
+    def set_address(self, address):
+        Restaurant.check_string_attribute(address)
+        self.address = address
+
+    def set_city(self, city):
+        Restaurant.check_string_attribute(city)
+        self.city = city
 
     def set_lat(self, lat):
         if self.MIN_LAT <= lat <= self.MAX_LAT:
@@ -87,10 +105,8 @@ class Restaurant(db.Model):
         self.phone = phone
 
     def set_menu_type(self, menu_type):
-        if 0 < len(menu_type) <= self.MAX_MENU_TYPE_LENGTH:
-            self.menu_type = menu_type
-        else:
-            raise ValueError("Invalid menu type")
+        Restaurant.check_string_attribute(menu_type)
+        self.menu_type = menu_type
 
     def set_is_open(self, is_open):
         self.is_open = is_open

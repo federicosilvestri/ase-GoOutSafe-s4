@@ -39,6 +39,3 @@ class User(UserMixin, db.Model):
         checked = check_password_hash(self.password, password)
         self.authenticated = checked
         return self.authenticated
-
-    def get_id(self):
-        return self.id

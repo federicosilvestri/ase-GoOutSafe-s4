@@ -1,6 +1,7 @@
 from .model_test import ModelTest
 import random
 from faker import Faker
+import unittest
 
 
 class TestUser(ModelTest):
@@ -15,7 +16,7 @@ class TestUser(ModelTest):
 
     @staticmethod
     def assertUserEquals(value, expected):
-        t = TestUser()
+        t = unittest.FunctionTestCase(TestUser)
         t.assertEqual(value.email, expected.email)
         t.assertEqual(value.password, expected.password)
         t.assertEqual(value.is_active, expected.is_active)

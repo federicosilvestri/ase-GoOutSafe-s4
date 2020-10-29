@@ -1,6 +1,3 @@
-import random
-import string
-
 from faker import Faker
 
 from .dao_test import DaoTest
@@ -17,13 +14,23 @@ class TestUserManager(DaoTest):
 
         self.user_manager = user_manager.UserManager
 
-    def test_create(self):
-        user = TestUser.create_random_user()
+    def test_crud(self):
+        for _ in range(0, 10):
+            user = TestUser.create_random_user()
+            self.user_manager.create_user(user=user)
+            user1 = self.user_manager.retrieve_by_id(user.id)
+            TestUser.assertUserEquals(user1, user)
 
-        self.user_manager.create(user=user)
-        user1 = self.user_manager.retrieve(user.id)
+            user.set_password(self.faker.password())
+            user.email = self.faker.email()
+            self.user_manager.update_user(user=user)
+            user1 = self.user_manager.retrieve_by_id(user.id)
+            TestUser.assertUserEquals(user1, user)
 
-        TestUser.assertUserEquals(user1, user)
+            self.user_manager.delete_user(user=user)
+
+
+
 
 
 
