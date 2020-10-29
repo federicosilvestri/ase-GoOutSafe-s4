@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 401f5f56fc9e
+Revision ID: 41969898e4d4
 Revises: 
-Create Date: 2020-10-29 10:45:05.878372
+Create Date: 2020-10-29 12:09:59.255240
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '401f5f56fc9e'
+revision = '41969898e4d4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -43,6 +43,7 @@ def upgrade():
     sa.Column('firstname', sa.Unicode(length=128), nullable=True),
     sa.Column('lastname', sa.Unicode(length=128), nullable=True),
     sa.Column('birthday', sa.DateTime(), nullable=True),
+    sa.Column('social_number', sa.Unicode(length=16), nullable=True),
     sa.Column('health_status', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['id'], ['User.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
@@ -55,6 +56,8 @@ def upgrade():
     op.create_table('Restaurant',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(length=100), nullable=True),
+    sa.Column('address', sa.String(length=100), nullable=True),
+    sa.Column('city', sa.String(length=100), nullable=True),
     sa.Column('lat', sa.Float(), nullable=True),
     sa.Column('lon', sa.Float(), nullable=True),
     sa.Column('phone', sa.String(length=25), nullable=True),
