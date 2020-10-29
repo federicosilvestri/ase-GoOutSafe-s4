@@ -1,8 +1,8 @@
-from models.reservation import Reservation
+from gooutsafe.models.reservation import Reservation
 from gooutsafe import db
 from .manager import Manager
 
-#CRUD: Create Retrive Update Delete
+#CRUD: Create Retrieve Update Delete
 class Reservation_Manager(Manager):
 
     @staticmethod
@@ -10,14 +10,14 @@ class Reservation_Manager(Manager):
         pass
 
     @staticmethod
-    def retrive_reservation():
+    def retrieve_reservation():
         pass
 
     @staticmethod
     def update_reservation():
         pass
-    @staticmethod
 
+    @staticmethod
     def delete_reservation():
         pass
 

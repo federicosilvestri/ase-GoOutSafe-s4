@@ -1,8 +1,8 @@
-from models.table import Table
+from gooutsafe.models.table import Table
 from gooutsafe import db
 from .manager import Manager
 
-#CRUD: Create Retrive Update Delete
+#CRUD: Create Retrieve Update Delete
 class Table_Manager(Manager):
 
     @staticmethod
@@ -10,7 +10,7 @@ class Table_Manager(Manager):
         pass
 
     @staticmethod
-    def retrive_table():
+    def retrieve_table():
         pass
 
     @staticmethod
