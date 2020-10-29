@@ -2,7 +2,7 @@ from models.restaurant import Restaurant
 from gooutsafe import db
 from .manager import Manager
 
-#CRUD: Create Retrive Update Delete
+#CRUD: Create Retrieve Update Delete
 class Restaurant_Manager(Manager):
 
     @staticmethod
@@ -10,7 +10,7 @@ class Restaurant_Manager(Manager):
         pass
 
     @staticmethod
-    def retrive_restaurant():
+    def retrieve_restaurant():
         pass
 
     @staticmethod
