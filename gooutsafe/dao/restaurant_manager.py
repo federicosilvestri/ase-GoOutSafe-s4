@@ -1,4 +1,4 @@
-from models.restaurant import Restaurant
+from gooutsafe.models.restaurant import Restaurant
 from gooutsafe import db
 from .manager import Manager
 
