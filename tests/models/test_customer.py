@@ -47,7 +47,7 @@ class TestCustomer(ModelTest):
         name, surname = complete_name[::len(complete_name) - 1]
         password = TestCustomer.faker.password()
         email = TestCustomer.faker.email()
-        birthdate = date.fromisoformat(TestCustomer.faker.date(end_datetime=date.today() - datetime.timedelta(days= 365 * 20)))
+        birthdate = TestCustomer.faker.date_of_birth()
         social_number = TestCustomer.faker.ssn()
         health_status = TestCustomer.faker.boolean()
         
