@@ -2,9 +2,17 @@ from .model_test import ModelTest
 from datetime import datetime
 from datetime import timedelta
 from .test_restaurant import  TestRestaurant
+from .test_user import TestUser
+from .test_table import TestTable
+import unittest
+
+from faker import Faker
+
+from .model_test import ModelTest
 
 
 class TestReservation(ModelTest):
+    faker = Faker('it_IT')
 
     def setUp(self):
         super(TestReservation, self).setUp()
@@ -19,27 +27,43 @@ class TestReservation(ModelTest):
         self.user = user
         self.restaurant = restaurant
 
-    def test_reservation_init(self):
-        start_time = datetime(2020, 12, 26, 13)
-        end_time = start_time + timedelta(hours=3)
-        user = self.user.User()
-
-        # TODO: update the creation of test restaurants by importing the test_restaurant file and 
-        #using the generate_random_restaurant() static method
+    @staticmethod
+    def generate_random_reservation():
+        from gooutsafe.models.reservation import Reservation
+        
+        user = TestUser.create_random_user()
+        table, _ = TestTable.generate_random_table()
         restaurant, _ = TestRestaurant.generate_random_restaurant()
-        table = self.table.Table(3, restaurant)
-        reservation = self.reservation.Reservation(user, table, restaurant, 5,start_time, end_time=end_time)
+        people_number = TestReservation.faker.random_int(max=table.MAX_TABLE_CAPACITY)
+        start_time = TestReservation.faker.date_time_between('now', '+6w')
+        reservation = Reservation(
+            user = user,
+            table = table,
+            restaurant = restaurant,
+            people_number = people_number,
+            start_time = start_time
+        )
+
+        return reservation, (user, table, restaurant, start_time)
+
+
+    @staticmethod
+    def assertEqualReservations(r1, r2):
+        t = unittest.FunctionTestCase(TestReservation)
+        t.assertEqual(r1.user.id, r2.user.id)
+        t.assertEqual(r1.table.id, r2.table.id)
+        t.assertEqual(r1.restaurant.id, r2.restaurant.id)
+        t.assertEqual(r1.people_number, r2.people_number)
+        t.assertEqual(r1.start_time, r2.start_time)
+
+    def test_reservation_init(self):
+        reservation, (user, table, restaurant, start_time) = TestReservation.generate_random_reservation()
         self.assertEqual(reservation.user, user)
         self.assertEqual(reservation.table, table)
         self.assertEqual(reservation.start_time, start_time) 
-        self.assertEqual(reservation.end_time, end_time)
 
     def test_set_start_time(self):
-        user = self.user.User()
-        restaurant, _ = TestRestaurant.generate_random_restaurant()
-        table = self.table.Table(3, restaurant)
-        start_time = datetime(2020, 12, 26, 13)
-        resvation = self.reservation.Reservation(user, table, restaurant, 5,start_time, end_time=start_time + timedelta(hours=4))
-        wrong_start_time = start_time + timedelta(days=4)
+        reservation, _ = TestReservation.generate_random_reservation()
+        wrong_start_time = TestReservation.faker.date_time_between('-4y','now')
         with self.assertRaises(ValueError):
-                resvation.set_start_time(wrong_start_time)
+                reservation.set_start_time(wrong_start_time)

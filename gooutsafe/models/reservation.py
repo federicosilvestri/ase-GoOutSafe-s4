@@ -1,5 +1,5 @@
 from datetime import timedelta
-import datetime
+from datetime import datetime
 from sqlalchemy.orm import relationship
 
 from gooutsafe import db
@@ -17,7 +17,7 @@ class Reservation(db.Model):
     table = relationship('Table')
     restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'))
     restaurant = relationship("Restaurant", back_populates="reservations")
-    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     people_number = db.Column(db.Integer)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
@@ -38,8 +38,10 @@ class Reservation(db.Model):
 
     @staticmethod
     def check_time(start_time, end_time):
-        if start_time >= end_time:
+        actual_time = datetime.now()
+        if start_time >= end_time or start_time < actual_time:
             raise ValueError('The start time cannot be greater than end_time')
+
 
     def set_user(self, user):
         self.user = user
@@ -54,8 +56,8 @@ class Reservation(db.Model):
         self.people_number
 
     def set_start_time(self, start_time):
-        Reservation.check_time(start_time, self.end_time)
-        self.timestamp = datetime.datetime.now()
+        self.start_time = start_time
+        self.set_end_time(start_time + timedelta(self.MAX_TIME_RESERVATION))
     
     def get_end_time(self):
         return self.__end_time
