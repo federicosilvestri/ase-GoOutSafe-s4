@@ -1,5 +1,6 @@
 import random
 import string
+import unittest
 
 from faker import Faker
 
@@ -38,6 +39,17 @@ class TestRestaurant(ModelTest):
         )
 
         return restaurant, (name, address, city, lat, lon, phone, menu_type)
+
+    @staticmethod
+    def assertEqualRestaurants(r1, r2):
+        t = unittest.FunctionTestCase(TestRestaurant)
+        t.assertEqual(r1.name, r2.name)
+        t.assertEqual(r1.address, r2.address)
+        t.assertEqual(r1.city, r2.city)
+        t.assertEqual(r1.lat, r2.lat)
+        t.assertEqual(r1.lon, r2.lon)
+        t.assertEqual(r1.phone, r2.phone)
+        t.assertEqual(r1.menu_type, r2.menu_type)
 
     def test_rest_init(self):
         for _ in range(0, 10):
