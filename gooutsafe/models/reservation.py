@@ -18,13 +18,15 @@ class Reservation(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id'))
     restaurant = relationship("Restaurant", back_populates="reservations")
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    people_number = db.Column(db.Integer)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
 
-    def __init__(self, user, table, restaurant, start_time, end_time=None):
+    def __init__(self, user, table, restaurant, people_number, start_time, end_time=None):
         self.user = user
         self.table = table
         self.restaurant = restaurant
+        self.people_number = people_number
         self.start_time = start_time
 
         if end_time is None:
@@ -47,6 +49,9 @@ class Reservation(db.Model):
     
     def set_restaurant(self, restaurant):
         self.restaurant = restaurant
+
+    def set_people_number(self, people_number):
+        self.people_number
 
     def set_start_time(self, start_time):
         Reservation.check_time(start_time, self.end_time)

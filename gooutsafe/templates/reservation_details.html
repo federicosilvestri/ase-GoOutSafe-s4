@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block page_title %} Reservation Details {% endblock %}
+
+{% block body %}
+    <h1>{{ restaurant.name }} -- {{ user.name }}</h1>
+    <ul> 
+        <li>
+            {{ table.id }}
+        </li>
+        <li>
+            {{ reservation.start_time }}
+        </li>
+    </ul>
+
+{% endblock %}

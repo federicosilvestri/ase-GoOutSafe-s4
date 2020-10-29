@@ -1,6 +1,7 @@
 from .model_test import ModelTest
 from datetime import datetime
 from datetime import timedelta
+from .test_restaurant import TestRestaurant
 
 
 class TestTable(ModelTest):
@@ -19,7 +20,7 @@ class TestTable(ModelTest):
         self.restaurant = restaurant
 
     def test_table_init(self):
-        restaurant = self.restaurant.Restaurant('Quello Buono', 10, 20, "55555555", 'Vegetarian')
+        restaurant = TestRestaurant.generate_random_restaurant()
         capacity = 3
         table = self.table.Table(3, restaurant)
         self.assertEqual(table.capacity, capacity)
