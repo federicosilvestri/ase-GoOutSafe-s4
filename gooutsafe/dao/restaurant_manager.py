@@ -6,8 +6,8 @@ from .manager import Manager
 class Restaurant_Manager(Manager):
 
     @staticmethod
-    def create_restaurant():
-        pass
+    def create_restaurant(restaurant: Restaurant):
+        Manager.create(restaurant=restaurant)
 
     @staticmethod
     def retrieve_restaurant():

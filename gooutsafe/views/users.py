@@ -42,7 +42,8 @@ def create_user_type(type):
             user.authenticated = True
 
             if user.type == 'operator':
-                return redirect('/operator/{{ user.id }}')
+                url = '/operator/'+ str(user.id)
+                return redirect(url)
             else:
                 return redirect('/profile')
 

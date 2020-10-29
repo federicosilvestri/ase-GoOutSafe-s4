@@ -1,11 +1,11 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, redirect, render_template, request
 from flask_login import (logout_user, login_user, login_required)
 
 from gooutsafe import db
 from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
-
 from gooutsafe.forms.restaurant import RestaurantForm
+from gooutsafe.dao.restaurant_manager import Restaurant_Manager
 
 
 restaurants = Blueprint('restaurants', __name__)
@@ -49,21 +49,19 @@ def _like(restaurant_id):
 def add(id_op):
     form = RestaurantForm()
 
-    """if request.method == 'POST':
+    if request.method == 'POST':
         if form.validate_on_submit():
             name = form.data['name']
             address = form.data['address']
+            city = form.data['city']
             phone = form.data['phone']
             menu_type = form.data['menu_type']
-            start_time = form.data['start_time']
-            end_time = form.data['end_time']
-
-            restaurant = Restaurant()
+            restaurant = Restaurant(name,address, city, 0, 0, phone, menu_type)
             restaurant.owner_id = id_op
-            form.populate_obj(restaurant)
-            db.session.add(restaurant)
-            db.session.commit()
 
-            return redirect('/operator/{{ id_op }}')"""
+            Restaurant_Manager.create_restaurant(restaurant)
+
+            url = '/operator/'+ str(id_op)
+            return redirect(url)
 
     return render_template('create_restaurant.html', form=form)

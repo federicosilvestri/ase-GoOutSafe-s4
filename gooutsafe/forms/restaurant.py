@@ -11,7 +11,7 @@ class RestaurantForm(FlaskForm):
     city = f.StringField('city', validators=[DataRequired()])
     phone = f.StringField('phone', validators=[DataRequired()])
     menu_type = f.SelectField('menu_type', choices=list_menu, default=1)
-    start_time = f.TimeField('start_time', validators=[DataRequired()])
-    end_time = f.TimeField('end_time', validators=[DataRequired()])
+    #start_time = f.TimeField('start_time', validators=[DataRequired()])
+    #end_time = f.TimeField('end_time', validators=[DataRequired()])
 
-    display = ['name', 'address', 'city', 'phone', 'menu_type', 'start_time', 'end_time']
+    display = ['name', 'address', 'city', 'phone', 'menu_type']
