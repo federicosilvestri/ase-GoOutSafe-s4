@@ -22,8 +22,10 @@ def login():
             login_user(user)
             if user.type == 'operator':
                 return render_template('operator_profile.html', current_user=user)
-            else:
+            elif user.type == 'customer':
                 return render_template('customer_profile.html', current_user=user)
+            else: 
+                return render_template('authority_profile.html', current_user=user)
 
     return render_template('login.html', form=form)
 
@@ -38,6 +40,12 @@ def profile():
 @login_required
 def operator(id):
     return render_template('operator_profile.html')
+
+
+@auth.route('/authority', methods=['GET', 'POST'])
+@login_required
+def authority():
+    return render_template('authority_profile.html')
 
 
 @auth.route('/logout')
