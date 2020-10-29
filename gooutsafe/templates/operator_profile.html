@@ -52,12 +52,22 @@
             </ul>
         </a>
         </nav>
-
-        <!-- TODO: check if there's already a restaurant -->
-        <a class="nav-link active"
-            onclick="location.href='/restaurants/add/{{current_user.id}}'">
-            Add your restaurant
-        </a>
+        <br>
+        {% if restaurant == None %}
+            <a class="nav-link active"
+                onclick="location.href='/restaurants/add/{{current_user.id}}'">
+                Add your restaurant
+            </a>
+        {% else %}
+            <h3>Your Restaurant</h3>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        {{ restaurant.name }} -- {{ restaurant.address }}
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
     {% endif %}
 
 {% endblock %}

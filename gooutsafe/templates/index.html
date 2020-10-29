@@ -16,7 +16,7 @@
                         </a>
                     {% elif current_user.type == "customer" %}
                         <a class="btn btn-outline-primary"
-                            onclick="location.href='/profile'">Profile
+                            onclick="location.href='/profile/{{current_user.id}}'">Profile
                         </a>
                     {% endif %}  
                 </li>

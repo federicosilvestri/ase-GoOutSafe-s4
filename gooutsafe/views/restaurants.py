@@ -61,7 +61,6 @@ def add(id_op):
 
             Restaurant_Manager.create_restaurant(restaurant)
 
-            url = '/operator/'+ str(id_op)
-            return redirect(url)
+            return redirect('/operator/'+ str(id_op))
 
     return render_template('create_restaurant.html', form=form)

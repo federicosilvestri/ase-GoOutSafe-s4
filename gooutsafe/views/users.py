@@ -36,10 +36,9 @@ def create_user_type(type):
             user.authenticated = True
 
             if user.type == 'operator':
-                url = '/operator/'+ str(user.id)
-                return redirect(url)
+                return redirect('/operator/'+ str(user.id))
             else:
-                return redirect('/profile')
+                return redirect('/profile/'+ str(user.id))
 
     return render_template('create_user.html', form=form)
 

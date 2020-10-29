@@ -21,7 +21,7 @@ def login():
         if user is not None and check_password_hash(user.password, password):
             login_user(user)
             if user.type == 'operator':
-                return render_template('operator_profile.html', current_user=user)
+                return redirect('/operator/'+ str(user.id))
             elif user.type == 'customer':
                 return render_template('customer_profile.html', current_user=user)
             else: 
@@ -30,16 +30,17 @@ def login():
     return render_template('login.html', form=form)
 
 
-@auth.route('/profile', methods=['GET', 'POST'])
+@auth.route('/profile/<int:id>', methods=['GET', 'POST'])
 @login_required
-def profile():
+def profile(id):
     return render_template('customer_profile.html')
 
 
 @auth.route('/operator/<int:id>', methods=['GET', 'POST'])
 @login_required
 def operator(id):
-    return render_template('operator_profile.html')
+    restaurant = Restaurant.query.filter_by(owner_id=id).first()
+    return render_template('operator_profile.html', restaurant=restaurant)
 
 
 @auth.route('/authority', methods=['GET', 'POST'])
