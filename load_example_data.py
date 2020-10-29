@@ -1,5 +1,6 @@
 from gooutsafe import create_app
 import json
+from werkzeug.security import generate_password_hash
 
 
 PATH_HEALTH_AUTH_DATA = 'example_data/health_authority.json'
@@ -20,7 +21,7 @@ def load_health_auth_data(health_authority):
     with open(PATH_HEALTH_AUTH_DATA) as json_file:
         dict_health_auth = json.load(json_file)
     email = dict_health_auth["email"]
-    password = dict_health_auth["password"]
+    password = generate_password_hash(dict_health_auth["password"])
     name = dict_health_auth["name"]
     city = dict_health_auth["city"]
     address = dict_health_auth["address"]
