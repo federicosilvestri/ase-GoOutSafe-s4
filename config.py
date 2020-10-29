@@ -24,5 +24,5 @@ class TestConfig(object):
     SECRET_KEY = b'isreallynotsecretatall'
 
     SQLALCHEMY_ECHO = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///../db_test.sqlite'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///../db.sqlite'
     SQLALCHEMY_TRACK_MODIFICATIONS = True

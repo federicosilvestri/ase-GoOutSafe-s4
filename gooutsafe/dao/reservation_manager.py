@@ -1,4 +1,4 @@
-from models.reservation import Reservation
+from gooutsafe.models.reservation import Reservation
 from gooutsafe import db
 from .manager import Manager
 

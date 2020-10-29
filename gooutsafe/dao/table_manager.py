@@ -1,4 +1,4 @@
-from models.table import Table
+from gooutsafe.models.table import Table
 from gooutsafe import db
 from .manager import Manager
 

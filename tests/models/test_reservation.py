@@ -31,10 +31,12 @@ class TestReservation(ModelTest):
         self.assertEqual(reservation.start_time, start_time) 
         self.assertEqual(reservation.end_time, end_time)
 
-    def test_start_time(self):
+    def test_set_start_time(self):
         user = self.user.User()
         restaurant = self.restaurant.Restaurant('Quello Buono', 10, 20, "55555555", 'Vegetarian')
         table = self.table.Table(3, restaurant.id)
-        wrong_start_time = datetime(2020, 10, 26, 13)
+        start_time = datetime(2020, 12, 26, 13)
+        resvation = self.reservation.Reservation(user, table, restaurant, start_time, end_time=start_time + timedelta(hours=4))
+        wrong_start_time = start_time + timedelta(days=4)
         with self.assertRaises(ValueError):
-            self.reservation.Reservation(user, table, restaurant, wrong_start_time, end_time=wrong_start_time - timedelta(days=4))
+                resvation.set_start_time(wrong_start_time)
