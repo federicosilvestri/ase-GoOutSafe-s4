@@ -3,7 +3,7 @@ from gooutsafe import db
 from .manager import Manager
 
 #CRUD: Create Retrieve Update Delete
-class Table_Manager(Manager):
+class TableManager(Manager):
 
     @staticmethod
     def create_table():
