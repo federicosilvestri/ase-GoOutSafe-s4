@@ -49,6 +49,7 @@ class Restaurant(db.Model):
     likes = relationship('Like', back_populates='restaurant')
 
     # TODO: add hybrid property or method to calculate the number of likes
+    # TODO: add a method to add a new table 
 
     def __init__(self, name, lat, lon, phone, menu_type):
         Restaurant.check_phone_number(phone)
