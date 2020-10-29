@@ -128,31 +128,19 @@ class TestRestaurant(ModelTest):
             restaurant.set_city(short_name)
 
     def test_valid_lat(self):
-        lat = TestRestaurant.faker.latitude()
         restaurant, _ = TestRestaurant.generate_random_restaurant()
+        lat = TestRestaurant.faker.latitude()
         restaurant.set_lat(lat)
         self.assertEqual(restaurant.lat, lat)
 
     def test_too_high_lat1(self):
-        lat = 1000
-        restaurant, _ = TestRestaurant.generate_random_restaurant()
-        with self.assertRaises(ValueError):
-            restaurant.set_lat(lat)
-
-    def test_too_high_lat2(self):
-        lat = 86
+        lat = self.restaurant.Restaurant.MAX_LAT + random.randint(1, 100)
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         with self.assertRaises(ValueError):
             restaurant.set_lat(lat)
 
     def test_too_low_lat1(self):
-        lat = -1000
-        restaurant, _ = TestRestaurant.generate_random_restaurant()
-        with self.assertRaises(ValueError):
-            restaurant.set_lat(lat)
-
-    def test_too_low_lat2(self):
-        lat = -86
+        lat = self.restaurant.Restaurant.MIN_LAT - random.randint(1, 100)
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         with self.assertRaises(ValueError):
             restaurant.set_lat(lat)
@@ -164,25 +152,13 @@ class TestRestaurant(ModelTest):
         self.assertEqual(restaurant.lon, lon)
 
     def test_too_high_lon1(self):
-        lon = 1000
-        restaurant, _ = TestRestaurant.generate_random_restaurant()
-        with self.assertRaises(ValueError):
-            restaurant.set_lon(lon)
-
-    def test_too_high_lon2(self):
-        lon = 181
+        lon = self.restaurant.Restaurant.MAX_LON + random.randint(1, 100)
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         with self.assertRaises(ValueError):
             restaurant.set_lon(lon)
 
     def test_too_low_lon1(self):
-        lon = -1000
-        restaurant, _ = TestRestaurant.generate_random_restaurant()
-        with self.assertRaises(ValueError):
-            restaurant.set_lon(lon)
-
-    def test_too_low_lon2(self):
-        lon = -181
+        lon = self.restaurant.Restaurant.MIN_LON - random.randint(1, 100)
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         with self.assertRaises(ValueError):
             restaurant.set_lon(lon)

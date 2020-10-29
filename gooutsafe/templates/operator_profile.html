@@ -63,7 +63,10 @@
             <div>
                 <ul class="list-group">
                     <li class="list-group-item">
-                        {{ restaurant.name }} -- {{ restaurant.address }}
+                        <a class="nav-link active"
+                            onclick="location.href='/restaurants/{{restaurant.id}}'">
+                            {{ restaurant.name }} -- {{ restaurant.address }}
+                        </a>
                     </li>
                 </ul>
             </div>

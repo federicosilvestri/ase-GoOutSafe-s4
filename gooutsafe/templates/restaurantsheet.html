@@ -3,10 +3,10 @@
 {% block page_title %} List {% endblock %}
 
 {% block body %}
-    <h1>{{ name }} -- Likes: {{ likes }}</h1>
-    <h2>Phone: {{ phone }}</h2>
-    <h2>Address: {{ address }} --  City: {{ city }}</h2>
-    <h2>Menu type: {{ menu_type }}</h2>
+    <h5>{{ name }} -- Likes: {{ likes }}</h5>
+    <h5>Phone: {{ phone }}</h5>
+    <h5>Address: {{ address }} --  City: {{ city }}</h5>
+    <h5>Menu type: {{ menu_type }}</h5>
     <ul>
         {% if current_user.is_authenticated %}
             <iframe width="600" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
