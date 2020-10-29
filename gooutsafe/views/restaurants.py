@@ -18,8 +18,9 @@ def _restaurants(message=''):
 @restaurants.route('/restaurants/<restaurant_id>')
 def restaurant_sheet(restaurant_id):
     record = db.session.query(Restaurant).filter_by(id=int(restaurant_id)).all()[0]
-    return render_template("restaurantsheet.html", name=record.name, likes=record.likes, lat=record.lat, lon=record.lon,
-                           phone=record.phone)
+    return render_template("restaurantsheet.html", name=record.name, likes=record.likes, address=record.address,
+                            city=record.city, lat=record.lat, lon=record.lon, menu_type=record.menu_type,
+                            phone=record.phone)
 
 
 @restaurants.route('/restaurants/like/<restaurant_id>')
