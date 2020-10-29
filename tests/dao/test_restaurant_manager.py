@@ -38,4 +38,3 @@ class TestRestaurantManager(DaoTest):
         base_restaurant.set_city(TestRestaurantManager.faker.city())
         updated_restaurant = self.restaurant_manager.retrieve_by_id(id_=base_restaurant.id)
         TestRestaurant.assertEqualRestaurants(base_restaurant, updated_restaurant)
-        
