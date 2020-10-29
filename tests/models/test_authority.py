@@ -1,4 +1,5 @@
 from .model_test import ModelTest
+import unittest
 
 
 class TestAuthority(ModelTest):
@@ -18,6 +19,19 @@ class TestAuthority(ModelTest):
             self.assertEqual(authority.city, city)
             self.assertEqual(authority.address, address)
             self.assertEqual(authority.phone, phone)
+
+    @staticmethod
+    def assertAuthorityEquals(value, expected):
+        t = unittest.FunctionTestCase(TestAuthority)
+        t.assertEqual(value.email, expected.email)
+        t.assertEqual(value.password, expected.password)
+        t.assertEqual(value.is_active, expected.is_active)
+        t.assertEqual(value.authenticated, False)
+        t.assertEqual(value.is_anonymous, expected.is_anonymous)
+        t.assertEqual(value.name, expected.name)
+        t.assertEqual(value.city, expected.city)
+        t.assertEqual(value.address, expected.address)
+        t.assertEqual(value.phone, expected.phone)
 
     @staticmethod
     def generate_random_authority():
