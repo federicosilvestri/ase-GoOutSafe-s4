@@ -7,40 +7,46 @@ class Restaurant(db.Model):
     __tablename__ = 'Restaurant'
 
     MAX_NAME_LENGTH = 100
+
     # taken from Google Maps bounds
     MAX_LAT = 85
     MIN_LAT = -85
     MAX_LON = 180
     MIN_LON = -180
+
     MAX_PHONE_LEN = 25
     MAX_MENU_TYPE_LENGTH = 100
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(
-        length=MAX_NAME_LENGTH
-    ))
-    reservations = relationship("Reservation", back_populates="restaurant")
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    name = db.Column(
+        db.String(length=MAX_NAME_LENGTH)
+    )
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
-    phone = db.Column(db.String(
-        length=MAX_PHONE_LEN
-    ))
-    menu_type = db.Column(db.String(
-        length=MAX_MENU_TYPE_LENGTH
-    ))
-    is_open = db.Column(
-        db.Boolean, default=False
+    phone = db.Column(
+        db.String(length=MAX_PHONE_LEN)
     )
-    tables = relationship("Table", back_populates="restaurant")
-    availabilities = relationship("RestaurantAvailability", back_populates="restaurant")
+    menu_type = db.Column(
+        db.String(length=MAX_MENU_TYPE_LENGTH)
+    )
+    is_open = db.Column(
+        db.Boolean,
+        default=False
+    )
     owner_id = db.Column(
         db.Integer,
         db.ForeignKey('Operator.id'),
     )
     owner = relationship('Operator', back_populates='restaurant')
+    reservations = relationship("Reservation", back_populates="restaurant")
+    tables = relationship("Table", back_populates="restaurant")
+    availabilities = relationship("RestaurantAvailability", back_populates="restaurant")
     ratings = relationship('RestaurantRating', back_populates='restaurant')
-
-    # TODO: add ratings relationship when their model is created
+    likes = relationship('Like', back_populates='restaurant')
 
     # TODO: add hybrid property or method to calculate the number of likes
 

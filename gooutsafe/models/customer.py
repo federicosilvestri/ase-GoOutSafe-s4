@@ -1,5 +1,6 @@
 from gooutsafe import db
 from .user import User
+from sqlalchemy.orm import relationship
 
 
 class Customer(User):
@@ -10,6 +11,7 @@ class Customer(User):
     lastname = db.Column(db.Unicode(128))
     birthday = db.Column(db.DateTime)
     health_status = db.Column(db.Boolean, default=False)
+    likes = relationship('Like', back_populates='liker')
 
     __mapper_args__ = {
         'polymorphic_identity': 'customer',

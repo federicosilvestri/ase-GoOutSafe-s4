@@ -7,13 +7,33 @@ from gooutsafe import db
 class Like(db.Model):
     __tablename__ = 'Like'
 
-    liker_id = db.Column(db.Integer, db.ForeignKey('User.id', ondelete="CASCADE"),  
-                    primary_key=True)
-    liker = relationship('User', foreign_keys='Like.liker_id')
+    liker_id = db.Column(
+        db.Integer,
+        db.ForeignKey(
+            'Customer.id',
+            ondelete="CASCADE"
+        ),
+        primary_key=True
+    )
 
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('Restaurant.id', ondelete="CASCADE"), 
-                    primary_key=True)
-    restaurant = relationship('Restaurant', foreign_keys='Like.restaurant_id')
+    liker = relationship(
+        'Customer',
+        back_populates='likes'
+    )
+
+    restaurant_id = db.Column(
+        db.Integer,
+        db.ForeignKey(
+            'Restaurant.id',
+            ondelete="CASCADE"
+        ),
+        primary_key=True
+    )
+
+    restaurant = relationship(
+        'Restaurant',
+        back_populates='likes'
+    )
 
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
