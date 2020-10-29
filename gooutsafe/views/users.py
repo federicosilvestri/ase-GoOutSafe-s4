@@ -1,8 +1,7 @@
 from flask import Blueprint, redirect, render_template, request
 from flask_login import (login_user)
 from werkzeug.security import generate_password_hash
-
-from gooutsafe import db
+from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.forms import UserForm, OperatorForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.operator import Operator
@@ -13,7 +12,7 @@ users = Blueprint('users', __name__)
 
 @users.route('/users')
 def _users():
-    usrs = db.session.query(User)
+    usrs = UserManager.retrieve()
     return render_template("users.html", users=usrs)
 
 
@@ -38,8 +37,7 @@ def create_user_type(type):
             form.populate_obj(user)
             user.set_password(generate_password_hash(form.password.data))
 
-            db.session.add(user)
-            db.session.commit()
+            UserManager.create_user(user)
 
             login_user(user)
             user.authenticated = True
@@ -52,9 +50,7 @@ def create_user_type(type):
     return render_template('create_user.html', form=form)
 
 
-@users.route('/delete_user/<int:id>', methods=['GET', 'POST'])
-def delete_user(id):
-    user = User.query.get(id)
-    db.session.delete(user)
-    db.session.commit()
+@users.route('/delete_user/<int:id_>', methods=['GET', 'POST'])
+def delete_user(id_):
+    UserManager.delete_user_by_id(id_)
     return redirect('/')
