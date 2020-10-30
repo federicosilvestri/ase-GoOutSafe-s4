@@ -57,6 +57,7 @@ and now you can run the application
 
 The available environments are:
 
+- debug
 - development
 - testing
 - production

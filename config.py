@@ -3,7 +3,7 @@ class Config(object):
     TESTING = False
 
 
-class DevConfig(Config):
+class DebugConfig(Config):
     """
     This is the main configuration object for application.
     """
@@ -12,12 +12,20 @@ class DevConfig(Config):
 
     SECRET_KEY = b'isreallynotsecretatall'
 
-    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///../db.sqlite'
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+
+class DevConfig(DebugConfig):
+    """
+    This is the main configuration object for application.
+    """
+    SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
-class TestConfig(DevConfig):
+class TestConfig(Config):
     """
     This is the main configuration object for application.
     """
