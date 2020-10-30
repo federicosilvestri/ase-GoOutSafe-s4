@@ -12,12 +12,18 @@ db = None
 migrate = None
 login = None
 debug_toolbar = None
+app = None
 
 
 def create_app(config_object):
     global db
+    global app
     global migrate
     global login
+
+    # check the existence of app
+    if app is not None:
+        return app
 
     app = Flask(__name__, instance_relative_config=True)
 
