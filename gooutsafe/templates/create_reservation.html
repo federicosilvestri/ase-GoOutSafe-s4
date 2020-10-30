@@ -2,18 +2,24 @@
 
 {% block title %} Add a Reservation {% endblock %}
 
+{% block scripts %}
+  {{ super() }}
+  {{ datepicker.loader() }}
+  {{ datepicker.picker(id=".dp") }}
+{% endblock %}
+
 {% block content %}
 
     <form action="" method="POST">
         {{ form.hidden_tag() }}
 
         {{ form.start_date.label }}
-        {{ form.start_date.(class='datepicker') }}
+        {{ form.start_date(class='dp') }}
         {{ form.hidden_tag() }}
         {{ form.start_time.label}}
-        {{ form.start_date.(class='timepicker') }}
+        {{ form.start_date(class='dp') }}
         {{ form.people_number.label}}
-        {{ form.people_number.(class='integer') }}
+        {{ form.people_number(class='integer') }}
 
         <p>
         <input type=submit value="Submit">
