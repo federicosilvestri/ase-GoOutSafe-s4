@@ -1,6 +1,3 @@
-import random
-from datetime import datetime, timedelta
-
 from faker import Faker
 from .dao_test import DaoTest
 from tests.models.test_restaurant import TestRestaurant
@@ -51,6 +48,7 @@ class RestaurantAvailabilityManager(DaoTest):
 
     def test_retrieve_by_restaurant_id(self):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
+        self.re_ma.RestaurantManager.create_restaurant(restaurant)
         self.re_ma.RestaurantManager.create_restaurant(restaurant)
         start_time, end_time = TestRestaurantAvailability.generate_correct_random_times()
         ava1 = self.ava.RestaurantAvailability(restaurant.id, start_time, end_time)
