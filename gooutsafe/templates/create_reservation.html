@@ -6,6 +6,11 @@
   {{ super() }}
   {{ datepicker.loader() }}
   {{ datepicker.picker(id=".dp") }}
+  <script>
+    $(".dropdown-menu").click(function(){
+        $(this).parents(".input-group-btn").find('.btn').text($(this).text());
+    });
+  </script>
 {% endblock %}
 
 {% block content %}
@@ -16,12 +21,19 @@
         {{ form.start_date.label }}
         {{ form.start_date(class='dp') }}
         {{ form.hidden_tag() }}
-        {% for time_slot in time_slots %}
-          <option value= "{{time_slot}}" SELECTED>{{time_slots}}</option>"
-        {% endfor %}
+          <button class="btn btn-info btn-md dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="color_dropdown" >
+              Select Time
+              <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for time_slot in time_slots %}
+              <a class="dropdown-item" href="#">
+              {{ time_slot }}
+              </a>
+            {% endfor %}
+          </div>
         {{ form.people_number.label}}
         {{ form.people_number(class='integer') }}
-
         <p>
         <input type="submit" value="Submit">
     </form>

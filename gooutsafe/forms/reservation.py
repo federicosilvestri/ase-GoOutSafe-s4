@@ -7,6 +7,6 @@ from wtforms.validators import DataRequired
 class ReservationForm(FlaskForm):
 
     start_date = f.DateField('Resevation Date', validators=[DataRequired()])
-    start_time = f.TimeField('Reservation Time', validators=[DataRequired()])
-    people_number = f.IntegerField('People Number', validators=[DataRequired()])
+    #time_slots = f.SelectField('Time', choices=list_menu, default=1)
+    people_number = f.IntegerField('Number of Peoples', validators=[DataRequired()])
     #display = ['start_date', 'start_time', 'people_number']
