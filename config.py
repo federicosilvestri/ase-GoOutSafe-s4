@@ -12,9 +12,9 @@ class DevConfig(Config):
 
     SECRET_KEY = b'isreallynotsecretatall'
 
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///../db.sqlite'
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class TestConfig(DevConfig):

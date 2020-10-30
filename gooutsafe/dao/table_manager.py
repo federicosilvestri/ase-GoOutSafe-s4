@@ -12,7 +12,7 @@ class TableManager(Manager):
     def retrieve_by_id(id_):
         Manager.check_none(id=id_)
         return Table.query.get(id_)
-
+    
     @staticmethod
     def retrieve_by_restaurant_id(restaurant_id):
         Manager.check_none(restaurant_id=restaurant_id)
