@@ -39,7 +39,8 @@ def get_free_table(restaurant, people_number):
     return reservation_table
 
 def get_free_time_slots(restaurant):
-    pass
+    time_slots = restaurant.availabilities
+    
     #TODO: implement this method
 
 @reservation.route('<restaurant_id>/delete_reservation/<int:id>')
