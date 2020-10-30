@@ -3,14 +3,14 @@
 {% block page_title %} List {% endblock %}
 
 {% block body %}
-    <h5>{{ name }} -- Likes: {{ likes }}</h5>
-    <h5>Phone: {{ phone }}</h5>
-    <h5>Address: {{ address }} --  City: {{ city }}</h5>
-    <h5>Menu type: {{ menu_type }}</h5>
+    <h5>{{ restaurant.name }} -- Likes: {{ likes }}</h5>
+    <h5>Phone: {{ restaurant.phone }}</h5>
+    <h5>Address: {{ restaurant.address }} --  City: {{ restaurant.city }}</h5>
+    <h5>Menu type: {{ restaurant.menu_type }}</h5>
     <ul>
         {% if current_user.is_authenticated %}
             <iframe width="600" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-                    src="https://www.openstreetmap.org/export/embed.html?bbox={{ lon - 0.001 }}%2C{{ lat - 0.001 }}%2C{{ lon + 0.001 }}%2C{{ lat + 0.001 }}&amp;layer=mapnik&amp;marker={{ lat }}%2C{{ lon }}"
+                    src="https://www.openstreetmap.org/export/embed.html?bbox={{ restaurant.lon - 0.001 }}%2C{{ restaurant.lat - 0.001 }}%2C{{ restaurant.lon + 0.001 }}%2C{{ restaurant.lat + 0.001 }}&amp;layer=mapnik&amp;marker={{ restaurant.lat }}%2C{{ restaurant.lon }}"
                     style="border: 1px solid black"></iframe><br/>
             <small><a href="https://www.openstreetmap.org/#map=17/{{ lat }}/{{ lon }}">See it Larger</a></small>
 
@@ -18,7 +18,7 @@
     </ul>
 
     <button type="button" class="btn btn-outline-primary"
-        onclick="location.href='/create_reservation/{{id}}'">Book a Table
+        onclick="location.href='/create_reservation/{{ restaurant.id }}'">Book a Table
     </button>
     
 {% endblock %}
