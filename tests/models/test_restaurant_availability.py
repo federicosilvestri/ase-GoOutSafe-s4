@@ -60,7 +60,7 @@ class TestRestaurantAvailability(ModelTest):
 
     @staticmethod
     def assertEqualAvailability(ra1, ra2):
-        t = unittest.FunctionTestCase(TestTable)
+        t = unittest.FunctionTestCase(TestRestaurantAvailability)
         t.assertEqual(ra1.start_time, ra2.start_time)
         t.assertEqual(ra1.end_time, ra2.end_time)
         t.assertEqual(ra1.restaurant.id, ra2.restaurant.id)
