@@ -6,6 +6,7 @@ from gooutsafe import db
 class Table(db.Model):
     __tablename__ = 'Table'
 
+    MIN_TABLE_CAPACITY = 1
     MAX_TABLE_CAPACITY = 15
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -18,7 +19,7 @@ class Table(db.Model):
         self.restaurant = restaurant
 
     def set_capacity(self, capacity):
-        if capacity <= 0 or capacity > self.MAX_TABLE_CAPACITY:
+        if capacity < self.MIN_TABLE_CAPACITY or capacity > self.MAX_TABLE_CAPACITY:
             raise ValueError('You can\'t set a negative value, zero or greater than ' 
         + str(self.MAX_TABLE_CAPACITY))
         self.capacity = capacity

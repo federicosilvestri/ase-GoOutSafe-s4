@@ -3,6 +3,8 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_environments import Environments
+from flask_bootstrap import Bootstrap
+from flask_datepicker import datepicker
 
 __version__ = '0.1'
 
@@ -65,6 +67,10 @@ def register_extensions(app):
     if app.testing:
         from .response import ContainsResponse
         app.response_class = ContainsResponse
+
+    # adding bootstrap and date picker
+    Bootstrap(app)
+    datepicker(app)
 
 
 def register_blueprints(app):
