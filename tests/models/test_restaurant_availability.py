@@ -1,6 +1,6 @@
 import random
 from datetime import timedelta
-
+import unittest
 from faker import Faker
 
 from .model_test import ModelTest
@@ -57,6 +57,13 @@ class TestRestaurantAvailability(ModelTest):
             rest_ava.append(avas)
 
         return rest_ava
+
+    @staticmethod
+    def assertEqualAvailability(ra1, ra2):
+        t = unittest.FunctionTestCase(TestTable)
+        t.assertEqual(ra1.start_time, ra2.start_time)
+        t.assertEqual(ra1.end_time, ra2.end_time)
+        t.assertEqual(ra1.restaurant.id, ra2.restaurant.id)
 
     def test_init(self):
         for _ in range(0, 10):

@@ -10,6 +10,11 @@ class RestaurantAvailabilityManager(Manager):
         Manager.create(availability=ava)
 
     @staticmethod
+    def retrieve_by_restaurant_id(restaurant_id):
+        Manager.check_none(restaurant_id=restaurant_id)
+        return RestaurantAvailability.query.filter(Restaurant.owner_id==restaurant_id).first()
+
+    @staticmethod
     def delete_availabilitie(ava: RestaurantAvailability):
         Manager.delete(availability=ava)
 

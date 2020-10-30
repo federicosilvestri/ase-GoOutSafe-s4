@@ -4,6 +4,7 @@ from gooutsafe import db
 from gooutsafe.auth import current_user
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.models.reservation import Reservation
+from gooutsafe.models.table import Table
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.table_manager import TableManager
@@ -18,7 +19,6 @@ def create_reservation(restaurant_id):
     form = ReservationForm()
     if request.method == 'POST':
         if form.is_submitted():
-            print("Quel cane di Federico forti")
             restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
             start_data = form.data['start_date']
             people_number = form.data['people_number']
@@ -28,16 +28,22 @@ def create_reservation(restaurant_id):
 
             return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id))
 
-    return render_template('create_reservation.html', form=form)
+    return render_template('create_reservation.html', restaurant=restaurant,form=form)
 
 def get_free_table(restaurant, people_number):
-    tables = TableManager.retrieve_by_restaurant_id(restaurant.id).order_by(table.capacity)
-    print(table)
-    return table[0]
+    tables = TableManager.retrieve_by_restaurant_id(restaurant.id).order_by(Table.capacity)
+    reservation_table = None
+    for table in tables:
+        if table.capacity >= people_number:
+            reservation_table = table
+    return reservation_table
 
+def get_free_time_slots(restaurant):
+    pass
+    #TODO: implement this method
 
 @reservation.route('<restaurant_id>/delete_reservation/<int:id>')
-def delete_reservation():
+def delete_reservation(restaurant_id, id):
     #TODO: implement this method
     pass
 
