@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from gooutsafe import db
 from gooutsafe.forms import LoginForm
+from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.models.user import User
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.dao.user_manager import UserManager
@@ -26,8 +27,9 @@ def login():
                 return redirect('/operator/'+ str(user.id))
             elif user.type == 'customer':
                 return render_template('customer_profile.html', current_user=user)
-            else: 
-                return render_template('authority_profile.html', current_user=user)
+            else:
+                ha_form = AuthorityForm()
+                return render_template('authority_profile.html', current_user=user, form = ha_form)
 
     return render_template('login.html', form=form)
 

@@ -10,10 +10,9 @@ def load_example_data():
     create_app('config.DevConfig')
     from gooutsafe import db
     from gooutsafe.models import health_authority
+    from gooutsafe.dao.health_authority_manager import AuthorityManager
     example_health_auth = load_health_auth_data(health_authority)
-    #TODO change the query with DAO class health_authority_manager
-    db.session.add(example_health_auth)
-    db.session.commit()
+    AuthorityManager.create_authority(example_health_auth)
 
   
 def load_health_auth_data(health_authority):

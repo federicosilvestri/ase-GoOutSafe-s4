@@ -19,6 +19,28 @@
             </ul>
         </a>
         </nav>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-authority" role="tabpanel"
+                 aria-labelledby="pills-authority-tab">
+    
+                <form action="/mark_positive" method="POST">
+                    {{ form.hidden_tag() }}
+                    <dl>
+                        {% for field in form.display %}
+                            <dt>{{ form[field].label }}</dt>
+                            <dd>{{ form[field]() }}</dd>
+                            {% if form[field].errors %}
+                                {% for e in form[field].errors %}
+                                    <p class="help-block">{{ e }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </dl>
+                    <p>
+                        <input type=submit value="Marks as positive">
+                </form>
+            </div>
+        </div>
     {% endif %}
 
 
