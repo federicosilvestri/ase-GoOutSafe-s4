@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "bootstrap/base.html" %}
 
-{% block page_title %} Users {% endblock %}
+{% block title %} Users {% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>User List</h1>
     <ul>
         {% for user in users: %}
