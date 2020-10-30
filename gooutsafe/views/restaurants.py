@@ -23,10 +23,8 @@ def _restaurants(message=''):
 @restaurants.route('/restaurants/<restaurant_id>')
 @login_required
 def restaurant_sheet(restaurant_id):
-    record = db.session.query(Restaurant).filter_by(id=int(restaurant_id)).all()[0]
-    return render_template("restaurantsheet.html", name=record.name, likes=record.likes, address=record.address,
-                            city=record.city, lat=record.lat, lon=record.lon, menu_type=record.menu_type,
-                            phone=record.phone)
+    restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)
+    return render_template("restaurantsheet.html", restaurant=restaurant)
 
 
 @restaurants.route('/restaurants/like/<restaurant_id>')

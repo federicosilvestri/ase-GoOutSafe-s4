@@ -30,6 +30,7 @@ class TestTable(ModelTest):
 
         return table, (capacity, restaurant)
 
+    @staticmethod
     def assertEqualTables(t1, t2):
         t = unittest.FunctionTestCase(TestTable)
         t.assertEqual(t1.capacity, t2.capacity)
