@@ -2,6 +2,9 @@ import flask_login
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_environments import Environments
+from flask_bootstrap import Bootstrap
+from flask_datepicker import datepicker
 
 __version__ = '0.1'
 
@@ -15,13 +18,14 @@ def create_app(config_object):
     global migrate
     global login
 
-    app = Flask(__name__)
-    login = flask_login.LoginManager(app)
-    login.login_view = 'auth.login'
+    app = Flask(__name__, instance_relative_config=True)
 
     # Load config
-    app.config.from_object(config_object)
-    login_required = flask_login.login_required
+    env = Environments(app)
+    env.from_object(config_object)
+
+    login = flask_login.LoginManager(app)
+    login.login_view = 'auth.login'
 
     # registering db
     db = SQLAlchemy(
@@ -40,7 +44,9 @@ def create_app(config_object):
         db=db
     )
 
-    # register_cli is only called when necessary
+    # create all
+    db.create_all()
+
     return app
 
 
@@ -62,6 +68,10 @@ def register_extensions(app):
         from .response import ContainsResponse
         app.response_class = ContainsResponse
 
+    # adding bootstrap and date picker
+    Bootstrap(app)
+    datepicker(app)
+
 
 def register_blueprints(app):
     """
@@ -78,8 +88,3 @@ def register_cli(app):
     @app.cli.command(short_help="Display list of URLs")
     def urls():
         print(app.url_map)
-
-
-if __name__ == '__main__':
-    app = create_app('config.BaseConfig')
-    register_cli(app)

@@ -14,6 +14,11 @@ class RestaurantManager(Manager):
         return Restaurant.query.get(id_)
 
     @staticmethod
+    def retrieve_by_operator_id(operator_id):
+        Manager.check_none(operator_id=operator_id)
+        return Restaurant.query.filter(Restaurant.owner_id==operator_id).first()
+
+    @staticmethod
     def update_restaurant(restaurant: Restaurant):
         Manager.update(restaurant=restaurant)
 

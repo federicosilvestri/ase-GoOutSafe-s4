@@ -9,7 +9,7 @@ before_install:
 # installing deps
 install:
   - pip install -r requirements.txt
-  - export FLASK_APP=test
+  - export FLASK_ENV=testing
   - flask db upgrade
 script:
   - python -m pytest --cov-report term --cov=tests/

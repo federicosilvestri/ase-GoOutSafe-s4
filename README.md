@@ -20,7 +20,6 @@ University of Pisa.
 |Chiara Boni       |c.boni5@studenti.unipi.it      |
 |Nunzio Lopardo    |n.lopardo@studenti.unipi.it    |
 |Paolo Murgia      |p.murgia1@studenti.unipi.it    |
-|Usman Shahzad     |u.shahzad1@studenti.unipi.it   |
 
 
 ## Diagrams
@@ -31,7 +30,7 @@ and document the project.
 
 ## Instructions
 
-#### Initialization
+### Initialization
 
 To setup the project initially you have to run these commands
 inside the project's root.
@@ -42,19 +41,29 @@ inside the project's root.
 
 `pip install -r requirements.txt`
 
-#### Run the project
+### Run the project
 
-To run the project you have to setup the flask application name,
+To run the project you have to setup the flask environment,
 you can do it by executing the following command:
 
-`export FLASK_APP=dev`
+`export FLASK_ENV=<environment-name>`
 
 and now you can run the application
 
 `flask run`
 
-To **run application** without executing the previous command you can
-run the bash script named `run.sh` 
+
+#### Application Environments
+
+The available environments are:
+
+- development
+- testing
+- production
+
+If you want to run the application with development environment
+you can run the `run.sh` script.
+
 
 ### Apply migrations
 
@@ -88,6 +97,7 @@ In order to know what are the lines of codes which are not covered by the tests,
 - Name of methods, properties, variables must be snake_cased
 - Name of classes must be PascalCased 
 - Name of constants must be UPPERCASE 
+- The class name of managers must be in the format `<BeanName>Manager`
 
 ### Future implementations
 

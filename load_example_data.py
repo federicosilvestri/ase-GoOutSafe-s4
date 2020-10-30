@@ -7,7 +7,7 @@ PATH_HEALTH_AUTH_DATA = 'example_data/health_authority.json'
 
 
 def load_example_data():
-    create_app('config.BaseConfig')
+    create_app('config.DevConfig')
     from gooutsafe import db
     from gooutsafe.models import health_authority
     example_health_auth = load_health_auth_data(health_authority)
