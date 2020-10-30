@@ -6,6 +6,7 @@ from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.models.table import Table
 from gooutsafe.forms.restaurant import RestaurantForm
+from gooutsafe.forms.add_table import TableForm
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.table_manager import TableManager
 
@@ -69,19 +70,30 @@ def add(id_op):
 @restaurants.route('/restaurants/details/<int:id_op>', methods=['GET', 'POST'])
 @login_required
 def details(id_op):
+    form = TableForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
-    #TODO table = 
-    return render_template('add_restaurant_details.html', restaurant=restaurant)
+    tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
+    return render_template('add_restaurant_details.html', restaurant=restaurant, 
+                    tables=tables, form=form)
 
 
 @restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
 def save_details(id_op, rest_id):
-    print("@@@@@@@@@@@@@@@@@@@")
-    num_tables = request.form['num_tables']
-    capacity = request.form['capacity']
+    form = TableForm()
+    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+    tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
 
-    for i in range(0,num_tables):
-        table = Table(capacity, rest_id)
-        TableManager.create_table(table)
+    if request.method == "POST":
+        if form.is_submitted():
+            num_tables = form.data['number']
+            capacity = form.data['capacity']
 
-    return redirect ('/operator/'+str(id_op))
+            for i in range(0,num_tables):
+                table = Table(capacity=capacity, restaurant=restaurant)
+                TableManager.create_table(table)
+            
+            return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
+
+    return render_template('add_restaurant_details.html', 
+                    restaurant=restaurant, tables=tables, form=form)
+
