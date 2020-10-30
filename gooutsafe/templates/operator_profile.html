@@ -24,7 +24,7 @@
                     
                 <!-- Modal -->
                 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" 
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    aria-labelledby="deleteModal aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
 
@@ -64,7 +64,7 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <a class="nav-link active"
-                            onclick="location.href='/restaurants/{{restaurant.id}}'">
+                        onclick="location.href='/restaurants/details/{{current_user.id}}'">
                             {{ restaurant.name }} -- {{ restaurant.address }}
                         </a>
                     </li>

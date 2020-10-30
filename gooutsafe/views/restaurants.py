@@ -4,8 +4,11 @@ from flask_login import (logout_user, login_user, login_required)
 from gooutsafe import db
 from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
+from gooutsafe.models.table import Table
 from gooutsafe.forms.restaurant import RestaurantForm
+from gooutsafe.forms.add_table import TableForm
 from gooutsafe.dao.restaurant_manager import RestaurantManager
+from gooutsafe.dao.table_manager import TableManager
 
 
 restaurants = Blueprint('restaurants', __name__)
@@ -62,3 +65,35 @@ def add(id_op):
             return redirect('/operator/'+ str(id_op))
 
     return render_template('create_restaurant.html', form=form)
+
+
+@restaurants.route('/restaurants/details/<int:id_op>', methods=['GET', 'POST'])
+@login_required
+def details(id_op):
+    form = TableForm()
+    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+    tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
+    return render_template('add_restaurant_details.html', restaurant=restaurant, 
+                    tables=tables, form=form)
+
+
+@restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+def save_details(id_op, rest_id):
+    form = TableForm()
+    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+    tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
+
+    if request.method == "POST":
+        if form.is_submitted():
+            num_tables = form.data['number']
+            capacity = form.data['capacity']
+
+            for i in range(0,num_tables):
+                table = Table(capacity=capacity, restaurant=restaurant)
+                TableManager.create_table(table)
+            
+            return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
+
+    return render_template('add_restaurant_details.html', 
+                    restaurant=restaurant, tables=tables, form=form)
+

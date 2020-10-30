@@ -6,6 +6,7 @@ from gooutsafe import db
 from gooutsafe.forms import LoginForm
 from gooutsafe.models.user import User
 from gooutsafe.models.restaurant import Restaurant
+from gooutsafe.dao.user_manager import UserManager
 
 auth = Blueprint('auth', __name__)
 
@@ -15,6 +16,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         email, password = form.data['email'], form.data['password']
+        q = UserManager.retrieve_by_id(email)
         q = db.session.query(User).filter(User.email == email)
         user = q.first()
 
