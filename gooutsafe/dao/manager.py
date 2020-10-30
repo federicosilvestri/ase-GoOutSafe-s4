@@ -38,5 +38,3 @@ class Manager(object):
         for bean in kwargs.values():
             db.session.delete(bean)
         db.session.commit()
-
-

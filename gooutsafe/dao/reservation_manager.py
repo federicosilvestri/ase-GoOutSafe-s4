@@ -1,8 +1,7 @@
 from gooutsafe.models.reservation import Reservation
-from gooutsafe import db
 from .manager import Manager
 
-#CRUD: Create Retrieve Update Delete
+
 class ReservationManager(Manager):
 
     @staticmethod

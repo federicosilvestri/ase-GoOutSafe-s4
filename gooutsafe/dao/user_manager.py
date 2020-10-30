@@ -1,5 +1,5 @@
-from gooutsafe.models.user import User
 from gooutsafe.dao.manager import Manager
+from gooutsafe.models.user import User
 
 
 class UserManager(Manager):

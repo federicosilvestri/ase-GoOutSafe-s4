@@ -1,8 +1,7 @@
 from gooutsafe.models.table import Table
-from gooutsafe import db
 from .manager import Manager
 
-#CRUD: Create Retrieve Update Delete
+
 class TableManager(Manager):
 
     @staticmethod

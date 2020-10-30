@@ -16,4 +16,3 @@ class LikeManager(Manager):
     def get_like_by_id(user_id, restaurant_id):
         like = Like.query.get(user_id, restaurant_id)
         return like
-    

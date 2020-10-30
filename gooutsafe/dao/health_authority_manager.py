@@ -1,5 +1,5 @@
-from gooutsafe.models.health_authority import Authority
 from gooutsafe.dao.manager import Manager
+from gooutsafe.models.health_authority import Authority
 
 
 class AuthorityManager(Manager):

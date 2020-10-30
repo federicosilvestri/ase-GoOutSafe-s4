@@ -1,8 +1,7 @@
 from gooutsafe.models.restaurant import Restaurant
-from gooutsafe import db
 from .manager import Manager
 
-#CRUD: Create Retrieve Update Delete
+
 class RestaurantManager(Manager):
 
     @staticmethod
