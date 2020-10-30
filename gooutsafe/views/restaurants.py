@@ -4,8 +4,10 @@ from flask_login import (logout_user, login_user, login_required)
 from gooutsafe import db
 from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
+from gooutsafe.models.table import Table
 from gooutsafe.forms.restaurant import RestaurantForm
 from gooutsafe.dao.restaurant_manager import RestaurantManager
+from gooutsafe.dao.table_manager import TableManager
 
 
 restaurants = Blueprint('restaurants', __name__)
@@ -64,3 +66,24 @@ def add(id_op):
             return redirect('/operator/'+ str(id_op))
 
     return render_template('create_restaurant.html', form=form)
+
+
+@restaurants.route('/restaurants/details/<int:id_op>', methods=['GET', 'POST'])
+@login_required
+def details(id_op):
+    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+    #TODO table = 
+    return render_template('add_restaurant_details.html', restaurant=restaurant)
+
+
+@restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+def save_details(id_op, rest_id):
+    print("@@@@@@@@@@@@@@@@@@@")
+    num_tables = request.form['num_tables']
+    capacity = request.form['capacity']
+
+    for i in range(0,num_tables):
+        table = Table(capacity, rest_id)
+        TableManager.create_table(table)
+
+    return redirect ('/operator/'+str(id_op))
