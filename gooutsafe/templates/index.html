@@ -2,44 +2,5 @@
 {% block title %} Home {% endblock %}
 {% block content %}
 
-    {% if current_user.is_authenticated %}
 
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/">
-
-            Hi {{ current_user.firstname }}! <br>
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    {% if current_user.type == "operator" %}
-                        <a class="btn btn-outline-primary"
-                            onclick="location.href='/operator/{{current_user.id}}'">Profile
-                        </a>
-                    {% elif current_user.type == "customer" %}
-                        <a class="btn btn-outline-primary"
-                            onclick="location.href='/profile/{{current_user.id}}'">Profile
-                        </a>
-                    {% endif %}  
-                </li>
-            </ul>
-            
-        </a>
-    </nav>
-
-    {% else %}
-    <nav class="navbar navbar-light bg-light">
-        Hi Anonymous
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <button type="button" class="btn btn-outline-primary"
-                    onclick="location.href='/create_user/<customer>'">Sign up
-                </button>
-
-                <button type="button" class="btn btn-outline-success"
-                    onclick="location.href='/login'">Login
-                </button>
-            </li>
-        </ul>
-    </nav>        
-
-    {% endif %}
 {% endblock %}
