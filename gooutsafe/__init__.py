@@ -11,6 +11,7 @@ __version__ = '0.1'
 db = None
 migrate = None
 login = None
+debug_toolbar = None
 
 
 def create_app(config_object):
@@ -56,11 +57,12 @@ def register_extensions(app):
     :param app: Flask Application Object
     :return: None
     """
+    global debug_toolbar
 
     if app.debug:
         try:
             from flask_debugtoolbar import DebugToolbarExtension
-            DebugToolbarExtension(app)
+            debug_toolbar = DebugToolbarExtension(app)
         except ImportError:
             pass
 
