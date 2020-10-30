@@ -1,5 +1,4 @@
 import random
-from datetime import timedelta
 import unittest
 from faker import Faker
 
@@ -21,17 +20,10 @@ class TestRestaurantAvailability(ModelTest):
     @staticmethod
     def generate_correct_random_times():
         # generating times
-        start_time = TestRestaurantAvailability.faker.date_time()
-        end_time = start_time + timedelta(
-            minutes=random.randint(10, 240)
-        )
+        start_datetime = TestRestaurantAvailability.faker.date_time()
+        end_datetime = start_datetime + TestRestaurantAvailability.faker.time_delta(1)
 
-        return start_time, end_time
-
-    @staticmethod
-    def generate_bad_random_times():
-        s, e = TestRestaurantAvailability.generate_correct_random_times()
-        return e, s
+        return start_datetime.time(), end_datetime.time()
 
     @staticmethod
     def generate_random_availabilities(restaurants: list, max_ava=25):
@@ -78,13 +70,6 @@ class TestRestaurantAvailability(ModelTest):
             self.assertEqual(start_time, _avail.start_time)
             self.assertEqual(end_time, _avail.end_time)
 
-            with self.assertRaises(ValueError):
-                _avail = self.availability.RestaurantAvailability(
-                    restaurant.id,
-                    end_time,
-                    start_time
-                )
-
     def test_set_times(self):
         for _ in range(0, 10):
             restaurant, _ = TestRestaurant.generate_random_restaurant()
@@ -98,9 +83,3 @@ class TestRestaurantAvailability(ModelTest):
 
             self.assertEqual(start_time, _avail.start_time)
             self.assertEqual(end_time, _avail.end_time)
-
-            with self.assertRaises(ValueError):
-                _avail.set_times(
-                    end_time,
-                    start_time
-                )

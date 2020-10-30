@@ -43,14 +43,4 @@ class RestaurantAvailabilityManager(DaoTest):
         # test update
         for avas in rests_ava:
             for ava in avas:
-                self.ram.delete_availabilitie(ava)
-
-    def test_retrieve_by_restaurant_id(self):
-        restaurant, _ = TestRestaurant.generate_random_restaurant()
-        self.re_ma.RestaurantManager.create_restaurant(restaurant)
-        self.re_ma.RestaurantManager.create_restaurant(restaurant)
-        start_time, end_time = TestRestaurantAvailability.generate_correct_random_times()
-        ava1 = self.ava.RestaurantAvailability(restaurant.id, start_time, end_time)
-        self.ram.create_availability(ava1)
-        ava2 = self.ram.retrieve_by_restaurant_id(restaurant.id)
-        TestRestaurantAvailability.assertEqualAvailability(ava1, ava2)
+                self.ram.delete_availability(ava)
