@@ -1,11 +1,15 @@
-class BaseConfig(object):
+class Config(object):
+    DEBUG = False
+    TESTING = False
+
+
+class DevConfig(Config):
     """
     This is the main configuration object for application.
     """
     DEBUG = True
+    TESTING = True
 
-    # import os; os.urandom(24)
-    # To set up in instance.py
     SECRET_KEY = b'isreallynotsecretatall'
 
     SQLALCHEMY_ECHO = True
@@ -13,16 +17,15 @@ class BaseConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 
-class TestConfig(object):
+class TestConfig(DevConfig):
     """
     This is the main configuration object for application.
     """
-    DEBUG = True
+    TESTING = True
 
-    # import os; os.urandom(24)
-    # To set up in instance.py
-    SECRET_KEY = b'isreallynotsecretatall'
+    import os
+    SECRET_KEY = os.urandom(24)
 
-    SQLALCHEMY_ECHO = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///../db.sqlite'
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
