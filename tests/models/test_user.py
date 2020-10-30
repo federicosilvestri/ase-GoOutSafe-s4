@@ -31,7 +31,7 @@ class TestUser(ModelTest):
         is_admin = TestUser.faker.boolean()
         authenticated = TestUser.faker.boolean()
         is_anonymous = TestUser.faker.boolean()
-        type_ = random.choice(['customer, operator, health_authority'])
+        type_ = random.choice(['customer', 'operator', 'health_authority'])
 
         from gooutsafe.models import User
 
