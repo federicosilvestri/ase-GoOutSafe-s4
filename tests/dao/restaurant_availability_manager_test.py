@@ -16,7 +16,6 @@ class RestaurantAvailabilityManager(DaoTest):
         from gooutsafe.dao import restaurant_availability_manager
         from gooutsafe.dao import restaurant_manager
         from gooutsafe.models import restaurant_availability
-
         self.ram = restaurant_availability_manager.RestaurantAvailabilityManager
         self.ava = restaurant_availability
         self.re_ma = restaurant_manager
@@ -48,3 +47,14 @@ class RestaurantAvailabilityManager(DaoTest):
         for avas in rests_ava:
             for ava in avas:
                 self.ram.delete_availabilitie(ava)
+
+
+    def test_retrieve_by_restaurant_id(self):
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        self.re_ma.RestaurantManager.create_restaurant(restaurant)
+        RestaurantManager.create_restaurant(restaurant)
+        start_time, end_time = TestRestaurantAvailability.generate_correct_random_times()
+        ava1 = self.ava.RestaurantAvailability(restaurant.id, start_time, end_time)
+        RestaurantAvailabilityManager.create_availability(ava1)
+        ava2 = RestaurantAvailabilityManager.retrieve_by_restaurant_id(restaurant.id)
+        TestRestaurantAvailability.assertEqualAvailability(ava1, ava2)

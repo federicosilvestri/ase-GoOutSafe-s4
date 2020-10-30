@@ -16,8 +16,9 @@
         {{ form.start_date.label }}
         {{ form.start_date(class='dp') }}
         {{ form.hidden_tag() }}
-        {{ form.start_time.label}}
-        {{ form.start_time(class='integer') }}
+        {% for time_slot in time_slots %}
+          <option value= "{{time_slot}}" SELECTED>{{time_slots}}</option>"
+        {% endfor %}
         {{ form.people_number.label}}
         {{ form.people_number(class='integer') }}
 
