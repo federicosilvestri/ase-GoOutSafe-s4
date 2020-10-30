@@ -20,7 +20,6 @@ University of Pisa.
 |Chiara Boni       |c.boni5@studenti.unipi.it      |
 |Nunzio Lopardo    |n.lopardo@studenti.unipi.it    |
 |Paolo Murgia      |p.murgia1@studenti.unipi.it    |
-|Usman Shahzad     |u.shahzad1@studenti.unipi.it   |
 
 
 ## Diagrams
