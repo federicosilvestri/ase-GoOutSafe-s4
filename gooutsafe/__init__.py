@@ -1,5 +1,6 @@
 import flask_login
 from flask import Flask
+import os
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_environments import Environments
@@ -15,14 +16,13 @@ debug_toolbar = None
 app = None
 
 
-def create_app(config_object):
+def create_app(config_object, new_one=False):
     global db
     global app
     global migrate
     global login
 
-    # check the existence of app
-    if app is not None:
+    if not new_one and app is not None:
         return app
 
     app = Flask(__name__, instance_relative_config=True)
@@ -51,8 +51,10 @@ def create_app(config_object):
         db=db
     )
 
-    # create all
-    db.create_all()
+    # checking the environment
+    if os.getenv('FLASK_ENV') == 'testing':
+        # we need to populate the db
+        db.create_all()
 
     return app
 
