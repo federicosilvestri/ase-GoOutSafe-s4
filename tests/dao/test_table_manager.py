@@ -1,6 +1,8 @@
-from faker import Faker
 import random
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
+
+from faker import Faker
+from models.test_restaurant import TestRestaurant
 from models.test_table import TestTable
 
 from .dao_test import DaoTest
@@ -16,6 +18,8 @@ class TestTableManager(DaoTest):
         from gooutsafe.models import table
 
         self.table_manager = table_manager.TableManager
+        from gooutsafe.dao import restaurant_manager
+        self.restaurant_manager = restaurant_manager.RestaurantManager
         self.table = table
     
     def test_create_table(self):
@@ -42,3 +46,17 @@ class TestTableManager(DaoTest):
         base_table.set_capacity(random.randint(self.table.Table.MIN_TABLE_CAPACITY, self.table.Table.MAX_TABLE_CAPACITY))
         updated_table = self.table_manager.retrieve_by_id(id_=base_table.id)
         TestTable.assertEqualTables(base_table, updated_table)
+    
+    def test_multiple_tables_retrieved_by_restaurant_id(self):
+        base_tables = []
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        for _ in range(random.randint(2, 10)):
+            table, _ = TestTable.generate_random_table()
+            base_tables.append(table)
+            table.restaurant = restaurant
+        self.restaurant_manager.create_restaurant(restaurant=restaurant)
+        for table in base_tables:
+            self.table_manager.create_table(table=table)
+        retrieved_tables = self.table_manager.retrieve_by_restaurant_id(restaurant_id=restaurant.id)
+        for base_table, retrieved_table in zip(base_tables, retrieved_tables):
+            TestTable.assertEqualTables(base_table, retrieved_table)
