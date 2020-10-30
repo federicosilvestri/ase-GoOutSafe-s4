@@ -1,11 +1,12 @@
 import wtforms as f
 from flask_wtf import FlaskForm
+from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired
 
 
 class ReservationForm(FlaskForm):
 
-    start_time = f.TimeField('start_time', validators=[DataRequired()])
-    end_time = f.TimeField('end_time', validators=[DataRequired()])
-    people_number = f.IntegerField('people_number', validators=[DataRequired()])
-    display = ['start_time', 'end_time']
+    start_date = f.DateField('Resevation Date', validators=[DataRequired()])
+    start_time = f.TimeField('Reservation Time', validators=[DataRequired()])
+    people_number = f.IntegerField('People Number', validators=[DataRequired()])
+    #display = ['start_date', 'start_time', 'people_number']

@@ -6,17 +6,15 @@
 
     <form action="" method="POST">
         {{ form.hidden_tag() }}
-        <dl>
-        {% for field in form.display %}
-            <dt>{{ form[field].label }}</dt>
-            <dd>{{ form[field]() }}</dd>
-            {% if form[field].errors %}
-                {% for e in form[field].errors %}
-                <p class="help-block">{{ e }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-        </dl>
+
+        {{ form.start_date.label }}
+        {{ form.start_date.(class='datepicker') }}
+        {{ form.hidden_tag() }}
+        {{ form.start_time.label}}
+        {{ form.start_date.(class='timepicker') }}
+        {{ form.people_number.label}}
+        {{ form.people_number.(class='integer') }}
+
         <p>
         <input type=submit value="Submit">
     </form>
