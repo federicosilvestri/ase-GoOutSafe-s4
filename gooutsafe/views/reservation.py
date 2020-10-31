@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template, request
 from flask_login import login_required
+#from flask_user import roles_required
 from gooutsafe import db
 from gooutsafe.auth import current_user
 
@@ -23,9 +24,10 @@ reservation = Blueprint('reservation', __name__)
 #TODO: only customer can create a new reservation
 @reservation.route('/create_reservation/<restaurant_id>', methods=['GET', 'POST'])
 @login_required
+#@roles_required('customer')
 def create_reservation(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
-    time_slots_avail = get_free_time_slots(restaurant)
+    time_slots_avail = get_time_slots(restaurant)
     form = ReservationForm(time_slots_avail)
     if request.method == 'POST':
         if form.is_submitted():
@@ -40,10 +42,9 @@ def create_reservation(restaurant_id):
             table = get_free_table(restaurant,people_number)
             reservation = Reservation(current_user, table, restaurant, people_number, merged_start_datetime)
             ReservationManager.create_reservation(reservation)
-
-            return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id))
-
+            return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id)) 
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
+
 
 def get_free_table(restaurant, people_number):
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id).order_by(Table.capacity)
@@ -54,7 +55,7 @@ def get_free_table(restaurant, people_number):
             break
     return reservation_table
 
-def get_free_time_slots(restaurant):
+def get_time_slots(restaurant):
     time_slots = restaurant.availabilities
     time_slot = time_slots[0]
     start_time = time_slot.start_time
@@ -65,16 +66,24 @@ def get_free_time_slots(restaurant):
     while temp_slot < end_datetime:
         free_time_slots.append(temp_slot.strftime('%H:%M'))
         temp_slot += timedelta(minutes=15)
-    print(free_time_slots)
     return free_time_slots
-    #TODO: implement this method
 
-@reservation.route('<restaurant_id>/delete_reservation/<int:id>')
+
+def check_time_slot(new_start_datetime, restaurant):
+    rest_reservations = ReservationManager.retrieve_by_restaurant_id(restaurant.restaurant_id)
+    new_end_datetime = new_end_datetime + timedelta(hours=Reservation.MAX_TIME_RESERVATION)
+    for rest_res in rest_reservations:
+        if (new_start_datetime > rest_res.start_time or new_start_datetime < rest_res.end_datetime) or (new_end_datetime > rest_res.start_time or new_end_datetime < rest_res.end_datetime):
+            return False
+    return True
+
+
+@reservation.route('/<restaurant_id>/delete_reservation/<int:id>')
 def delete_reservation(restaurant_id, id):
     #TODO: implement this method
     pass
 
-@reservation.route('reservations/<restaurant_id>/<reservation_id>')
+@reservation.route('/reservations/<restaurant_id>/<reservation_id>')
 def reservation_details(restaurant_id, reservation_id):
     reservation = ReservationManager.retrieve_by_id(reservation_id)
     user = CustomerManager.retrieve_by_id(reservation.user.id)

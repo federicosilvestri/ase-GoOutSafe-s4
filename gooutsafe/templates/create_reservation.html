@@ -1,11 +1,8 @@
 {% extends "base.html" %}
 
 {% block title %} Add a Reservation {% endblock %}
-
-{% block scripts %}
-  {{ super() }}
-  {{ datepicker.loader() }}
-  {{ datepicker.picker(id=".dp") }}
+{% block head %}
+    <link type="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 {% endblock %}
 
 {% block content %}
@@ -31,15 +28,33 @@
     !-->
     
     <form action="" method="POST">
-        {{ form.hidden_tag() }}
 
-        {{ form.start_date.label }}
-        {{ form.start_date(class='dp') }}
-        {{ form.hidden_tag() }}
-        {{ form.time_slots.label}}
-        {{ form.time_slots }}
+        <div class="col-lg-4">
+            <div class="form-group">
+              <label for="datetimepicker1">Date:</label>
+                <div class ='input-group date' id='datetimepicker'>
+                  <input type="text" class="form-control">
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+                <script type="text/javascript">
+                $(function () {
+                   $('#datetimepicker').datetimepicker();
+                });
+              </script>
+            </div>
+        </div>
+        
         {{ form.people_number.label}}
         {{ form.people_number(class='integer') }}
+        
         <p>
         <input type="submit" value="Submit">
     </form>

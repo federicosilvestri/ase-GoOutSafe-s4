@@ -19,4 +19,3 @@ class ReservationForm(FlaskForm):
         self.time_slots.choices = time_slots
 
 
-
