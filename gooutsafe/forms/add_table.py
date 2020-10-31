@@ -5,5 +5,5 @@ from wtforms.validators import DataRequired
 
 class TableForm(FlaskForm):
     number = f.IntegerField('number', validators=[DataRequired()])
-    capacity = f.IntegerField('capacity', validators=[DataRequired()])
-    display = ['number', 'capacity']
+    max_capacity = f.IntegerField('max capacity', validators=[DataRequired()])
+    display = ['number', 'max_capacity']

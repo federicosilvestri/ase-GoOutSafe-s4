@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block page_title %} All reservations {% endblock %}
+
+{% block content %}
+
+    {% if current_user.is_authenticated %}
+    </nav>
+    <br>
+    <h3> {{ restaurant.name }} </h3> <br>
+    <h5> All your reservations </h5><br>
+
+    <table class="table">
+
+        {% for r in reservations %}
+        <tr>
+            <td>
+                {{ r.user_id }}) Table: {{ r.table_id }} -- Persons: {{ r.people_number }} --
+                Start time: {{ r.start_time }} -- End time: {{ r.end_time }}
+            </td>
+            <td>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-light" data-toggle="modal" 
+                data-target="#deleteReservation">
+                  Delete
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="deleteReservation" tabindex="-1" 
+                aria-labelledby="deleteReservation" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Are you sure??
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Do you want to delete this reservation?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" 
+                            data-dismiss="modal"> Close </button>
+
+                        <button type="button" class="btn btn-danger"
+                        onclick="location.href='/delete/{{r.id}}/{{restaurant.id}}'">
+                            Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% endif %}
+
+{% endblock %}

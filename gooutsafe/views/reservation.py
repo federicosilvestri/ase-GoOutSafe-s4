@@ -61,15 +61,26 @@ def get_free_time_slots(restaurant):
     return free_time_slots
     #TODO: implement this method
 
-@reservation.route('<restaurant_id>/delete_reservation/<int:id>')
+@reservation.route('/delete/<int:id>/<restaurant_id>')
 def delete_reservation(restaurant_id, id):
-    #TODO: implement this method
-    pass
+    ReservationManager.delete_reservation_by_id(id)
+    return redirect ('/reservations/'+ str(restaurant_id))
 
-@reservation.route('reservations/<restaurant_id>/<reservation_id>')
+
+@reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
 def reservation_details(restaurant_id, reservation_id):
     reservation = db.session.query(Reservation).filter_by(id=int(reservation_id)).all()[0]
     user = reservation.user
     table = reservation.table
     restaurant = reservation.restaurant
-    return render_template("reservation_details.html", reservation = reservation, user = user, table = table, restaurant = restaurant)
+    return render_template("reservation_details.html", reservation = reservation, 
+        user = user, table = table, restaurant = restaurant)
+
+
+@reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
+def reservation_all(restaurant_id):
+    restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
+    reservations = ReservationManager.retrieve_by_restaurant_id(restaurant_id)
+    
+    return render_template("restaurant_reservation.html", 
+        restaurant=restaurant, reservations=reservations)

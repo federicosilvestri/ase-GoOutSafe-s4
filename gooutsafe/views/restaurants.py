@@ -96,7 +96,7 @@ def save_details(id_op, rest_id):
     if request.method == "POST":
         if table_form.is_submitted():
             num_tables = table_form.data['number']
-            capacity = table_form.data['capacity']
+            capacity = table_form.data['max_capacity']
 
             for i in range(0,num_tables):
                 table = Table(capacity=capacity, restaurant=restaurant)
