@@ -29,7 +29,12 @@ class CustomerManager(Manager):
             Manager.check_none(customer=customer)
             return CustomerManager.retrieve_by_id(id_=customer.id)
         except ValueError:
-            return None
+            return 
+            
+    @staticmethod
+    def retrieve_all_positive():
+        pos_customers = Customer.query.filter_by(health_status=True).all()
+        return pos_customers
 
     @staticmethod
     def update_customer(customer: Customer):
