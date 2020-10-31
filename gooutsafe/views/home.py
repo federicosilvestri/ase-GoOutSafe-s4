@@ -3,6 +3,7 @@ from flask import Blueprint, render_template
 from gooutsafe import db
 from gooutsafe.auth import current_user
 from gooutsafe.models.restaurant import Restaurant
+from gooutsafe.tasks.home_tasks import print_with_delay
 
 home = Blueprint('home', __name__)
 
@@ -13,4 +14,5 @@ def index():
         restaurants = db.session.query(Restaurant)
     else:
         restaurants = None
+    task = print_with_delay.delay()
     return render_template("index.html", restaurants=restaurants)
