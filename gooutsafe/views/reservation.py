@@ -29,6 +29,7 @@ def create_reservation(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
     time_slots_avail = get_time_slots(restaurant)
     form = ReservationForm(time_slots_avail)
+
     if request.method == 'POST':
         if form.is_submitted():
             start_data = form.data['start_date']
@@ -43,6 +44,7 @@ def create_reservation(restaurant_id):
             reservation = Reservation(current_user, table, restaurant, people_number, merged_start_datetime)
             ReservationManager.create_reservation(reservation)
             return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id)) 
+
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
 
 
@@ -78,7 +80,6 @@ def delete_reservation(restaurant_id, id):
 def reservation_details(restaurant_id, reservation_id):
     reservation = ReservationManager.retrieve_by_id(reservation_id)
     user = CustomerManager.retrieve_by_id(reservation.user.id)
-    print(user.firstname)
     table = reservation.table
     restaurant = reservation.restaurant
     return render_template("reservation_details.html", reservation = reservation, 
