@@ -12,3 +12,5 @@ elif env == 'testing':
     app = create_app('config.TestConfig')
 else:
     raise RuntimeError("%s is not recognized as valid app environment. You have to setup the environment!" % env)
+
+from gooutsafe import celery
