@@ -12,6 +12,38 @@ class CustomerManager(Manager):
     def retrieve_by_id(id_):
         Manager.check_none(id=id_)
         return Customer.query.get(id_)
+    
+    @staticmethod
+    def retrieve_by_ssn(ssn):
+        try:
+            customer = Customer.query.filter_by(social_number=ssn).first()
+            Manager.check_none(customer=customer)
+            return CustomerManager.retrieve_by_id(id_=customer.id)
+        except ValueError:
+            return None
+
+    @staticmethod
+    def retrieve_by_email(email):
+        try:
+            customer = Customer.query.filter_by(email=email).first()
+            Manager.check_none(customer=customer)
+            return CustomerManager.retrieve_by_id(id_=customer.id)
+        except ValueError:
+            return None
+    
+    @staticmethod
+    def retrieve_by_phone(phone):
+        try:
+            customer = Customer.query.filter_by(phone=phone).first()
+            Manager.check_none(customer=customer)
+            return CustomerManager.retrieve_by_id(id_=customer.id)
+        except ValueError:
+            return None 
+            
+    @staticmethod
+    def retrieve_all_positive():
+        pos_customers = Customer.query.filter_by(health_status=True).all()
+        return pos_customers
 
     @staticmethod
     def update_customer(customer: Customer):

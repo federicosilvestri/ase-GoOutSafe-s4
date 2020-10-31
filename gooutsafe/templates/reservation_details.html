@@ -3,13 +3,13 @@
 {% block title %} Reservation Details {% endblock %}
 
 {% block content %}
-    <h1>{{ restaurant.name }} -- {{ user.name }}</h1>
+    <h1>{{ restaurant.name }} -- {{ user.firstname }}</h1>
     <ul> 
         <li>
-            {{ table.id }}
+            Table: {{ table.id }}
         </li>
         <li>
-            {{ reservation.start_time }}
+            Date: {{ reservation.start_time }}
         </li>
     </ul>
 

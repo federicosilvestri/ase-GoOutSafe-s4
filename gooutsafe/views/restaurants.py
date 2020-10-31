@@ -5,10 +5,13 @@ from gooutsafe import db
 from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.models.table import Table
+from gooutsafe.models.restaurant_availability import RestaurantAvailability
 from gooutsafe.forms.restaurant import RestaurantForm
 from gooutsafe.forms.add_table import TableForm
+from gooutsafe.forms.add_times import TimesForm
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.table_manager import TableManager
+from gooutsafe.dao.restaurant_availability_manager import RestaurantAvailabilityManager
 
 
 restaurants = Blueprint('restaurants', __name__)
@@ -70,23 +73,30 @@ def add(id_op):
 @restaurants.route('/restaurants/details/<int:id_op>', methods=['GET', 'POST'])
 @login_required
 def details(id_op):
-    form = TableForm()
+    table_form = TableForm()
+    time_form = TimesForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
-    return render_template('add_restaurant_details.html', restaurant=restaurant, 
-                    tables=tables, form=form)
+    ava = restaurant.availabilities
+
+    return render_template('add_restaurant_details.html', 
+                    restaurant=restaurant, tables=tables, 
+                    table_form=table_form, time_form=time_form,times=ava)
 
 
 @restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+@login_required
 def save_details(id_op, rest_id):
-    form = TableForm()
+    table_form = TableForm()
+    time_form = TimesForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
+    ava = restaurant.availabilities
 
     if request.method == "POST":
-        if form.is_submitted():
-            num_tables = form.data['number']
-            capacity = form.data['capacity']
+        if table_form.is_submitted():
+            num_tables = table_form.data['number']
+            capacity = table_form.data['max_capacity']
 
             for i in range(0,num_tables):
                 table = Table(capacity=capacity, restaurant=restaurant)
@@ -95,5 +105,29 @@ def save_details(id_op, rest_id):
             return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
 
     return render_template('add_restaurant_details.html', 
-                    restaurant=restaurant, tables=tables, form=form)
+                    restaurant=restaurant, tables=tables, 
+                    table_form=table_form, time_form=time_form, times=ava)
 
+
+@restaurants.route('/restaurants/savetime/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+@login_required
+def save_time(id_op, rest_id):
+    table_form = TableForm()
+    time_form = TimesForm()
+    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+    tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
+    ava = restaurant.availabilities
+
+    if request.method == "POST":
+        if time_form.is_submitted():
+            start_time = time_form.data['start_time']
+            end_time = time_form.data['end_time']
+
+            time = RestaurantAvailability(rest_id, start_time, end_time)
+            RestaurantAvailabilityManager.create_availability(time)
+            
+            return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
+
+    return render_template('add_restaurant_details.html', 
+                    restaurant=restaurant, tables=tables, 
+                    table_form=table_form, time_form=time_form, times=ava)

@@ -6,10 +6,6 @@
 
     {% if current_user.is_authenticated %}
 
-        <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="/">
-
-            Hi {{ current_user.firstname }}! <br>
             <ul class="nav justify-content-end">
                 <li class="nav-item">
                     <a class="btn btn-outline-dark"
@@ -53,6 +49,8 @@
         </a>
         </nav>
         <br>
+        
+        <h5> Hi {{ current_user.firstname }}! </h5><br>
         <h3>Your Restaurants</h3>
         {% for restaurant in restaurants %}
             <div>

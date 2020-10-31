@@ -1,0 +1,16 @@
+{% extends "components/navbar/base_navbar.html" %}
+{% block navbar_content %}
+    <nav class="navbar navbar-light bg-light">
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <button type="button" class="btn btn-outline-primary"
+                        onclick="location.href='/create_user/<customer>'">Sign up
+                </button>
+
+                <button type="button" class="btn btn-outline-success"
+                        onclick="location.href='/login'">Login
+                </button>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}

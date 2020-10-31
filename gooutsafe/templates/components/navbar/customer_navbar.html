@@ -1,0 +1,19 @@
+{% extends "components/navbar/base_navbar.html" %}
+{% block navbar_content %}
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/"></a>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                {% if current_user.type == "operator" %}
+                    <a class="btn btn-outline-primary"
+                       onclick="location.href='/operator/{{ current_user.id }}'">Profile
+                    </a>
+                {% elif current_user.type == "customer" %}
+                    <a class="btn btn-outline-primary"
+                       onclick="location.href='/profile/{{ current_user.id }}'">Profile
+                    </a>
+                {% endif %}
+            </li>
+        </ul>
+    </nav>
+{% endblock %}

@@ -5,11 +5,6 @@
 {% block content %}
 
     {% if current_user.is_authenticated %}
-
-        <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="/">
-
-            Hi {{ current_user.name }}! <br>
             <ul class="nav justify-content-end">
                 <li class="nav-item">
                     <a class="btn btn-outline-dark"
@@ -17,13 +12,16 @@
                     </a>
                 </li>
             </ul>
-        </a>
         </nav>
+        <br>
+
+        <h5>Hi {{current_user.name}} </h5>> <br>
+
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-authority" role="tabpanel"
                  aria-labelledby="pills-authority-tab">
     
-                <form action="/mark_positive" method="POST">
+                <form action="/ha/mark_positive" method="POST">
                     {{ form.hidden_tag() }}
                     <dl>
                         {% for field in form.display %}
@@ -39,6 +37,19 @@
                     <p>
                         <input type=submit value="Marks as positive">
                 </form>
+                <h3>List of positive customers</h3>
+                {% for customer in pos_customers %}
+                    <div>
+                        <ul>
+                            <form action="/contact/{{customer.id}}" method="GET">
+                                <li>
+                                    {{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }}
+                                    <button class="btn btn-sm btn-primary text-right" type="submit">Check contacts</button>
+                                </li>
+                            </form>
+                        </ul>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     {% endif %}
