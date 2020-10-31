@@ -29,8 +29,9 @@ def mark_positive():
     pos_customers = CustomerManager.retrieve_all_positive()
     return render_template('authority_profile.html', form=form, pos_customers=pos_customers)
 
-@authority.route('/ha/contact/<int:id_>', methods = ['GET'])
+@authority.route('/ha/contact/<int:contact_id>', methods = ['GET'])
 @login_required
-def contact_tracing():
+def contact_tracing(contact_id):
     # TODO //visualize all contact with positive person
-    pass
+    customer = CustomerManager.retrieve_by_id(id_=contact_id)
+    return render_template('contact_tracing_positive.html', customer=customer)

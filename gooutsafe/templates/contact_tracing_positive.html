@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %} Authority Profile {% endblock %}
+
+{% block content %}
+
+    {% if current_user.is_authenticated %}
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark"
+                        onclick="location.href='/logout'">Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <br>
+
+        <h5>Hi {{current_user.name}} </h5>> <br>
+        <h3>Positive Customer</h3>
+                    <div>
+                        <il>{{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }} | phone: {{ customer.phone }}</il>
+                    </div>
+    {% endif %}
+{% endblock %}

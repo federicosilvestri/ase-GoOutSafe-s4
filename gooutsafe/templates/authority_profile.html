@@ -41,9 +41,9 @@
                 {% for customer in pos_customers %}
                     <div>
                         <ul>
-                            <form action="/contact/{{customer.id}}" method="GET">
+                            <form action="/ha/contact/{{customer.id}}" method="GET">
                                 <li>
-                                    {{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }}
+                                    {{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }} | phone: {{ customer.phone }}
                                     <button class="btn btn-sm btn-primary text-right" type="submit">Check contacts</button>
                                 </li>
                             </form>
