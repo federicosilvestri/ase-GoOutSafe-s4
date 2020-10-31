@@ -26,8 +26,6 @@ def mark_positive():
         if(customer is not None):
             customer.set_health_status(status=True)
             CustomerManager.update_customer(customer)
-            print(customer.firstname)
-            print(customer.health_status)
-  
     form = AuthorityForm()
-    return render_template('authority_profile.html', form=form)
+    pos_customers = CustomerManager.retrieve_all_positive()
+    return render_template('authority_profile.html', form=form, pos_customers=pos_customers)

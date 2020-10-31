@@ -8,6 +8,7 @@ from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.models.user import User
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.dao.user_manager import UserManager
+from gooutsafe.dao.customer_manager import CustomerManager
 
 auth = Blueprint('auth', __name__)
 
@@ -29,7 +30,8 @@ def login():
                 return render_template('customer_profile.html', current_user=user)
             else:
                 ha_form = AuthorityForm()
-                return render_template('authority_profile.html', current_user=user, form = ha_form)
+                pos_customers = CustomerManager.retrieve_all_positive()
+                return render_template('authority_profile.html', current_user=user, form = ha_form, pos_customers=pos_customers)
 
     return render_template('login.html', form=form)
 
