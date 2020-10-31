@@ -1,10 +1,10 @@
 from .dao_test import DaoTest
 
 
-class LikeManagerTest(DaoTest):
+class TestLikeManager(DaoTest):
 
     def setUp(self):
-        super(LikeManagerTest, self).setUp()
+        super(TestLikeManager, self).setUp()
 
         from gooutsafe.dao import like_manager
 

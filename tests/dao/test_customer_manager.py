@@ -24,15 +24,19 @@ class TestCustomerManager(DaoTest):
         self.customer_manager.create_customer(customer=customer1)
         customer_ssn = self.customer_manager.retrieve_by_ssn(ssn=customer1.social_number)
         customer_email = self.customer_manager.retrieve_by_email(email=customer1.email)
+        customer_phone = self.customer_manager.retrieve_by_phone(phone=customer1.phone)
         #tests for existing customers
         TestCustomer.assertEqualCustomers(customer1, customer_ssn)
         TestCustomer.assertEqualCustomers(customer1, customer_email)
+        TestCustomer.assertEqualCustomers(customer1, customer_phone)
         #tests for nonexisting customers in the database
         customer_fake, _ = TestCustomer.generate_random_customer()
         customer_ssn = self.customer_manager.retrieve_by_ssn(ssn=customer_fake.social_number)
         customer_email = self.customer_manager.retrieve_by_email(email=customer_fake.email)
+        customer_phone = self.customer_manager.retrieve_by_phone(phone=customer_fake.phone)
         self.assertIsNone(customer_ssn, None)
         self.assertIsNone(customer_email, None)
+        self.assertIsNone(customer_phone, None)
 
     def test_retrieve_positive_customers(self):
         pos_customers = self.customer_manager.retrieve_all_positive()
