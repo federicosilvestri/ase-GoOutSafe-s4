@@ -6,10 +6,6 @@
 
     {% if current_user.is_authenticated %}
 
-        <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="/">
-
-            Hi {{ current_user.email }}! <br>
             <ul class="nav justify-content-end">
                 <li class="nav-item">
                     <a class="btn btn-outline-dark"
@@ -53,6 +49,7 @@
         </a>
         </nav>
         <br>
+        <h5> Hi {{ current_user.firstname }}! </h5><br>
         {% if restaurant == None %}
             <a class="nav-link active"
                 onclick="location.href='/restaurants/add/{{current_user.id}}'">
