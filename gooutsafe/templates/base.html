@@ -20,11 +20,10 @@
         <a class="navbar-brand" href="/">
             <h1>GoOutSafe</h1>
         </a>
-    </nav>
-        {% if current_user.is_authenticated %}
+
+    {% if current_user.is_authenticated %}
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/">
-            Hi {{ current_user.firstname }}! <br>
+        <a class="navbar-brand" href="/"></a>
             <ul class="nav justify-content-end">
                 <li class="nav-item">
                     {% if current_user.type == "operator" %}
@@ -38,12 +37,10 @@
                     {% endif %}
                 </li>
             </ul>
-        </a>
     </nav>
 
     {% else %}
     <nav class="navbar navbar-light bg-light">
-        Hi Anonymous
         <ul class="nav justify-content-end">
             <li class="nav-item">
                 <button type="button" class="btn btn-outline-primary"
@@ -55,6 +52,7 @@
                 </button>
             </li>
         </ul>
+    </nav>
     </nav>
     {% endif %}
     {% endblock %}
