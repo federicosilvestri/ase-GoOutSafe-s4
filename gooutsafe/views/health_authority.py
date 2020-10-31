@@ -9,7 +9,7 @@ from gooutsafe.models.customer import Customer
 authority = Blueprint('authority', __name__)
 
 
-@authority.route('/mark_positive', methods = ['POST'])
+@authority.route('/ha/mark_positive', methods = ['POST'])
 @login_required
 def mark_positive():
     if request.method == 'POST':
@@ -21,11 +21,17 @@ def mark_positive():
         elif(track_type == 'email'):
             customer = CustomerManager.retrieve_by_email(email=customer_ident)
         else:
-            # TODO //set health_status with phone number
-            pass
+            customer = CustomerManager.retrieve_by_phone(phone=customer_ident)
         if(customer is not None):
             customer.set_health_status(status=True)
             CustomerManager.update_customer(customer)
     form = AuthorityForm()
     pos_customers = CustomerManager.retrieve_all_positive()
     return render_template('authority_profile.html', form=form, pos_customers=pos_customers)
+
+@authority.route('/ha/contact/<int:contact_id>', methods = ['GET'])
+@login_required
+def contact_tracing(contact_id):
+    # TODO //visualize all contact with positive person
+    customer = CustomerManager.retrieve_by_id(id_=contact_id)
+    return render_template('contact_tracing_positive.html', customer=customer)

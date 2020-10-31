@@ -3,5 +3,29 @@
 
 {% block content %}
 
+<!-- BARRA DI RICERCA-->
+
+
+
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.search_field.label }}
+    {{ form.search_field }}
+    {{ form.filters.label }}
+    {{ form.filters }}
+    <input type=submit value="Submit">
+</form>
+
+<h5> Restaurants </h5>
+{% for r in restaurants %}
+    <li> {{ r.name}} | {{ r.address }} | {{ r.city }}</li>
+{% endfor %}
+
+
+<!-- LISTA RISTORANTI-->
+
+<!-- LISTA RISTORANTI BEST RESTAURANT-->
+
+
 
 {% endblock %}

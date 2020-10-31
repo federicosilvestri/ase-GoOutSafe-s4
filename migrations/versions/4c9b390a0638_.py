@@ -1,8 +1,14 @@
 """empty message
 
-Revision ID: a8eecd947fed
+<<<<<<< HEAD:migrations/versions/35c56882daf3_.py
+Revision ID: 35c56882daf3
 Revises: 
-Create Date: 2020-10-30 22:09:19.134967
+Create Date: 2020-10-31 18:51:21.491535
+=======
+Revision ID: 4c9b390a0638
+Revises: 
+Create Date: 2020-10-31 22:57:13.819292
+>>>>>>> 3e6412fcb0d3ae85ab172e1c943c40f17f026346:migrations/versions/4c9b390a0638_.py
 
 """
 from alembic import op
@@ -10,7 +16,11 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a8eecd947fed'
+<<<<<<< HEAD:migrations/versions/35c56882daf3_.py
+revision = '35c56882daf3'
+=======
+revision = '4c9b390a0638'
+>>>>>>> 3e6412fcb0d3ae85ab172e1c943c40f17f026346:migrations/versions/4c9b390a0638_.py
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -45,6 +55,7 @@ def upgrade():
     sa.Column('birthday', sa.Date(), nullable=True),
     sa.Column('social_number', sa.Unicode(length=16), nullable=True),
     sa.Column('health_status', sa.Boolean(), nullable=True),
+    sa.Column('phone', sa.String(length=25), nullable=True),
     sa.ForeignKeyConstraint(['id'], ['User.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

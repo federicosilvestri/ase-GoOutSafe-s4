@@ -92,6 +92,18 @@ In order to know what are the lines of codes which are not covered by the tests,
 
 `python -m pytest --cov-report term-missing`
 
+## Celery
+
+In order to set up Celery, you need to open another terminal, using the same development virtual environment, and setup both Redis, the message broker, and the Celery worker.
+
+Execute the following command to run the docker container with Redis in the background:
+
+`docker run --name=redis-devel --publish=6379:6379 --hostname=redis --restart=on-failure --detach redis:latest`
+
+Execute the following command to run the Celery worker:
+
+`celery -A app.celery worker --loglevel=INFO`
+
 ## Conventions
 
 - Name of files must be snake_cased
