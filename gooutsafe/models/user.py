@@ -39,3 +39,12 @@ class User(UserMixin, db.Model):
         checked = check_password_hash(self.password, password)
         self.authenticated = checked
         return self.authenticated
+
+    def is_lha(self):
+        return self.type == 'authority'
+
+    def is_rest_operator(self):
+        return self.type == 'operator'
+
+    def is_customer(self):
+        return self.type == 'customer'

@@ -13,65 +13,37 @@
 </head>
 <body>
 
-  
+
 <div class="container">
     {% block navbar %}
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/">
-            <h1>GoOutSafe</h1>
-        </a>
-
-    {% if current_user.is_authenticated %}
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/"></a>
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    {% if current_user.type == "operator" %}
-                        <a class="btn btn-outline-primary"
-                            onclick="location.href='/operator/{{current_user.id}}'">Profile
-                        </a>
-                    {% elif current_user.type == "customer" %}
-                        <a class="btn btn-outline-primary"
-                            onclick="location.href='/profile/{{current_user.id}}'">Profile
-                        </a>
-                    {% endif %}
-                </li>
-            </ul>
-    </nav>
-
-    {% else %}
-    <nav class="navbar navbar-light bg-light">
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <button type="button" class="btn btn-outline-primary"
-                    onclick="location.href='/create_user/<customer>'">Sign up
-                </button>
-
-                <button type="button" class="btn btn-outline-success"
-                    onclick="location.href='/login'">Login
-                </button>
-            </li>
-        </ul>
-    </nav>
-    </nav>
-    {% endif %}
+        {% if current_user.is_authenticated %}
+            {% if current_user.is_customer() %}
+                {% include "components/navbar/customer_navbar.html" %}
+            {% elif current_user.is_rest_operator() %}
+                {% include "components/navbar/rest_operator_navbar.html" %}
+            {% else %}
+                {% include "components/navbar/lha_navbar.html" %}
+            {% endif %}
+        {% else %}
+            {% include "components/navbar/anonymous_navbar.html" %}
+        {% endif %}
     {% endblock %}
 
     {% block content %}
     {% endblock %}
 </div>
-  {% block scripts %}
+{% block scripts %}
     <!--
     <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
     <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
     -->
-    
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-        crossorigin="anonymous"></script>
-  {%- endblock scripts %}
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+            crossorigin="anonymous"></script>
+{%- endblock scripts %}
 </body>
 </html>
