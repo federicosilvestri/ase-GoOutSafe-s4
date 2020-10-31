@@ -17,7 +17,12 @@ class TestCustomerManager(DaoTest):
         customer1, _ = TestCustomer.generate_random_customer()
         self.customer_manager.create_customer(customer=customer1)
         customer2 = self.customer_manager.retrieve_by_id(id_=customer1.id)
+        customer3 = self.customer_manager.retrieve_by_ssn(ssn=customer1.social_number)
+        customer4 = self.customer_manager.retrieve_by_email(email=customer1.email)
         TestCustomer.assertEqualCustomers(customer1, customer2)
+        TestCustomer.assertEqualCustomers(customer1, customer3)
+        TestCustomer.assertEqualCustomers(customer1, customer4)
+
     
     def test_delete_customer(self):
         base_customer, _ = TestCustomer.generate_random_customer()
@@ -38,4 +43,6 @@ class TestCustomerManager(DaoTest):
         base_customer.set_firstname(TestCustomerManager.faker.first_name())
         updated_customer = self.customer_manager.retrieve_by_id(id_=base_customer.id)
         TestCustomer.assertEqualCustomers(base_customer, updated_customer)
+
+
         
