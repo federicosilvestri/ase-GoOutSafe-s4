@@ -6,32 +6,37 @@
   {{ super() }}
   {{ datepicker.loader() }}
   {{ datepicker.picker(id=".dp") }}
-  <script>
-    $(".dropdown-menu").click(function(){
-        $(this).parents(".input-group-btn").find('.btn').text($(this).text());
-    });
-  </script>
 {% endblock %}
 
 {% block content %}
 
+<!--
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <dl>
+        {% for field in form.display %}
+            <dt>{{ form[field].label }}</dt>
+            <dd>{{ form[field]() }}</dd>
+            {% if form[field].errors %}
+                {% for e in form[field].errors %}
+                <p class="help-block">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </dl>
+        <p>
+        <input type=submit value="Submit">
+    </form>
+    !-->
+    
     <form action="" method="POST">
         {{ form.hidden_tag() }}
 
         {{ form.start_date.label }}
         {{ form.start_date(class='dp') }}
         {{ form.hidden_tag() }}
-          <button class="btn btn-info btn-md dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="color_dropdown" >
-              Select Time
-              <span class="caret"></span>
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {% for time_slot in time_slots %}
-              <a class="dropdown-item" href="#">
-              {{ time_slot }}
-              </a>
-            {% endfor %}
-          </div>
+        {{ form.time_slots.label}}
+        {{ form.time_slots }}
         {{ form.people_number.label}}
         {{ form.people_number(class='integer') }}
         <p>
