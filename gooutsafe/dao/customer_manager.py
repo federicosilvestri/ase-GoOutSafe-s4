@@ -29,7 +29,16 @@ class CustomerManager(Manager):
             Manager.check_none(customer=customer)
             return CustomerManager.retrieve_by_id(id_=customer.id)
         except ValueError:
-            return 
+            return None
+    
+    @staticmethod
+    def retrieve_by_phone(phone):
+        try:
+            customer = Customer.query.filter_by(phone=phone).first()
+            Manager.check_none(customer=customer)
+            return CustomerManager.retrieve_by_id(id_=customer.id)
+        except ValueError:
+            return None 
             
     @staticmethod
     def retrieve_all_positive():

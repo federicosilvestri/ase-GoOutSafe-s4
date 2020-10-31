@@ -21,8 +21,7 @@ def mark_positive():
         elif(track_type == 'email'):
             customer = CustomerManager.retrieve_by_email(email=customer_ident)
         else:
-            # TODO //set health_status with phone number
-            pass
+            customer = CustomerManager.retrieve_by_phone(phone=customer_ident)
         if(customer is not None):
             customer.set_health_status(status=True)
             CustomerManager.update_customer(customer)
