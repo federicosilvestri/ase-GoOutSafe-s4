@@ -37,6 +37,14 @@
                     <p>
                         <input type=submit value="Marks as positive">
                 </form>
+                <h3>List of positive customers</h3>
+                {% for customer in pos_customers %}
+                    <div>
+                        <li>
+                            {{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }}
+                        </li>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     {% endif %}

@@ -18,6 +18,26 @@ class TestCustomerManager(DaoTest):
         self.customer_manager.create_customer(customer=customer1)
         customer2 = self.customer_manager.retrieve_by_id(id_=customer1.id)
         TestCustomer.assertEqualCustomers(customer1, customer2)
+
+    def test_retrieve_customer(self):
+        customer1, _ = TestCustomer.generate_random_customer()
+        self.customer_manager.create_customer(customer=customer1)
+        customer_ssn = self.customer_manager.retrieve_by_ssn(ssn=customer1.social_number)
+        customer_email = self.customer_manager.retrieve_by_email(email=customer1.email)
+        #tests for existing customers
+        TestCustomer.assertEqualCustomers(customer1, customer_ssn)
+        TestCustomer.assertEqualCustomers(customer1, customer_email)
+        #tests for nonexisting customers in the database
+        customer_fake, _ = TestCustomer.generate_random_customer()
+        customer_ssn = self.customer_manager.retrieve_by_ssn(ssn=customer_fake.social_number)
+        customer_email = self.customer_manager.retrieve_by_email(email=customer_fake.email)
+        self.assertIsNone(customer_ssn, None)
+        self.assertIsNone(customer_email, None)
+
+    def test_retrieve_positive_customers(self):
+        pos_customers = self.customer_manager.retrieve_all_positive()
+        for customers in pos_customers:
+            self.assertTrue(customers.health_status)
     
     def test_delete_customer(self):
         base_customer, _ = TestCustomer.generate_random_customer()
@@ -36,6 +56,9 @@ class TestCustomerManager(DaoTest):
         self.customer_manager.create_customer(customer=base_customer)
         base_customer.set_social_number(TestCustomerManager.faker.ssn())
         base_customer.set_firstname(TestCustomerManager.faker.first_name())
+        self.customer_manager.update_customer(customer=base_customer)
         updated_customer = self.customer_manager.retrieve_by_id(id_=base_customer.id)
         TestCustomer.assertEqualCustomers(base_customer, updated_customer)
+
+
         
