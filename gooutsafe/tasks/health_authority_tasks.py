@@ -19,3 +19,5 @@ def revert_customer_health_status(customer_id):
     if customer:
         customer.set_health_status(False)
         CustomerManager.update_customer(customer=customer)
+    else:
+        raise ValueError('Customer does not exist anymore')
