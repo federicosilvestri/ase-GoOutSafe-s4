@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request
-from flask_login import (logout_user, login_user, login_required)
-
+from flask_login import login_required, login_user, logout_user
 from gooutsafe.auth import current_user
-from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.dao.customer_manager import CustomerManager
+from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.models.customer import Customer
+from gooutsafe.tasks.health_authority_tasks import \
+    schedule_revert_customer_health_status
 
 authority = Blueprint('authority', __name__)
 
@@ -25,6 +26,7 @@ def mark_positive():
         if(customer is not None):
             customer.set_health_status(status=True)
             CustomerManager.update_customer(customer)
+            schedule_revert_customer_health_status(customer)
     form = AuthorityForm()
     pos_customers = CustomerManager.retrieve_all_positive()
     return render_template('authority_profile.html', form=form, pos_customers=pos_customers)
