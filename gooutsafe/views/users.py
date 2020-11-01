@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import (logout_user, login_user, login_required)
 from werkzeug.security import generate_password_hash
 from gooutsafe.dao.user_manager import UserManager
@@ -36,9 +36,9 @@ def create_user_type(type):
             user.authenticated = True
 
             if user.type == 'operator':
-                return redirect('/operator/'+ str(user.id))
+                return redirect(url_for('auth.operator', id=user.id))
             else:
-                return redirect('/profile/'+ str(user.id))
+                return redirect(url_for('auth.profile', id=user.id))
 
     return render_template('create_user.html', form=form)
 
@@ -47,4 +47,4 @@ def create_user_type(type):
 @login_required
 def delete_user(id_):
     UserManager.delete_user_by_id(id_)
-    return redirect('/')
+    return redirect(url_for('home.index'))

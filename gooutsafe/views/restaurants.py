@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import (logout_user, login_user, login_required)
 
 from gooutsafe import db
@@ -30,6 +30,7 @@ def _restaurants(message=''):
 def restaurant_sheet(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)
     list_measure = restaurant.measures.split(',')
+
     return render_template("restaurantsheet.html", 
         restaurant=restaurant, list_measures=list_measure[1:])
 
@@ -68,7 +69,7 @@ def add(id_op):
 
             RestaurantManager.create_restaurant(restaurant)
 
-            return redirect('/operator/'+ str(id_op))
+            return redirect(url_for('auth.operator', id=id_op))
 
     return render_template('create_restaurant.html', form=form)
 
@@ -106,7 +107,7 @@ def save_details(id_op, rest_id):
                     table = Table(capacity=capacity, restaurant=restaurant)
                     TableManager.create_table(table)
 
-    return redirect ('/restaurants/details/'+ str(id_op))
+    return redirect (url_for('restaurants.details',id_op=id_op))
 
 
 @restaurants.route('/restaurants/savetime/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
@@ -123,7 +124,7 @@ def save_time(id_op, rest_id):
                 time = RestaurantAvailability(rest_id, start_time, end_time)
                 RestaurantAvailabilityManager.create_availability(time)
 
-    return redirect ('/restaurants/details/'+ str(id_op))
+    return redirect (url_for('restaurants.details',id_op=id_op))
 
 
 @restaurants.route('/restaurants/savemeasure/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
@@ -142,4 +143,4 @@ def save_measure(id_op, rest_id):
             restaurant.set_measures(string)
             RestaurantManager.update()
 
-    return redirect ('/restaurants/details/'+ str(id_op))
+    return redirect (url_for('restaurants.details',id_op=id_op))

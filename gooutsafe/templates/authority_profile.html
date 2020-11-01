@@ -5,13 +5,14 @@
 {% block content %}
 
     {% if current_user.is_authenticated %}
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark"
-                        onclick="location.href='/logout'">Logout
-                    </a>
-                </li>
-            </ul>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="btn btn-outline-dark"
+                    href="{{ url_for('auth.logout')}}">
+                    Logout
+                </a>
+            </li>
+        </ul>
         </nav>
         <br>
 

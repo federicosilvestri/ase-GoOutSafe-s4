@@ -1,6 +1,8 @@
 from faker import Faker
 from datetime import timedelta, datetime
 from models.test_reservation import TestReservation
+from models.test_customer import TestCustomer
+from models.test_user import TestUser
 
 from .dao_test import DaoTest
 
@@ -13,6 +15,11 @@ class TestReservationManager(DaoTest):
 
         from gooutsafe.dao import reservation_manager
         self.reservation_manager = reservation_manager.ReservationManager
+        from gooutsafe.dao import customer_manager
+        self.customer_manager = customer_manager.CustomerManager
+        from gooutsafe.dao import user_manager
+        self.user_manager = user_manager.UserManager
+    
     
     def test_create_reservation(self):
         resevation1, _ = TestReservation.generate_random_reservation()
@@ -40,3 +47,11 @@ class TestReservationManager(DaoTest):
         base_reservation.set_start_time(start_time)
         updated_reservation = self.reservation_manager.retrieve_by_id(id_=base_reservation.id)
         TestReservation.assertEqualReservations(base_reservation, updated_reservation)
+
+    def test_retrieve_by_user_id(self):
+        reservation, _ = TestReservation.generate_random_reservation()
+        user = reservation.user
+        self.user_manager.create_user(user=user)
+        self.reservation_manager.create_reservation(reservation=reservation)
+        retrieved_reservation = self.reservation_manager.retrieve_by_user_id(user_id=user.id).first()
+        TestReservation.assertEqualReservations(reservation, retrieved_reservation)

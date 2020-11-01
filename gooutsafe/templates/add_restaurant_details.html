@@ -9,10 +9,10 @@
     <br>      
     <ul class="nav justify-content-end">
         <li class="nav-item">
-            <button type="button" class="btn btn-outline-info"
-                onclick="location.href='/reservations/{{restaurant.id}}'">
+            <a type="button" class="btn btn-outline-info"
+                href="{{ url_for('reservation.reservation_all',restaurant_id=restaurant.id) }}">
                 See reservations
-            </button>
+            </a>
         </li>
     </ul>
 

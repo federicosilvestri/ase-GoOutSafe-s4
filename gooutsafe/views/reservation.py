@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import login_required
 #from flask_user import roles_required
 from gooutsafe import db
@@ -41,7 +41,8 @@ def create_reservation(restaurant_id):
             start_time = datetime.combine(start_data, start_time)
             reservation = Reservation(current_user, table, restaurant, people_number, start_time)
             ReservationManager.create_reservation(reservation)
-            return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id)) 
+            return redirect(url_for('reservation.reservation_details',
+                    restaurant_id=restaurant_id, reservation_id=reservation.id))
 
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
 
@@ -69,9 +70,9 @@ def get_time_slots(restaurant):
     return free_time_slots
 
 @reservation.route('/delete/<int:id>/<restaurant_id>')
-def delete_reservation(restaurant_id, id):
+def delete_reservation(id, restaurant_id):
     ReservationManager.delete_reservation_by_id(id)
-    return redirect ('/reservations/'+ str(restaurant_id))
+    return redirect (url_for('reservation.reservation_all', restaurant_id=restaurant.id))
 
 
 @reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
@@ -91,3 +92,9 @@ def reservation_all(restaurant_id):
     
     return render_template("restaurant_reservation.html", 
         restaurant=restaurant, reservations=reservations)
+
+
+@reservation.route('/delete/<int:id>/<int:customer_id>')
+def delete_reservation_customer(id, customer_id):
+    ReservationManager.delete_reservation_by_id(id)
+    return redirect(url_for('auth.profile', id=user.id))

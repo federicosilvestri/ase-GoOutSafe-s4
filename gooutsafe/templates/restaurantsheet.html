@@ -24,8 +24,9 @@
         {% endif %}
     </ul>
 
-    <button type="button" class="btn btn-outline-primary"
-        onclick="location.href='/create_reservation/{{ restaurant.id }}'">Book a Table
-    </button>
+    <a type="button" class="btn btn-outline-primary"
+        href="{{ url_for('reservation.create_reservation', restaurant_id=restaurant.id ) }}">
+        Book a Table
+    </a>
     
 {% endblock %}

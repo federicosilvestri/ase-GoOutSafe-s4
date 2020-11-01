@@ -6,53 +6,57 @@
 
     {% if current_user.is_authenticated %}
 
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark"
-                        onclick="location.href='/logout'">Logout
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="btn btn-outline-dark"
+                    href="{{ url_for('auth.logout')}}">
+                    Logout
+                </a>
+        
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-danger" data-toggle="modal" 
+                data-target="#deleteModal">
+            Delete account
+        </button>
+            
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" 
+            aria-labelledby="deleteModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModal">Are you sure??</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        If you delete your account, <br>
+                            everything will be lost!
+                    </div>
+
+                    <div class="modal-footer">
+                    <a type="button" data-dismiss="modal">
+                        Close
                     </a>
-                
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-danger" data-toggle="modal" 
-                        data-target="#deleteModal">
-                    Delete account
-                </button>
-                    
-                <!-- Modal -->
-                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" 
-                    aria-labelledby="deleteModal aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="deleteModal">Are you sure??</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            </div>
-                            <div class="modal-content">
-                                If you delete your account, <br>
-                                    everything will be lost!
-                            </div>
-
-                            <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger"
-                                onclick="location.href='/delete_user/{{current_user.id}}'">Delete</button>
-                            </div>
-                        </div>
+                    <a href = "{{ url_for('users.delete_user',id_=current_user.id ) }}">
+                        Delete
+                    </a>                            
                     </div>
                 </div>
+            </div>
+        </div>
 
-                </li>
-            </ul>
+        </li>
+    </ul>
         </a>
         </nav>
         <br>
         <h5> Hi {{ current_user.firstname }}! </h5><br>
         {% if restaurant == None %}
             <a class="nav-link active"
-                onclick="location.href='/restaurants/add/{{current_user.id}}'">
+                href="{{ url_for('restaurants.add', id_op=current_user.id) }}">
                 Add your restaurant
             </a>
         {% else %}
@@ -61,7 +65,7 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <a class="nav-link active"
-                        onclick="location.href='/restaurants/details/{{current_user.id}}'">
+                        href="{{ url_for('restaurants.details', id_op=current_user.id ) }}">
                             {{ restaurant.name }} -- {{ restaurant.address }}
                         </a>
                     </li>

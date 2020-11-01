@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, url_for
 from flask_login import (logout_user, login_user, login_required)
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -8,6 +8,7 @@ from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.models.user import User
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.dao.user_manager import UserManager
+from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.customer_manager import CustomerManager
 
 auth = Blueprint('auth', __name__)
@@ -25,9 +26,9 @@ def login():
         if user is not None and check_password_hash(user.password, password):
             login_user(user)
             if user.type == 'operator':
-                return redirect('/operator/'+ str(user.id))
+                return redirect(url_for('auth.operator', id=user.id))
             elif user.type == 'customer':
-                return render_template('customer_profile.html', current_user=user)
+                return redirect(url_for('auth.profile', id=user.id))
             else:
                 ha_form = AuthorityForm()
                 pos_customers = CustomerManager.retrieve_all_positive()
@@ -39,7 +40,10 @@ def login():
 @auth.route('/profile/<int:id>', methods=['GET', 'POST'])
 @login_required
 def profile(id):
-    return render_template('customer_profile.html')
+    reservations = ReservationManager.retrieve_by_user_id(id)
+
+    return render_template('customer_profile.html', 
+        reservations=reservations)
 
 
 @auth.route('/operator/<int:id>', methods=['GET', 'POST'])
@@ -59,4 +63,4 @@ def authority():
 @login_required
 def logout():
     logout_user()
-    return redirect('/')
+    return redirect(url_for('home.index'))
