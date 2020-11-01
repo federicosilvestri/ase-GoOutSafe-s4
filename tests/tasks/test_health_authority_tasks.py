@@ -22,5 +22,7 @@ class TestHealthAuthorityTasks(TasksTest):
         customer, _ = TestCustomer.generate_random_customer()
         customer.set_health_status(True)
         self.customer_manager.create_customer(customer=customer)
+        customer_id = customer.id
         self.health_authority_tasks.revert_customer_health_status(customer.id)
-        self.assertEqual(customer.health_status, False)
+        customer_retrieved = self.customer_manager.retrieve_by_id(customer_id)
+        self.assertEqual(customer_retrieved.health_status, False)

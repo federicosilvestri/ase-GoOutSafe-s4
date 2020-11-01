@@ -10,13 +10,12 @@ from gooutsafe.dao.customer_manager import CustomerManager
 def schedule_revert_customer_health_status(customer, eta=None):
     if not eta:
         eta = datetime.utcnow() + timedelta(days=14)
-    revert_customer_health_status.apply_async((customer.id), eta=eta)
+    customer_id = customer.id
+    revert_customer_health_status.apply_async((customer_id), eta=eta)
 
 @celery.task
 def revert_customer_health_status(customer_id):
     customer = CustomerManager.retrieve_by_id(customer_id)
-    print("===================== ABOUT TO RIETRIEVE CUSTOMER")
     if customer:
         customer.set_health_status(False)
         CustomerManager.update_customer(customer=customer)
-        print("OOOOOOOOOOOOOOOOOOOOOOO", customer.health_status)
