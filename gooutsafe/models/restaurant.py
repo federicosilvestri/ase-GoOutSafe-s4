@@ -38,6 +38,7 @@ class Restaurant(db.Model):
     menu_type = db.Column(
         db.String(length=MAX_STRING_LENGTH)
     )
+    measures = db.Column(db.Unicode(), default="")
     is_open = db.Column(
         db.Boolean,
         default=False
@@ -108,6 +109,9 @@ class Restaurant(db.Model):
     def set_menu_type(self, menu_type):
         Restaurant.check_string_attribute(menu_type)
         self.menu_type = menu_type
+
+    def set_measures(self, measure):
+        self.measures = measure
 
     def set_is_open(self, is_open):
         self.is_open = is_open

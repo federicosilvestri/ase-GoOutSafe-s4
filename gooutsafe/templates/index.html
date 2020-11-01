@@ -5,7 +5,7 @@
 
 <!-- BARRA DI RICERCA-->
 
-
+<br>
 
 <form action="" method="POST">
     {{ form.hidden_tag() }}
@@ -15,8 +15,10 @@
     {{ form.filters }}
     <input type=submit value="Submit">
 </form>
-<!-- LISTA RISTORANTI-->
-<h5> Restaurants </h5>
+
+<br>
+<h5> Restaurants </h5><br>
+
 {% for r in restaurants %}
     <tr>
         <td>

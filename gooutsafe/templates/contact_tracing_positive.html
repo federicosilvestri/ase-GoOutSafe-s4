@@ -20,5 +20,17 @@
                     <div>
                         <il>{{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }} | phone: {{ customer.phone }}</il>
                     </div>
+        <h3>Contacts of the positive customer</h3>
+        {% for c in pos_contact %}
+            <div>
+                <ul>
+                        <li>
+                            {% if c.id != customer.id  %}
+                                {{ c.firstname }} {{ c.lastname }} -- SSN: {{ c.social_number }} | email: {{ c.email }} | phone: {{ c.phone }}
+                            {% endif %}
+                        </li>
+                </ul>
+            </div>  
+        {% endfor %}
     {% endif %}
 {% endblock %}

@@ -6,6 +6,14 @@
     <h5>Phone: {{ restaurant.phone }}</h5>
     <h5>Address: {{ restaurant.address }} --  City: {{ restaurant.city }}</h5>
     <h5>Menu type: {{ restaurant.menu_type }}</h5>
+    <h5>Precautions measures: 
+        <ul>
+        {% for m in list_measures %}
+            <li>{{ m }} </li>
+        {% endfor %}
+        </ul>
+    </h5><br>
+
     <ul>
         {% if current_user.is_authenticated %}
             <iframe width="600" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"

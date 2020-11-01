@@ -3,9 +3,6 @@
 {% block page_title %} All reservations {% endblock %}
 
 {% block content %}
-
-    {% if current_user.is_authenticated %}
-    </nav>
     <br>
     <h3> {{ restaurant.name }} </h3> <br>
     <h5> All your reservations </h5><br>
@@ -15,8 +12,14 @@
         {% for r in reservations %}
         <tr>
             <td>
-                {{ r.user_id }}) Table: {{ r.table_id }} -- Persons: {{ r.people_number }} --
+                Table: {{ r.table_id }} -- Persons: {{ r.people_number }} --
                 Start time: {{ r.start_time }} -- End time: {{ r.end_time }}
+            </td>
+            <td>
+                <button type="button" class="btn btn-light"
+                onclick="location.href='/reservations/{{restaurant.id}}/{{r.id}}'">
+                    See details
+                </button>
             </td>
             <td>
                 <!-- Button trigger modal -->
@@ -57,7 +60,5 @@
         </tr>
         {% endfor %}
     </table>
-
-    {% endif %}
 
 {% endblock %}

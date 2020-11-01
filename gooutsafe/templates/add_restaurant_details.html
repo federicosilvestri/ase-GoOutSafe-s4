@@ -125,8 +125,62 @@
       </div>
       </div>
     </div>
-    </p>
     </td>
+
+        <td>
+        <!-- General sheet of the measures -->
+        <ul>
+        <h5> Precaution measures </h5>
+            {% for m in list_measure %}
+            <li> {{ m }} </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Button add measures trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" 
+            data-target="#addMeasure">
+        Add precautions
+    </button>
+
+        <!-- Modal add table -->
+        <div class="modal fade" id="addMeasure" tabindex="-1" 
+        aria-labelledby="addMeasure" aria-hidden="true">
+
+        <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="addTable">Add measure</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+
+        <div class="modal-body">
+            <form action="{{ url_for('restaurants.save_measure', id_op=current_user.id, rest_id=restaurant.id) }}"
+                method="POST">
+
+                {{ measure_form.hidden_tag() }}
+                <dl>
+                        {% for field in measure_form.display %}
+                            <dt>{{ measure_form[field].label }}</dt>
+                            <dd>{{ measure_form[field]() }}</dd>
+                            {% if measure_form[field].errors %}
+                                {% for e in measure_form[field].errors %}
+                                    <p class="help-block">{{ e }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                </dl>
+                <p>
+                    <input type=submit value="Publish">
+            </form>
+        </div>
+        </div>
+        </div>
+        </div>
+        </p>
+        </td>
+    </p>
     </tr>
     </table>
 {% endif %}
