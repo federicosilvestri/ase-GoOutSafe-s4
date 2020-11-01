@@ -18,7 +18,16 @@
 
 <h5> Restaurants </h5>
 {% for r in restaurants %}
-    <li> {{ r.name}} | {{ r.address }} | {{ r.city }}</li>
+    <tr>
+        <td>
+            {{ r.name}} | {{ r.address }} | {{ r.city }}
+        </td>
+        <td>
+            <button type="button" class="btn btn-outline-primary"
+                onclick="location.href='/create_reservation/{{ r.id }}'">Book a Table
+            </button>
+        </td>
+    </tr>
 {% endfor %}
 
 
