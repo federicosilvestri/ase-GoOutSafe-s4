@@ -26,7 +26,7 @@
                 <li>
                     {{ r.name }} | {{ r.address }} | {{ r.city }}
                     <td>
-                        {% if r.tables|length and r.availabilities|length %}
+                        {% if r.tables|length and r.availabilities|length and current_user.type == "custumer" %}
                             <a type="button" class="btn btn-primary active"
                             href="{{ url_for('reservation.create_reservation', restaurant_id=r.id) }}">
                                 Book a Table

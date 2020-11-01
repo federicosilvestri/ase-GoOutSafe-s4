@@ -11,7 +11,7 @@ def schedule_revert_customer_health_status(customer, eta=None):
     if not eta:
         eta = datetime.utcnow() + timedelta(days=14)
     customer_id = customer.id
-    revert_customer_health_status.apply_async((customer_id), eta=eta)
+    revert_customer_health_status.apply_async(customer_id, eta=eta)
 
 @celery.task
 def revert_customer_health_status(customer_id):
