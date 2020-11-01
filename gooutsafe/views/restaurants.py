@@ -99,8 +99,9 @@ def save_details(id_op, rest_id):
             capacity = table_form.data['max_capacity']
 
             for i in range(0,num_tables):
-                table = Table(capacity=capacity, restaurant=restaurant)
-                TableManager.create_table(table)
+                if max_capacity >= 1:
+                    table = Table(capacity=capacity, restaurant=restaurant)
+                    TableManager.create_table(table)
             
             return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
 
@@ -123,8 +124,9 @@ def save_time(id_op, rest_id):
             start_time = time_form.data['start_time']
             end_time = time_form.data['end_time']
 
-            time = RestaurantAvailability(rest_id, start_time, end_time)
-            RestaurantAvailabilityManager.create_availability(time)
+            if end_time > start_time:
+                time = RestaurantAvailability(rest_id, start_time, end_time)
+                RestaurantAvailabilityManager.create_availability(time)
             
             return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
 
