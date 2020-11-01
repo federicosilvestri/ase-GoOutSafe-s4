@@ -6,11 +6,13 @@
             <li class="nav-item">
                 {% if current_user.type == "operator" %}
                     <a class="btn btn-outline-primary"
-                       onclick="location.href='/operator/{{ current_user.id }}'">Profile
+                       href="{{ url_for('auth.operator',id=current_user.id ) }}">
+                       Profile
                     </a>
                 {% elif current_user.type == "customer" %}
                     <a class="btn btn-outline-primary"
-                       onclick="location.href='/profile/{{ current_user.id }}'">Profile
+                    href="{{ url_for('auth.profile',id=current_user.id ) }}">
+                        Profile
                     </a>
                 {% endif %}
             </li>
