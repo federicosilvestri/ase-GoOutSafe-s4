@@ -14,9 +14,8 @@
                     </a>
                 
                 <!-- Button trigger modal -->
-                {% if current_user.health_status is true %}
-                <button type="button" class="btn btn-danger disable" data-toggle="modal" 
-                        data-target="#deleteModal">
+                {% if customer.health_status %}
+                <button type="button" class="btn btn-danger disabled" data-toggle="modal">
                     Delete account
                 </button>
                 {% else %}

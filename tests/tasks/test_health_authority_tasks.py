@@ -1,5 +1,7 @@
-from models.test_customer import TestCustomer
+from unittest.mock import patch
+
 from models.test_authority import TestAuthority
+from models.test_customer import TestCustomer
 
 from .tasks_test import TasksTest
 
@@ -15,6 +17,13 @@ class TestHealthAuthorityTasks(TasksTest):
         self.customer_manager = customer_manager.CustomerManager
         from gooutsafe.tasks import health_authority_tasks
         self.health_authority_tasks = health_authority_tasks
+
+    # def test_schedule_revert_health_status(self):
+    #     with patch('gooutsafe.tasks.health_authority_tasks.revert_customer_health_status') as task_mock:
+    #         customer, _ = TestCustomer.generate_random_customer()
+    #         self.customer_manager.create_customer(customer=customer)
+    #         self.health_authority_tasks.schedule_revert_customer_health_status(customer)
+    #         assert task_mock.called
 
     def test_revert_health_status(self):
         # authority, _ = TestAuthority.generate_random_authority()

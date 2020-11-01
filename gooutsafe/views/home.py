@@ -26,7 +26,7 @@ def index():
                 restaurants = search_by(search_field, search_filter)
         return render_template("index.html", restaurants = restaurants, form = form)
     
-    return render_template("index.html", form = form)
+    return render_template("index.html", form = form, current_user=current_user)
 
 def search_by(search_field, search_filter):
     if search_filter == "Name":
