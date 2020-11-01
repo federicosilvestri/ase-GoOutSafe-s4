@@ -42,6 +42,7 @@ def create_reservation(restaurant_id):
             reservation = Reservation(current_user, table, restaurant, people_number, start_time)
             ReservationManager.create_reservation(reservation)
             return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id)) 
+
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
 
 

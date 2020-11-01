@@ -9,6 +9,7 @@ from gooutsafe.models.restaurant_availability import RestaurantAvailability
 from gooutsafe.forms.restaurant import RestaurantForm
 from gooutsafe.forms.add_table import TableForm
 from gooutsafe.forms.add_times import TimesForm
+from gooutsafe.forms.add_measure import MeasureForm
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.table_manager import TableManager
 from gooutsafe.dao.restaurant_availability_manager import RestaurantAvailabilityManager
@@ -75,13 +76,15 @@ def add(id_op):
 def details(id_op):
     table_form = TableForm()
     time_form = TimesForm()
+    measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
 
     return render_template('add_restaurant_details.html', 
                     restaurant=restaurant, tables=tables, 
-                    table_form=table_form, time_form=time_form,times=ava)
+                    table_form=table_form, time_form=time_form,
+                    times=ava, measure_form=measure_form)
 
 
 @restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
@@ -89,6 +92,7 @@ def details(id_op):
 def save_details(id_op, rest_id):
     table_form = TableForm()
     time_form = TimesForm()
+    measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
@@ -99,14 +103,16 @@ def save_details(id_op, rest_id):
             capacity = table_form.data['max_capacity']
 
             for i in range(0,num_tables):
-                table = Table(capacity=capacity, restaurant=restaurant)
-                TableManager.create_table(table)
+                if max_capacity >= 1:
+                    table = Table(capacity=capacity, restaurant=restaurant)
+                    TableManager.create_table(table)
             
             return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
 
     return render_template('add_restaurant_details.html', 
                     restaurant=restaurant, tables=tables, 
-                    table_form=table_form, time_form=time_form, times=ava)
+                    table_form=table_form, time_form=time_form, 
+                    times=ava, measure_form=measure_form)
 
 
 @restaurants.route('/restaurants/savetime/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
@@ -114,6 +120,7 @@ def save_details(id_op, rest_id):
 def save_time(id_op, rest_id):
     table_form = TableForm()
     time_form = TimesForm()
+    measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
@@ -123,11 +130,13 @@ def save_time(id_op, rest_id):
             start_time = time_form.data['start_time']
             end_time = time_form.data['end_time']
 
-            time = RestaurantAvailability(rest_id, start_time, end_time)
-            RestaurantAvailabilityManager.create_availability(time)
+            if end_time > start_time:
+                time = RestaurantAvailability(rest_id, start_time, end_time)
+                RestaurantAvailabilityManager.create_availability(time)
             
             return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
 
     return render_template('add_restaurant_details.html', 
                     restaurant=restaurant, tables=tables, 
-                    table_form=table_form, time_form=time_form, times=ava)
+                    table_form=table_form, time_form=time_form, 
+                    times=ava, measure_form=measure_form)
