@@ -120,13 +120,6 @@ def make_celery(app):
     )
     celery.conf.timezone = 'Europe/Rome'
     celery.conf.update(app.config)
-    celery.conf.imports = ('gooutsafe.tasks.home_tasks',)
-    # celery.conf.beat_schedule = {
-    #     "every-5-seconds": {
-    #         "task": "gooutsafe.tasks.home_tasks.ciao",
-    #         "schedule": 10.0
-    #     }
-    # }
 
     class ContextTask(celery.Task):
         def __call__(self, *args, **kwargs):

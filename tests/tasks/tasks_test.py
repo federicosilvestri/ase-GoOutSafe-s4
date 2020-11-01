@@ -9,4 +9,4 @@ class TasksTest(unittest.TestCase):
 
     def setUp(self):
         from gooutsafe import create_app
-        create_app('config.TestConfig')
+        create_app()
