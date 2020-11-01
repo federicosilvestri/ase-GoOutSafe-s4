@@ -26,7 +26,7 @@
                 <li>
                     {{ r.name }} | {{ r.address }} | {{ r.city }}
                     <td>
-                        {% if r.tables|length%}
+                        {% if r.tables|length and r.availabilities|length %}
                             <button type="button" class="btn btn-primary active"
                                 onclick="location.href='/create_reservation/{{ r.id }}'">Book a Table
                             </button>

@@ -29,6 +29,10 @@ class RestaurantManager(Manager):
         return Restaurant.query.filter(Restaurant.city==restaurant_city)
 
     @staticmethod
+    def retrieve_all():
+        return Restaurant.query.all()
+
+    @staticmethod
     def update_restaurant(restaurant: Restaurant):
         Manager.update(restaurant=restaurant)
 

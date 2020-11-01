@@ -20,7 +20,10 @@ def index():
         if form.is_submitted():
             search_field = form.data['search_field']
             search_filter = form.data['filters']
-            restaurants = search_by(search_field, search_filter)
+            if not search_field:
+                restaurants = RestaurantManager.retrieve_all()
+            else:
+                restaurants = search_by(search_field, search_filter)
         return render_template("index.html", restaurants = restaurants, form = form)
     
     return render_template("index.html", form = form)
