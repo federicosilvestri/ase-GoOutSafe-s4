@@ -14,10 +14,17 @@
                     </a>
                 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-danger" data-toggle="modal" 
+                {% if current_user.health_status is true %}
+                <button type="button" class="btn btn-danger disable" data-toggle="modal" 
                         data-target="#deleteModal">
                     Delete account
                 </button>
+                {% else %}
+                    <button type="button" class="btn btn-danger active" data-toggle="modal" 
+                    data-target="#deleteModal">
+                    Delete account
+                </button>
+                {% endif %}
                     
                 <!-- Modal -->
                 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" 
