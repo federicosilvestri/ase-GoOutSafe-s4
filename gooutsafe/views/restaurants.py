@@ -29,7 +29,9 @@ def _restaurants(message=''):
 @login_required
 def restaurant_sheet(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)
-    return render_template("restaurantsheet.html", restaurant=restaurant)
+    list_measure = restaurant.measures.split(',')
+    return render_template("restaurantsheet.html", 
+        restaurant=restaurant, list_measures=list_measure[1:])
 
 
 @restaurants.route('/restaurants/like/<restaurant_id>')
@@ -78,24 +80,21 @@ def details(id_op):
     time_form = TimesForm()
     measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+    list_measure = restaurant.measures.split(',')
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
 
     return render_template('add_restaurant_details.html', 
                     restaurant=restaurant, tables=tables, 
                     table_form=table_form, time_form=time_form,
-                    times=ava, measure_form=measure_form)
+                    times=ava, measure_form=measure_form, list_measure=list_measure[1:])
 
 
 @restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
 @login_required
 def save_details(id_op, rest_id):
     table_form = TableForm()
-    time_form = TimesForm()
-    measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
-    tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
-    ava = restaurant.availabilities
 
     if request.method == "POST":
         if table_form.is_submitted():
@@ -103,27 +102,17 @@ def save_details(id_op, rest_id):
             capacity = table_form.data['max_capacity']
 
             for i in range(0,num_tables):
-                if max_capacity >= 1:
+                if capacity >= 1:
                     table = Table(capacity=capacity, restaurant=restaurant)
                     TableManager.create_table(table)
-            
-            return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
 
-    return render_template('add_restaurant_details.html', 
-                    restaurant=restaurant, tables=tables, 
-                    table_form=table_form, time_form=time_form, 
-                    times=ava, measure_form=measure_form)
+    return redirect ('/restaurants/details/'+ str(id_op))
 
 
 @restaurants.route('/restaurants/savetime/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
 @login_required
 def save_time(id_op, rest_id):
-    table_form = TableForm()
     time_form = TimesForm()
-    measure_form = MeasureForm()
-    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
-    tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
-    ava = restaurant.availabilities
 
     if request.method == "POST":
         if time_form.is_submitted():
@@ -133,10 +122,24 @@ def save_time(id_op, rest_id):
             if end_time > start_time:
                 time = RestaurantAvailability(rest_id, start_time, end_time)
                 RestaurantAvailabilityManager.create_availability(time)
-            
-            return redirect('/restaurants/save/'+ str(id_op) + '/' +str(rest_id))
 
-    return render_template('add_restaurant_details.html', 
-                    restaurant=restaurant, tables=tables, 
-                    table_form=table_form, time_form=time_form, 
-                    times=ava, measure_form=measure_form)
+    return redirect ('/restaurants/details/'+ str(id_op))
+
+
+@restaurants.route('/restaurants/savemeasure/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+@login_required
+def save_measure(id_op, rest_id):
+    measure_form = MeasureForm()
+    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+
+    if request.method == "POST":
+        if measure_form.is_submitted():
+            list_measure = restaurant.measures.split(',')
+            measure = measure_form.data['measure']
+            if measure not in list_measure:
+                list_measure.append(measure)
+            string = ','.join(list_measure)
+            restaurant.set_measures(string)
+            RestaurantManager.update()
+
+    return redirect ('/restaurants/details/'+ str(id_op))

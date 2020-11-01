@@ -1,8 +1,9 @@
 import wtforms as f
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired
 
 
 class MeasureForm(FlaskForm):
-    measure = f.StringField('Measure', validators=[DataRequired()])
+    list_measure = ["Hand sanitizer", "Plexiglass", "Spaced tables",
+                    "Sanitized rooms", "Temperature scanners"]
+    measure = f.SelectField('Measure', choices=list_measure, default=1)
     display = ['measure']

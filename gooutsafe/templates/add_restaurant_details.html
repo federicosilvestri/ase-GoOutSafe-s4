@@ -125,15 +125,15 @@
       </div>
       </div>
     </div>
-    </p>
     </td>
 
-    <p>
         <td>
         <!-- General sheet of the measures -->
         <ul>
         <h5> Precaution measures </h5>
-        <!-- TODO -->
+            {% for m in list_measure %}
+            <li> {{ m }} </li>
+            {% endfor %}
         </ul>
 
         <!-- Button add measures trigger modal -->
@@ -156,7 +156,7 @@
         </div>
 
         <div class="modal-body">
-            <form action="{{ url_for('restaurants.save_time', id_op=current_user.id, rest_id=restaurant.id) }}"
+            <form action="{{ url_for('restaurants.save_measure', id_op=current_user.id, rest_id=restaurant.id) }}"
                 method="POST">
 
                 {{ measure_form.hidden_tag() }}
