@@ -1,21 +1,15 @@
 import wtforms as f
 from flask_wtf import FlaskForm
-from wtforms.fields.html5 import DateField
-from wtforms.validators import DataRequired
+from wtforms.fields.html5 import DateField, DateTimeField, TimeField, IntegerField
+from wtforms.validators import DataRequired, NumberRange
 from datetime import datetime, timedelta, time
 
 
 class ReservationForm(FlaskForm):
 
-    time_slot_init = ['00:00']
-
-    start_date = f.DateField('Resevation Date', validators=[DataRequired()])
-    time_slots = f.SelectField('Time', choices=time_slot_init, default=1)
-    people_number = f.IntegerField('Number of Peoples', validators=[DataRequired()])
-    display = ['start_date', 'time_slots', 'people_number']
+    start_date = DateField()#('Date',format='%Y-%m-%d', default=datetime.now(), validators=[DataRequired()])
+    start_time = TimeField()#('Time', format='%H-%M', default=datetime.now(), render_kw={"step": "1"}, validators=[DataRequired()])
+    people_number = IntegerField('Number of Peoples', default=1, validators=[DataRequired(), NumberRange(min=1, max=20)])
+    display = ['start_date', 'start_time', 'people_number']
     
-    def __init__(self, time_slots):
-        super().__init__() 
-        self.time_slots.choices = time_slots
-
 

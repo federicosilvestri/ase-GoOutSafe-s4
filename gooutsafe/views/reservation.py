@@ -27,21 +27,19 @@ reservation = Blueprint('reservation', __name__)
 @login_required
 #@roles_required('customer')
 def create_reservation(restaurant_id):
+    form = ReservationForm()
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
-    time_slots_avail = get_time_slots(restaurant)
-    form = ReservationForm(time_slots_avail)
     if request.method == 'POST':
         if form.is_submitted():
             start_data = form.data['start_date']
             print(start_data)
-            start_time = form.data['time_slots']
-            merged_str_datetime = str(start_data) + ' ' + str(start_time)
-            print(merged_str_datetime)
-            merged_start_datetime = datetime.strptime(merged_str_datetime, '%Y-%m-%d %H:%M')
-            print(merged_start_datetime)
+            start_time = form.data['start_time']
+            print(start_time)
             people_number = form.data['people_number']
+            print(people_number)
             table = get_free_table(restaurant,people_number)
-            reservation = Reservation(current_user, table, restaurant, people_number, merged_start_datetime)
+            start_time = datetime.combine(start_data, start_time)
+            reservation = Reservation(current_user, table, restaurant, people_number, start_time)
             ReservationManager.create_reservation(reservation)
             return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id)) 
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
@@ -79,7 +77,6 @@ def delete_reservation(restaurant_id, id):
 def reservation_details(restaurant_id, reservation_id):
     reservation = ReservationManager.retrieve_by_id(reservation_id)
     user = CustomerManager.retrieve_by_id(reservation.user.id)
-    print(user.firstname)
     table = reservation.table
     restaurant = reservation.restaurant
     return render_template("reservation_details.html", reservation = reservation, 
