@@ -22,22 +22,27 @@
 {% for r in restaurants %}
     <tr>
         <td>
-            {{ r.name}} | {{ r.address }} | {{ r.city }}
-        </td>
-        <td>
-            <a type="button" class="btn btn-outline-primary"
-            href="{{ url_for('reservation.create_reservation', restaurant_id=r.id) }}">
-                Book a Table
-            </a>
+            <ul>
+                <li>
+                    {{ r.name }} | {{ r.address }} | {{ r.city }}
+                    <td>
+                        {% if r.tables|length and r.availabilities|length %}
+                            <a type="button" class="btn btn-primary active"
+                            href="{{ url_for('reservation.create_reservation', restaurant_id=r.id) }}">
+                                Book a Table
+                            </a>
+                        {% else %}
+                            <a type="button" class="btn btn-primary disabled">
+                                Book a Table
+                            </a>
+                        {% endif %}
+                    </td>
+                </li>
+            </ul>
         </td>
     </tr>
 {% endfor %}
 
-
-<!-- LISTA RISTORANTI-->
-
 <!-- LISTA RISTORANTI BEST RESTAURANT-->
-
-
 
 {% endblock %}

@@ -5,7 +5,6 @@ from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.forms import UserForm, LoginForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.operator import Operator
-from gooutsafe.models.user import User
 
 users = Blueprint('users', __name__)
 
@@ -19,7 +18,7 @@ def _users():
 @users.route('/create_user/<string:type>', methods=['GET', 'POST'])
 def create_user_type(type):
     form = LoginForm()
-    if type == "<customer>":
+    if type == "customer":
         form = UserForm()
         user = Customer()
     else:
@@ -47,4 +46,8 @@ def create_user_type(type):
 @login_required
 def delete_user(id_):
     UserManager.delete_user_by_id(id_)
+<<<<<<< HEAD
     return redirect(url_for('home.index'))
+=======
+    return redirect('/')
+>>>>>>> c4fda6543f8c472a44020d319012a81a2a964ce8

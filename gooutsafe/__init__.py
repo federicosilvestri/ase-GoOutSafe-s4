@@ -113,14 +113,12 @@ def register_cli(app):
 
 def make_celery(app):
     BACKEND = BROKER = 'redis://localhost:6379'
-    # TODO: move this to the config file?
-    app.config['CELERY_BROKER_URL'] = BROKER
-    app.config['CELERY_RESULT_BACKEND'] = BACKEND
     celery = Celery(
         app.name,
-        broker=app.config['CELERY_BROKER_URL'],
-        backend=app.config['CELERY_RESULT_BACKEND']
+        broker=BROKER,
+        backend=BACKEND
     )
+    celery.conf.timezone = 'Europe/Rome'
     celery.conf.update(app.config)
 
     class ContextTask(celery.Task):

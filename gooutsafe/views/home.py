@@ -15,11 +15,15 @@ home = Blueprint('home', __name__)
 def index():
     form = HomeForm()
     restaurants=[]
+    tables = []
     if request.method == 'POST':
         if form.is_submitted():
             search_field = form.data['search_field']
             search_filter = form.data['filters']
-            restaurants = search_by(search_field, search_filter)
+            if not search_field:
+                restaurants = RestaurantManager.retrieve_all()
+            else:
+                restaurants = search_by(search_field, search_filter)
         return render_template("index.html", restaurants = restaurants, form = form)
     
     return render_template("index.html", form = form)
@@ -31,6 +35,3 @@ def search_by(search_field, search_filter):
     if search_filter == "City":
         restaurants = RestaurantManager.retrieve_by_restaurant_city(search_field)
         return restaurants
-
-
-    

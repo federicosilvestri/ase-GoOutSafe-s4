@@ -43,7 +43,10 @@ class CustomerManager(Manager):
     @staticmethod
     def retrieve_all_positive():
         pos_customers = Customer.query.filter_by(health_status=True).all()
-        return pos_customers
+        if (len(pos_customers) != 0):
+            return pos_customers
+        else:
+            return None
 
     @staticmethod
     def update_customer(customer: Customer):

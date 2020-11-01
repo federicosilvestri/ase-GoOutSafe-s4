@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: aab0505ba191
+Revision ID: f1de83269d97
 Revises: 
-Create Date: 2020-11-01 13:54:19.731037
+Create Date: 2020-11-01 21:17:56.519310
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'aab0505ba191'
+revision = 'f1de83269d97'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -42,7 +42,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('firstname', sa.Unicode(length=128), nullable=True),
     sa.Column('lastname', sa.Unicode(length=128), nullable=True),
-    sa.Column('birthday', sa.Date(), nullable=True),
+    sa.Column('birthdate', sa.Date(), nullable=True),
     sa.Column('social_number', sa.Unicode(length=16), nullable=True),
     sa.Column('health_status', sa.Boolean(), nullable=True),
     sa.Column('phone', sa.String(length=25), nullable=True),
@@ -63,6 +63,7 @@ def upgrade():
     sa.Column('lon', sa.Float(), nullable=True),
     sa.Column('phone', sa.String(length=25), nullable=True),
     sa.Column('menu_type', sa.String(length=100), nullable=True),
+    sa.Column('measures', sa.Unicode(), nullable=True),
     sa.Column('is_open', sa.Boolean(), nullable=True),
     sa.Column('owner_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['owner_id'], ['Operator.id'], ),

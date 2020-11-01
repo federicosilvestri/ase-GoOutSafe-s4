@@ -22,10 +22,10 @@ class TestReservationManager(DaoTest):
     
     
     def test_create_reservation(self):
-        resevation1, _ = TestReservation.generate_random_reservation()
-        self.reservation_manager.create_reservation(reservation=resevation1)
-        resevation2 = self.reservation_manager.retrieve_by_id(id_=resevation1.id)
-        TestReservation.assertEqualReservations(resevation1, resevation1)
+        reservation1, _ = TestReservation.generate_random_reservation()
+        self.reservation_manager.create_reservation(reservation=reservation1)
+        reservation2 = self.reservation_manager.retrieve_by_id(id_=reservation1.id)
+        TestReservation.assertEqualReservations(reservation1, reservation2)
 
     def test_delete_reservation(self):
         base_reservation, _ = TestReservation.generate_random_reservation()
