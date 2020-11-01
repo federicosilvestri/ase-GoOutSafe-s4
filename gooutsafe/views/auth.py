@@ -40,10 +40,9 @@ def login():
 @auth.route('/profile/<int:id>', methods=['GET', 'POST'])
 @login_required
 def profile(id):
-    reservations = ReservationManager.retrieve_by_user_id(id)
-
-    return render_template('customer_profile.html', 
-        reservations=reservations)
+    reservations = ReservationManager.retrieve_by_customer_id(id)
+    customer = CustomerManager.retrieve_by_id(id)
+    return render_template('customer_profile.html', customer=customer, reservations=reservations)
 
 
 @auth.route('/operator/<int:id>', methods=['GET', 'POST'])
