@@ -1,11 +1,10 @@
 from flask import Blueprint, redirect, render_template, request
-from flask_login import (logout_user, login_user, login_required)
+from flask_login import login_user, login_required
 from werkzeug.security import generate_password_hash
 from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.forms import UserForm, LoginForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.operator import Operator
-from gooutsafe.models.user import User
 
 users = Blueprint('users', __name__)
 
@@ -19,7 +18,7 @@ def _users():
 @users.route('/create_user/<string:type>', methods=['GET', 'POST'])
 def create_user_type(type):
     form = LoginForm()
-    if type == "<customer>":
+    if type == "customer":
         form = UserForm()
         user = Customer()
     else:
