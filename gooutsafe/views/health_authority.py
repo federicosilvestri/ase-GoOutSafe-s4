@@ -12,6 +12,11 @@ from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.tasks.health_authority_tasks import schedule_revert_customer_health_status
 
 
+from gooutsafe.forms.authority import AuthorityForm
+
+from gooutsafe.tasks.health_authority_tasks import schedule_revert_customer_health_status
+
+
 authority = Blueprint('authority', __name__)
 
 
