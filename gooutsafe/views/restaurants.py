@@ -9,6 +9,7 @@ from gooutsafe.models.restaurant_availability import RestaurantAvailability
 from gooutsafe.forms.restaurant import RestaurantForm
 from gooutsafe.forms.add_table import TableForm
 from gooutsafe.forms.add_times import TimesForm
+from gooutsafe.forms.add_measure import MeasureForm
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.table_manager import TableManager
 from gooutsafe.dao.restaurant_availability_manager import RestaurantAvailabilityManager
@@ -75,13 +76,15 @@ def add(id_op):
 def details(id_op):
     table_form = TableForm()
     time_form = TimesForm()
+    measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
 
     return render_template('add_restaurant_details.html', 
                     restaurant=restaurant, tables=tables, 
-                    table_form=table_form, time_form=time_form,times=ava)
+                    table_form=table_form, time_form=time_form,
+                    times=ava, measure_form=measure_form)
 
 
 @restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
@@ -89,6 +92,7 @@ def details(id_op):
 def save_details(id_op, rest_id):
     table_form = TableForm()
     time_form = TimesForm()
+    measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
@@ -107,7 +111,8 @@ def save_details(id_op, rest_id):
 
     return render_template('add_restaurant_details.html', 
                     restaurant=restaurant, tables=tables, 
-                    table_form=table_form, time_form=time_form, times=ava)
+                    table_form=table_form, time_form=time_form, 
+                    times=ava, measure_form=measure_form)
 
 
 @restaurants.route('/restaurants/savetime/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
@@ -115,6 +120,7 @@ def save_details(id_op, rest_id):
 def save_time(id_op, rest_id):
     table_form = TableForm()
     time_form = TimesForm()
+    measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
@@ -132,4 +138,5 @@ def save_time(id_op, rest_id):
 
     return render_template('add_restaurant_details.html', 
                     restaurant=restaurant, tables=tables, 
-                    table_form=table_form, time_form=time_form, times=ava)
+                    table_form=table_form, time_form=time_form, 
+                    times=ava, measure_form=measure_form)
