@@ -22,7 +22,7 @@ class TestCustomer(ModelTest):
             self.assertEqual(customer.email, email)
             self.assertEqual(customer.firstname, name)
             self.assertEqual(customer.lastname, surname)
-            self.assertEqual(customer.birthday, birthdate)
+            self.assertEqual(customer.birthdate, birthdate)
             self.assertEqual(customer.social_number, social_number)
             self.assertEqual(customer.health_status, health_status)
             self.assertEqual(customer.phone, phone)
@@ -32,7 +32,7 @@ class TestCustomer(ModelTest):
         t = unittest.FunctionTestCase(TestCustomer)
         t.assertEqual(c1.firstname, c2.firstname)
         t.assertEqual(c1.lastname, c2.lastname)
-        t.assertEqual(c1.birthday, c2.birthday)
+        t.assertEqual(c1.birthdate, c2.birthdate)
         t.assertEqual(c1.social_number, c2.social_number)
         t.assertEqual(c1.health_status, c2.health_status)
         t.assertEqual(c1.phone, c2.phone)
@@ -60,7 +60,7 @@ class TestCustomer(ModelTest):
             lastname=surname,
             email=email,
             password=password,
-            birthday=birthdate,
+            birthdate=birthdate,
             social_number=social_number,
             health_status=health_status,
             phone=phone
