@@ -15,26 +15,29 @@
     {{ form.filters }}
     <input type=submit value="Submit">
 </form>
-
+<!-- LISTA RISTORANTI-->
 <h5> Restaurants </h5>
 {% for r in restaurants %}
     <tr>
         <td>
-            {{ r.name}} | {{ r.address }} | {{ r.city }}
-        </td>
-        <td>
-            <button type="button" class="btn btn-outline-primary"
-                onclick="location.href='/create_reservation/{{ r.id }}'">Book a Table
-            </button>
+            <ul>
+                <li>
+                    {{ r.name }} | {{ r.address }} | {{ r.city }}
+                    <td>
+                        {% if r.tables|length%}
+                            <button type="button" class="btn btn-primary active"
+                                onclick="location.href='/create_reservation/{{ r.id }}'">Book a Table
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary disabled">Book a Table</button>
+                        {% endif %}
+                    </td>
+                </li>
+            </ul>
         </td>
     </tr>
 {% endfor %}
 
-
-<!-- LISTA RISTORANTI-->
-
 <!-- LISTA RISTORANTI BEST RESTAURANT-->
-
-
 
 {% endblock %}

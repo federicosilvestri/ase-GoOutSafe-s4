@@ -19,6 +19,11 @@ class ReservationManager(Manager):
         return Reservation.query.filter(Reservation.restaurant_id==restaurant_id)
 
     @staticmethod
+    def retrieve_by_table_id(table_id):
+        Manager.check_none(table_id=table_id)
+        return Reservation.query.filter(Reservation.table_id==table_id).all()
+
+    @staticmethod
     def update_reservation(reservation: Reservation):
         Manager.update(reservation=reservation)
 

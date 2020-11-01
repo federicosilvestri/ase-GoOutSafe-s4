@@ -15,6 +15,7 @@ home = Blueprint('home', __name__)
 def index():
     form = HomeForm()
     restaurants=[]
+    tables = []
     if request.method == 'POST':
         if form.is_submitted():
             search_field = form.data['search_field']
