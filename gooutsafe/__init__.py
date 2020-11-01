@@ -108,15 +108,20 @@ def register_cli(app):
 
 def make_celery(app):
     BACKEND = BROKER = 'redis://localhost:6379'
-    # TODO: move this to the config file?
-    app.config['CELERY_BROKER_URL'] = BROKER
-    app.config['CELERY_RESULT_BACKEND'] = BACKEND
     celery = Celery(
         app.name,
-        broker=app.config['CELERY_BROKER_URL'],
-        backend=app.config['CELERY_RESULT_BACKEND']
+        broker=BROKER,
+        backend=BACKEND
     )
+    celery.conf.timezone = 'Europe/Rome'
     celery.conf.update(app.config)
+    celery.conf.imports = ('gooutsafe.tasks.home_tasks',)
+    # celery.conf.beat_schedule = {
+    #     "every-5-seconds": {
+    #         "task": "gooutsafe.tasks.home_tasks.ciao",
+    #         "schedule": 10.0
+    #     }
+    # }
 
     class ContextTask(celery.Task):
         def __call__(self, *args, **kwargs):
