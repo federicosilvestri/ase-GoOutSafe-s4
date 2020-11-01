@@ -53,5 +53,6 @@ class TestReservationManager(DaoTest):
         user = reservation.user
         self.user_manager.create_user(user=user)
         self.reservation_manager.create_reservation(reservation=reservation)
-        retrieved_reservation = self.reservation_manager.retrieve_by_user_id(user_id=user.id).first()
-        TestReservation.assertEqualReservations(reservation, retrieved_reservation)
+        retrieved_reservation = self.reservation_manager.retrieve_by_customer_id(user_id=user.id)
+        for res in retrieved_reservation:
+            TestReservation.assertEqualReservations(reservation, res)

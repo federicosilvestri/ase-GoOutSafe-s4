@@ -40,8 +40,9 @@ class TestCustomerManager(DaoTest):
 
     def test_retrieve_positive_customers(self):
         pos_customers = self.customer_manager.retrieve_all_positive()
-        for customers in pos_customers:
-            self.assertTrue(customers.health_status)
+        if(pos_customers is not None):
+            for customers in pos_customers:
+                self.assertTrue(customers.health_status)
     
     def test_delete_customer(self):
         base_customer, _ = TestCustomer.generate_random_customer()
