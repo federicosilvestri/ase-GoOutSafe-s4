@@ -4,11 +4,11 @@
         <ul class="nav justify-content-end">
             <li class="nav-item">
                 <button type="button" class="btn btn-outline-primary"
-                        onclick="location.href='/create_user/<customer>'">Sign up
+                        onclick="location.href='{{ url_for('users.create_user_type', type='customer') }}'">Sign up
                 </button>
 
                 <button type="button" class="btn btn-outline-success"
-                        onclick="location.href='/login'">Login
+                        onclick="location.href='{{ url_for('users._users') }}'">Login
                 </button>
             </li>
         </ul>

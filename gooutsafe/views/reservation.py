@@ -32,41 +32,91 @@ def create_reservation(restaurant_id):
     if request.method == 'POST':
         if form.is_submitted():
             start_data = form.data['start_date']
-            print(start_data)
             start_time = form.data['start_time']
-            print(start_time)
             people_number = form.data['people_number']
-            print(people_number)
-            table = get_free_table(restaurant,people_number)
-            start_time = datetime.combine(start_data, start_time)
-            reservation = Reservation(current_user, table, restaurant, people_number, start_time)
-            ReservationManager.create_reservation(reservation)
-            return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id)) 
-
+            start_time_merged = datetime.combine(start_data, start_time)
+            print(str(start_time_merged))
+            table = validate_reservation(restaurant, start_time_merged, people_number)
+            if table != False:
+                reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
+                ReservationManager.create_reservation(reservation)
+                return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id)) 
+            else:
+                print("#######################################")
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
 
 
-def get_free_table(restaurant, people_number):
-    tables = TableManager.retrieve_by_restaurant_id(restaurant.id).order_by(Table.capacity)
-    reservation_table = None
-    for table in tables:
-        if table.capacity >= people_number:
-            reservation_table = table
-            break
-    return reservation_table
+def validate_reservation(restaurant, start_datetime, people_number):
+    end_datetime = start_datetime + timedelta(hours=Reservation.MAX_TIME_RESERVATION)
+    if check_rest_ava(restaurant, start_datetime, end_datetime):
+        print('RISTORANTE APERTO')
+        tables = TableManager.retrieve_by_restaurant_id(restaurant.id).order_by(Table.capacity)
+        reservation_table = None
+        for table in tables:
+            print('RICERCA TAVOLO')
+            if table.capacity >= people_number:
+                print('TAVOLO ADATTO')
+                reservation_table = table
+                table_reservations = ReservationManager.retrieve_by_table_id(table_id=table.id)
+                if len(table_reservations) != 0:
+                    print('\nRICERCA OVERLAP\n')
+                    for r in table_reservations:
+                        old_start_datetime = r.start_time
+                        old_end_datetime = r.end_time
+                        print(old_start_datetime)
+                        print(old_end_datetime)
+                        if start_datetime.date() == old_start_datetime.date():
+                            print('OVERLAP DATA\n')
+                            if check_time_interval(start_datetime.time(), end_datetime.time(), old_start_datetime.time(), old_end_datetime.time()):
+                                print('OVERLAP PRENOTAZIONI')
+                                pass
+                            else:
+                                print('NON CI SONO PRENOTAZIONI - TAVOLO DISPONIBILE')
+                                return reservation_table
+                        else:
+                            print('NON CI SONO PRENOTAZIONI - TAVOLO DISPONIBILE')
+                            return reservation_table
+                else:
+                    print('NON CI SONO PRENOTAZIONI - TAVOLO DISPONIBILE')
+                    return reservation_table
+            else:
+                print('NON CI SONO TAVOLI DISPONIBILE')
+                return False
+    return False
 
-def get_time_slots(restaurant):
-    time_slots = restaurant.availabilities
-    time_slot = time_slots[0]
-    start_time = time_slot.start_time
-    end_time = time_slot.end_time
-    temp_slot = datetime(2020, 1, 1, start_time.hour, start_time.minute)
-    end_datetime = datetime(2020, 1, 1, end_time.hour, end_time.minute)
-    free_time_slots = []
-    while temp_slot < end_datetime:
-        free_time_slots.append(temp_slot.strftime('%H:%M'))
-        temp_slot += timedelta(minutes=15)
-    return free_time_slots
+def check_rest_ava(restaurant, start_datetime, end_datetime):
+    availabilities = restaurant.availabilities
+    for ava in availabilities:
+        print(ava.start_time)
+        print(ava.end_time)
+        if check_time_interval(start_datetime.time(), end_datetime.time(), ava.start_time, ava.end_time):
+            return True
+        print('RISTORANTE CHIUSO')
+    return False
+
+        
+def check_time_interval(start_time1, end_time1, start_time2, end_time2):
+    """
+    This method check if start_time1 and end_time1 overlap
+    the intervall between startime2 and end_time2
+
+    Args:
+        start_time1 (datetime): [description]
+        end_time1 (datetime): [description]
+        start_time2 (datetime): [description]
+        end_time2 (datetime): [description]
+
+    Returns:
+        Boolean: [description]
+    """
+    if start_time1 >= start_time2 and start_time1 < end_time2:
+        print('***OVERLAP 1***')
+        return True
+    elif end_time1 > start_time2 and end_time1 <= end_time2:
+        print('***OVERLAP 2***')
+        return True
+    return False
+    
 
 @reservation.route('/delete/<int:id>/<restaurant_id>')
 def delete_reservation(restaurant_id, id):
