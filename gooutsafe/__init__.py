@@ -13,19 +13,24 @@ db = None
 migrate = None
 login = None
 debug_toolbar = None
-app = None
 
 
-def create_app(config_object, new_one=False):
+def create_app():
     global db
     global app
     global migrate
     global login
 
-    if not new_one and app is not None:
-        return app
-
     app = Flask(__name__, instance_relative_config=True)
+
+    flask_env = os.getenv('FLASK_ENV', 'None')
+    if flask_env == 'development':
+        config_object = 'config.DevConfig'
+        register_cli(app)
+    elif flask_env == 'testing':
+        config_object = 'config.TestConfig'
+    else:
+        raise RuntimeError("%s is not recognized as valid app environment. You have to setup the environment!" % env)
 
     # Load config
     env = Environments(app)
@@ -52,9 +57,12 @@ def create_app(config_object, new_one=False):
     )
 
     # checking the environment
-    if os.getenv('FLASK_ENV') == 'testing':
+    if flask_env == 'testing':
         # we need to populate the db
         db.create_all()
+        print("CREATING SB")
+    elif flask_env == 'development':
+        register_cli(app)
 
     return app
 
@@ -73,10 +81,6 @@ def register_extensions(app):
             debug_toolbar = DebugToolbarExtension(app)
         except ImportError:
             pass
-
-    if app.testing:
-        from .response import ContainsResponse
-        app.response_class = ContainsResponse
 
     # adding bootstrap and date picker
     Bootstrap(app)

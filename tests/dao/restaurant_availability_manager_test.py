@@ -4,7 +4,6 @@ from tests.models.test_restaurant import TestRestaurant
 from tests.models.test_restaurant_availability import TestRestaurantAvailability
 
 
-
 class RestaurantAvailabilityManager(DaoTest):
     faker = Faker()
 
