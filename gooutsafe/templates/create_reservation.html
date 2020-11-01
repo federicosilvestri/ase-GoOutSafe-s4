@@ -11,15 +11,12 @@
     <form action="" method="POST">
         {{ form.hidden_tag() }}
         <dl>
-        {% for field in form.display %}
-            <dt>{{ form[field].label }}</dt>
-            <dd>{{ form[field]() }}</dd>
-            {% if form[field].errors %}
-                {% for e in form[field].errors %}
-                <p class="help-block">{{ e }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
+        <dt>{{ form.start_date.label }}</dt>
+        <dd>{{ form.start_date }}</dd>
+        <dt>{{ form.start_time.label }}</dt>
+        <dd>{{ form.start_time }}</dd>
+        <dt>{{ form.people_number.label }}</dt>
+        <dd>{{ form.people_number }}</dd>
         </dl>
         <p>
         <input type=submit value="Submit">
