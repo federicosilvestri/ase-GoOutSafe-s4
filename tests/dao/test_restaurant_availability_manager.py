@@ -4,11 +4,11 @@ from tests.models.test_restaurant import TestRestaurant
 from tests.models.test_restaurant_availability import TestRestaurantAvailability
 
 
-class RestaurantAvailabilityManager(DaoTest):
+class TestRestaurantAvailabilityManager(DaoTest):
     faker = Faker()
 
     def setUp(self):
-        super(RestaurantAvailabilityManager, self).setUp()
+        super(TestRestaurantAvailabilityManager, self).setUp()
 
         from gooutsafe.dao import restaurant_availability_manager
         from gooutsafe.dao import restaurant_manager

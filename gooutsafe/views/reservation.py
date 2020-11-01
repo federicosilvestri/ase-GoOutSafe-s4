@@ -13,6 +13,7 @@ from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.table_manager import TableManager
+
 from gooutsafe.forms.reservation import ReservationForm
 
 from datetime import time
@@ -26,23 +27,22 @@ reservation = Blueprint('reservation', __name__)
 @login_required
 #@roles_required('customer')
 def create_reservation(restaurant_id):
+    form = ReservationForm()
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
-    time_slots_avail = get_time_slots(restaurant)
-    form = ReservationForm(time_slots_avail)
     if request.method == 'POST':
         if form.is_submitted():
             start_data = form.data['start_date']
             print(start_data)
-            start_time = form.data['time_slots']
-            merged_str_datetime = str(start_data) + ' ' + str(start_time)
-            print(merged_str_datetime)
-            merged_start_datetime = datetime.strptime(merged_str_datetime, '%Y-%m-%d %H:%M')
-            print(merged_start_datetime)
+            start_time = form.data['start_time']
+            print(start_time)
             people_number = form.data['people_number']
+            print(people_number)
             table = get_free_table(restaurant,people_number)
-            reservation = Reservation(current_user, table, restaurant, people_number, merged_start_datetime)
+            start_time = datetime.combine(start_data, start_time)
+            reservation = Reservation(current_user, table, restaurant, people_number, start_time)
             ReservationManager.create_reservation(reservation)
             return redirect('/reservations/' + str(restaurant_id) + '/' + str(reservation.id)) 
+
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
 
 
@@ -68,26 +68,26 @@ def get_time_slots(restaurant):
         temp_slot += timedelta(minutes=15)
     return free_time_slots
 
-
-def check_time_slot(new_start_datetime, restaurant):
-    rest_reservations = ReservationManager.retrieve_by_restaurant_id(restaurant.restaurant_id)
-    new_end_datetime = new_end_datetime + timedelta(hours=Reservation.MAX_TIME_RESERVATION)
-    for rest_res in rest_reservations:
-        if (new_start_datetime > rest_res.start_time or new_start_datetime < rest_res.end_datetime) or (new_end_datetime > rest_res.start_time or new_end_datetime < rest_res.end_datetime):
-            return False
-    return True
-
-
-@reservation.route('/<restaurant_id>/delete_reservation/<int:id>')
+@reservation.route('/delete/<int:id>/<restaurant_id>')
 def delete_reservation(restaurant_id, id):
-    #TODO: implement this method
-    pass
+    ReservationManager.delete_reservation_by_id(id)
+    return redirect ('/reservations/'+ str(restaurant_id))
 
-@reservation.route('/reservations/<restaurant_id>/<reservation_id>')
+
+@reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
 def reservation_details(restaurant_id, reservation_id):
     reservation = ReservationManager.retrieve_by_id(reservation_id)
     user = CustomerManager.retrieve_by_id(reservation.user.id)
-    print(user.firstname)
     table = reservation.table
     restaurant = reservation.restaurant
-    return render_template("reservation_details.html", reservation = reservation, user = user, table = table, restaurant = restaurant)
+    return render_template("reservation_details.html", reservation = reservation, 
+        user = user, table = table, restaurant = restaurant)
+
+
+@reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
+def reservation_all(restaurant_id):
+    restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
+    reservations = ReservationManager.retrieve_by_restaurant_id(restaurant_id)
+    
+    return render_template("restaurant_reservation.html", 
+        restaurant=restaurant, reservations=reservations)

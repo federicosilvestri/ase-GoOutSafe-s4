@@ -1,11 +1,13 @@
-import flask_login
-from flask import Flask
 import os
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_environments import Environments
+
+import flask_login
+from celery import Celery
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
+from flask_environments import Environments
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 __version__ = '0.1'
 
@@ -13,6 +15,7 @@ db = None
 migrate = None
 login = None
 debug_toolbar = None
+celery = None
 
 
 def create_app():
@@ -20,6 +23,7 @@ def create_app():
     global app
     global migrate
     global login
+    global celery
 
     app = Flask(__name__, instance_relative_config=True)
 
@@ -43,6 +47,9 @@ def create_app():
     db = SQLAlchemy(
         app=app
     )
+
+    # creating celery
+    celery = make_celery(app)
 
     # requiring the list of models
     import gooutsafe.models
@@ -102,3 +109,24 @@ def register_cli(app):
     @app.cli.command(short_help="Display list of URLs")
     def urls():
         print(app.url_map)
+
+
+def make_celery(app):
+    BACKEND = BROKER = 'redis://localhost:6379'
+    # TODO: move this to the config file?
+    app.config['CELERY_BROKER_URL'] = BROKER
+    app.config['CELERY_RESULT_BACKEND'] = BACKEND
+    celery = Celery(
+        app.name,
+        broker=app.config['CELERY_BROKER_URL'],
+        backend=app.config['CELERY_RESULT_BACKEND']
+    )
+    celery.conf.update(app.config)
+
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery

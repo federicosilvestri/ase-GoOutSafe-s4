@@ -17,7 +17,7 @@ class TestCustomer(ModelTest):
 
     def test_cust_init(self):
         for i in range(0, 10):
-            customer, (name, surname, password, email, birthdate, social_number, health_status) = TestCustomer.generate_random_customer()
+            customer, (name, surname, password, email, birthdate, social_number, health_status, phone) = TestCustomer.generate_random_customer()
 
             self.assertEqual(customer.email, email)
             self.assertEqual(customer.firstname, name)
@@ -25,6 +25,7 @@ class TestCustomer(ModelTest):
             self.assertEqual(customer.birthday, birthdate)
             self.assertEqual(customer.social_number, social_number)
             self.assertEqual(customer.health_status, health_status)
+            self.assertEqual(customer.phone, phone)
 
     @staticmethod
     def assertEqualCustomers(c1, c2):
@@ -34,6 +35,7 @@ class TestCustomer(ModelTest):
         t.assertEqual(c1.birthday, c2.birthday)
         t.assertEqual(c1.social_number, c2.social_number)
         t.assertEqual(c1.health_status, c2.health_status)
+        t.assertEqual(c1.phone, c2.phone)
 
     @staticmethod
     def generate_random_customer():
@@ -50,6 +52,7 @@ class TestCustomer(ModelTest):
         birthdate = TestCustomer.faker.date_of_birth()
         social_number = TestCustomer.faker.ssn()
         health_status = TestCustomer.faker.boolean()
+        phone = TestCustomer.faker.phone_number()
         
 
         customer = Customer(
@@ -59,10 +62,11 @@ class TestCustomer(ModelTest):
             password=password,
             birthday=birthdate,
             social_number=social_number,
-            health_status=health_status
+            health_status=health_status,
+            phone=phone
         )
 
-        return customer, (name, surname, password, email, birthdate, social_number, health_status)
+        return customer, (name, surname, password, email, birthdate, social_number, health_status, phone)
 
     def test_valid_social_number(self):
         customer, _ = TestCustomer.generate_random_customer()
@@ -75,3 +79,22 @@ class TestCustomer(ModelTest):
         social_number = ''.join(['%s' % i for i in range(0, self.customer.Customer.SOCIAL_CODE_LENGTH + 1)])
         with self.assertRaises(ValueError):
             customer.set_social_number(social_number)
+    
+    def test_valid_phone(self):
+        phone = TestCustomer.faker.phone_number()
+        customer, _ = TestCustomer.generate_random_customer()
+        customer.set_phone(phone)
+        self.assertEqual(customer.phone, phone)
+
+    def test_too_high_phone1(self):
+        customer, _ = TestCustomer.generate_random_customer()
+
+        phone = ''.join(['%s' % i for i in range(0, self.customer.Customer.MAX_PHONE_LEN + 1)])
+        with self.assertRaises(ValueError):
+            customer.set_phone(phone)
+
+    def test_too_short_phone(self):
+        customer, _ = TestCustomer.generate_random_customer()
+        with self.assertRaises(ValueError):
+            phone = ""
+            customer.set_phone(phone)

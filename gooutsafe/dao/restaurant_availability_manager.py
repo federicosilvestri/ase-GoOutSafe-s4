@@ -4,7 +4,7 @@ from gooutsafe.models.restaurant_availability import RestaurantAvailability
 
 class RestaurantAvailabilityManager(Manager):
     """
-    This manager does not implemented the retrieve method
+    This manager does not implement the retrieve method
     because if you want to access the availabilities
     you must use the Restaurant.availabilities object.
     """

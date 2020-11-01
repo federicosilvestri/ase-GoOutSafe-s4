@@ -9,12 +9,15 @@ class Customer(User):
 
     __tablename__ = 'Customer'
 
+    MAX_PHONE_LEN = 25
+
     id = db.Column(db.Integer, db.ForeignKey('User.id', ondelete="CASCADE"), primary_key=True)
     firstname = db.Column(db.Unicode(128))
     lastname = db.Column(db.Unicode(128))
     birthday = db.Column(db.Date)
     social_number = db.Column(db.Unicode(SOCIAL_CODE_LENGTH))
     health_status = db.Column(db.Boolean, default=False)
+    phone = db.Column(db.String(length=MAX_PHONE_LEN))
     likes = relationship('Like', back_populates='liker')
 
     __mapper_args__ = {
@@ -24,6 +27,15 @@ class Customer(User):
     def __init__(self, *args, **kw):
         super(Customer, self).__init__(*args, **kw)
         self._authenticated = False
+    
+    @staticmethod
+    def check_phone_number(phone):
+        if len(phone) > Customer.MAX_PHONE_LEN or len(phone) <= 0:
+            raise ValueError("Invalid phone number")
+    
+    def set_phone(self, phone):
+        Customer.check_phone_number(phone)
+        self.phone = phone
 
     def set_firstname(self, name):
         self.firstname = name
