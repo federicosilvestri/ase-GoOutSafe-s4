@@ -11,6 +11,7 @@ from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
+from gooutsafe.dao.health_authority_manager import AuthorityManager
 
 auth = Blueprint('auth', __name__)
 
@@ -31,10 +32,7 @@ def login():
             elif user.type == 'customer':
                 return redirect(url_for('auth.profile', id=user.id))
             else:
-                ha_form = AuthorityForm()
-                pos_customers = CustomerManager.retrieve_all_positive()
-                return render_template('authority_profile.html', current_user=user, form = ha_form, pos_customers=pos_customers)
-
+                return redirect(url_for('auth.authority', id=user.id))
     return render_template('login.html', form=form)
 
 
@@ -55,10 +53,13 @@ def operator(id):
     return render_template('operator_profile.html', restaurant=restaurant)
 
 
-@auth.route('/authority', methods=['GET', 'POST'])
+@auth.route('/authority/<int:id>', methods=['GET', 'POST'])
 @login_required
-def authority():
-    return render_template('authority_profile.html')
+def authority(id):
+    authority = AuthorityManager.retrieve_by_id(id)
+    ha_form = AuthorityForm()
+    pos_customers = CustomerManager.retrieve_all_positive()
+    return render_template('authority_profile.html', current_user=authority, form=ha_form, pos_customers=pos_customers, search_customer=None)
 
 
 @auth.route('/logout')
