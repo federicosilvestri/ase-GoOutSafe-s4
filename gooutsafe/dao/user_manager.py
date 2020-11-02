@@ -16,7 +16,7 @@ class UserManager(Manager):
     @staticmethod
     def retrieve_by_email(email):
         Manager.check_none(email=email)
-        return User.query.filter(User.email==email).first()
+        return User.query.filter(User.email == email).first()
 
     @staticmethod
     def update_user(user: User):

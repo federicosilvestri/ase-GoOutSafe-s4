@@ -23,13 +23,25 @@
 {% block navbar %}
 {% endblock %}
 
+{% block flashing_messages %}
+{% endblock %}
 {% block content %}
     <form class="form-signin" action="" method="POST">
-    {{ form.hidden_tag() }}
+        {{ form.hidden_tag() }}
         <img class="mb-4" src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="144" height="144">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required
+               autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <div class="checkbox mb-3">
@@ -38,6 +50,5 @@
             </label>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        <p class="mt-5 mb-3 text-muted">ASE SQUAD4 &copy; 2020-2021</p>
     </form>
 {% endblock %}
