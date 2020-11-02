@@ -1,14 +1,12 @@
 from flask import Blueprint, render_template, redirect
 from flask_login import (logout_user, login_user, login_required)
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 
-from gooutsafe import db
+from gooutsafe.dao.customer_manager import CustomerManager
+from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.forms import LoginForm
 from gooutsafe.forms.authority import AuthorityForm
-from gooutsafe.models.user import User
 from gooutsafe.models.restaurant import Restaurant
-from gooutsafe.dao.user_manager import UserManager
-from gooutsafe.dao.customer_manager import CustomerManager
 
 auth = Blueprint('auth', __name__)
 
@@ -16,24 +14,27 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
+    login_error = False
+
+    if form.is_submitted():
         email, password = form.data['email'], form.data['password']
-        q = UserManager.retrieve_by_id(email)
-        q = db.session.query(User).filter(User.email == email)
-        user = q.first()
+        user = UserManager.retrieve_by_email(email)
 
         if user is not None and check_password_hash(user.password, password):
             login_user(user)
             if user.type == 'operator':
-                return redirect('/operator/'+ str(user.id))
+                return redirect('/operator/%d' % user.id)
             elif user.type == 'customer':
                 return render_template('customer_profile.html', current_user=user)
             else:
                 ha_form = AuthorityForm()
                 pos_customers = CustomerManager.retrieve_all_positive()
-                return render_template('authority_profile.html', current_user=user, form = ha_form, pos_customers=pos_customers)
+                return render_template('authority_profile.html', current_user=user, form=ha_form,
+                                       pos_customers=pos_customers)
+        else:
+            login_error = True
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, login_error=login_error)
 
 
 @auth.route('/profile/<int:id>', methods=['GET', 'POST'])
