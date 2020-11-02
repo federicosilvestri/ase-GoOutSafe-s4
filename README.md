@@ -94,11 +94,16 @@ In order to know what are the lines of codes which are not covered by the tests,
 
 ## Celery
 
-In order to set up Celery, you need to open another terminal, using the same development virtual environment, and setup both Redis, the message broker, and the Celery worker.
+In order to set up Celery, you need to open two other terminals, using the same development virtual environment. You setup both Redis, the message broker, and the Celery scheduler in the first one, while starting the Celery worker in the other one.
+(Note: Redis can be set up in either one of the new terminals, there is no need to put it in the same one of the scheduler).
 
 Execute the following command to run the docker container with Redis in the background:
 
 `docker run --name=redis-devel --publish=6379:6379 --hostname=redis --restart=on-failure --detach redis:latest`
+
+Execute the following command to run the Celery scheduler:
+
+`celery -A app.celery beat --loglevel=INFO`
 
 Execute the following command to run the Celery worker:
 

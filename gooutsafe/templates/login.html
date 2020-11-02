@@ -23,16 +23,22 @@
 {% block navbar %}
 {% endblock %}
 
+{% block flashing_messages %}
+{% endblock %}
 {% block content %}
     <form class="form-signin" action="" method="POST">
         {{ form.hidden_tag() }}
         <img class="mb-4" src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="144" height="144">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        {% if login_error %}
-        <div class="alert alert-danger" role="alert">
-            Username or password are invalid!
-        </div>
-        {% endif %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required
                autofocus>

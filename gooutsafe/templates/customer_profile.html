@@ -9,14 +9,21 @@
             <ul class="nav justify-content-end">
                 <li class="nav-item">
                     <a class="btn btn-outline-dark"
-                        onclick="location.href='/logout'">Logout
+                        href="{{ url_for('auth.logout')}}">
+                        Logout
                     </a>
                 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-danger" data-toggle="modal" 
-                        data-target="#deleteModal">
+                {% if customer.health_status %}
+                <button type="button" class="btn btn-danger disabled" data-toggle="modal">
                     Delete account
                 </button>
+                {% else %}
+                    <button type="button" class="btn btn-danger active" data-toggle="modal" 
+                    data-target="#deleteModal">
+                    Delete account
+                </button>
+                {% endif %}
                     
                 <!-- Modal -->
                 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" 
@@ -36,9 +43,12 @@
                             </div>
 
                             <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger"
-                                onclick="location.href='/delete_user/{{current_user.id}}'">Delete</button>
+                            <a type="button" data-dismiss="modal">
+                                Close
+                            </a>
+                            <a href = "{{ url_for('users.delete_user',id_=current_user.id ) }}">
+                                Delete
+                            </a>                            
                             </div>
                         </div>
                     </div>
@@ -51,14 +61,69 @@
         <br>
         
         <h5> Hi {{ current_user.firstname }}! </h5><br>
-        <h3>Your Restaurants</h3>
-        {% for restaurant in restaurants %}
-            <div>
-                <li>
-                    {{ restaurant.name }} -- Likes:{{ restaurant.likes }}
-                </li>
-            </div>
-        {% endfor %}
+        <h3>Your reservations</h3><br>
+
+        <table class="table">
+            {% for r in reservations %}
+            <tr>
+                <td>
+                    {% for rest in restaurants %}
+                        {% if rest.id == r.restaurant_id %}
+                            Restaurant: {{ rest.name }}, {{ rest.address }} <br>
+                        {% endif %}
+                    {% endfor %}
+                People: {{ r.people_number }} <br>
+                Start time: {{ r.start_time }} -- End time: {{ r.end_time }}
+                </td>
+
+                <td>
+                    <a type="button" class="btn btn-light"
+                        href="">
+                    <!-- TODO -->
+                        Edit
+                    </a>
+                </td>
+
+                <td>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-light" data-toggle="modal" 
+                        data-target="#deleteReservation">
+                      Delete
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteReservation" tabindex="-1" 
+                    aria-labelledby="deleteReservation" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                Are you sure??
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Do you want to delete this reservation?
+                          </div>
+                          <div class="modal-footer">
+                            <a type="button" class="btn btn-secondary" 
+                                data-dismiss="modal"> 
+                                Close 
+                            </a>
+
+                            <a href = "{{ url_for('reservation.delete_reservation_customer',id=r.id, customer_id=r.user_id ) }}">
+                                Delete
+                            </a> 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 
 

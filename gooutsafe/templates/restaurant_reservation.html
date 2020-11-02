@@ -16,15 +16,16 @@
                 Start time: {{ r.start_time }} -- End time: {{ r.end_time }}
             </td>
             <td>
-                <button type="button" class="btn btn-light"
-                onclick="location.href='/reservations/{{restaurant.id}}/{{r.id}}'">
+            <a type="button" class="btn btn-light"
+            href="{{ url_for('reservation.reservation_details', restaurant_id=restaurant.id,
+                reservation_id=r.id ) }}">
                     See details
-                </button>
+            </a>
             </td>
             <td>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-light" data-toggle="modal" 
-                data-target="#deleteReservation">
+                  data-target="#deleteReservation">
                   Delete
                 </button>
                 
@@ -48,10 +49,11 @@
                         <button type="button" class="btn btn-secondary" 
                             data-dismiss="modal"> Close </button>
 
-                        <button type="button" class="btn btn-danger"
-                        onclick="location.href='/delete/{{r.id}}/{{restaurant.id}}'">
+                        <a type="button" class="btn btn-danger"
+                        href="{{ url_for('reservation.delete_reservation', id=r.id,
+                              restaurant_id=restaurant.id) }}">
                             Delete
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>

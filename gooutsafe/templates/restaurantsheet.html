@@ -4,7 +4,8 @@
 {% block content %}
     <div class="row" style="margin-top:20px">
         <div class="col-sm-6">
-            <h3>{{ restaurant.name }}<img src="{{ url_for('static', filename='bootstrap-icons/hand-thumbs-up.svg') }}" alt="" width="32" height="32" title="Bootstrap"></h3>
+            <h3>{{ restaurant.name }}<img src="{{ url_for('static', filename='bootstrap-icons/hand-thumbs-up.svg') }}"
+                                          alt="" width="32" height="32" title="Bootstrap"></h3>
             <table class="table">
                 <tr>
                     <th>Phone</th>
@@ -72,7 +73,8 @@
             {% if current_user.is_authenticated %}
                 <p>Are you <b>hungry</b>?
                     <button type="button" class="btn btn-outline-primary"
-                            onclick="location.href='/create_reservation/{{ restaurant.id }}'">Book a Table
+                            onclick="location.href={{ url_for('reservation.create_reservation', restaurant_id=restaurant.id ) }}">
+                        Book a Table
                     </button>
                 </p>
             {% endif %}

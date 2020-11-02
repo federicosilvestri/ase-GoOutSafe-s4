@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, flash
 from flask_login import (logout_user, login_user, login_required)
 from werkzeug.security import check_password_hash
 
@@ -14,7 +14,6 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    login_error = False
 
     if form.is_submitted():
         email, password = form.data['email'], form.data['password']
@@ -32,9 +31,9 @@ def login():
                 return render_template('authority_profile.html', current_user=user, form=ha_form,
                                        pos_customers=pos_customers)
         else:
-            login_error = True
+            flash('Invalid credentials')
 
-    return render_template('login.html', form=form, login_error=login_error)
+    return render_template('login.html', form=form)
 
 
 @auth.route('/profile/<int:id>', methods=['GET', 'POST'])

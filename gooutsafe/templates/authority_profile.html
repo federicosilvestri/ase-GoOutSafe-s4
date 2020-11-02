@@ -5,13 +5,14 @@
 {% block content %}
 
     {% if current_user.is_authenticated %}
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark"
-                        onclick="location.href='/logout'">Logout
-                    </a>
-                </li>
-            </ul>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="btn btn-outline-dark"
+                    href="{{ url_for('auth.logout')}}">
+                    Logout
+                </a>
+            </li>
+        </ul>
         </nav>
         <br>
 
@@ -37,19 +38,21 @@
                     <p>
                         <input type=submit value="Marks as positive">
                 </form>
-                <h3>List of positive customers</h3>
-                {% for customer in pos_customers %}
-                    <div>
-                        <ul>
-                            <form action="/ha/contact/{{customer.id}}" method="GET">
-                                <li>
-                                    {{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }} | phone: {{ customer.phone }}
-                                    <button class="btn btn-sm btn-primary text-right" type="submit">Check contacts</button>
-                                </li>
-                            </form>
-                        </ul>
-                    </div>
-                {% endfor %}
+                {% if pos_customers != None %}
+                    <h3>List of positive customers</h3>
+                    {% for customer in pos_customers %}
+                        <div>
+                            <ul>
+                                <form action="/ha/contact/{{customer.id}}" method="GET">
+                                    <li>
+                                        {{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }} | phone: {{ customer.phone }}
+                                        <button class="btn btn-sm btn-primary text-right" type="submit">Check contacts</button>
+                                    </li>
+                                </form>
+                            </ul>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     {% endif %}
