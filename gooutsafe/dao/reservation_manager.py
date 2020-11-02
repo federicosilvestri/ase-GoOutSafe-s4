@@ -1,6 +1,7 @@
 from gooutsafe.models.reservation import Reservation
 from .manager import Manager
 from gooutsafe import db
+from datetime import datetime
 
 
 class ReservationManager(Manager):
@@ -32,7 +33,7 @@ class ReservationManager(Manager):
         cond2 = db.and_(Reservation.start_time < pos_reservation.end_time, pos_reservation.end_time < Reservation.end_time)
         cond3 = db.or_(cond1,cond2)
         cond4 = db.and_(cond3, Reservation.restaurant_id==pos_reservation.restaurant_id)
-        cond5 = db.and_(cond4, Reservation.user_id!=pos_reservation.user_id) #discard the reservations for the same positive customer
+        cond5 = db.and_(cond4, Reservation.user_id!=pos_reservation.user_id, Reservation.start_time < datetime.today() ) #discard the reservations for the same positive customer
         return Reservation.query.filter(cond5).all()
 
     @staticmethod
