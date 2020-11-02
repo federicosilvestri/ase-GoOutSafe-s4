@@ -121,7 +121,7 @@ class TestReservationManager(DaoTest):
         retriverd_contacted_reservations = self.reservation_manager.retrieve_all_contact_reservation_by_id(positive_reservation.id)
         retriverd_contacted_users = []
         for res in retriverd_contacted_reservations:
-            retriverd_contacted_reservations.append(res.user)
+            retriverd_contacted_users.append(res.user)
         retriverd_contacted_users.sort(key=lambda positive_user: positive_user.id)
         contacted_users.sort(key=lambda positive_user: positive_user.id)
         for retriverd_contacted_user, contacted_user in zip(retriverd_contacted_users, contacted_users):
