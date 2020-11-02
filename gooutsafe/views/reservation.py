@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import login_required
 #from flask_user import roles_required
 from gooutsafe import db
@@ -43,7 +43,7 @@ def create_reservation(restaurant_id):
                 return redirect(url_for('reservation.reservation_details',
                     restaurant_id=restaurant_id, reservation_id=reservation.id)) 
             else:
-                print("#######################################")
+                flash("There aren't free tables for that hour or the restaurant is close")
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
 
 
