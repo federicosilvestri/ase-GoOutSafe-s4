@@ -21,23 +21,22 @@
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-authority" role="tabpanel"
                  aria-labelledby="pills-authority-tab">
-    
-                <form action="/ha/mark_positive" method="POST">
+                
+                <form action="/ha/search_customer" method="POST">
                     {{ form.hidden_tag() }}
-                    <dl>
-                        {% for field in form.display %}
-                            <dt>{{ form[field].label }}</dt>
-                            <dd>{{ form[field]() }}</dd>
-                            {% if form[field].errors %}
-                                {% for e in form[field].errors %}
-                                    <p class="help-block">{{ e }}</p>
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    </dl>
-                    <p>
-                        <input type=submit value="Marks as positive">
+                    {{ form.track_type.label }}
+                    {{ form.track_type }}
+                    {{ form.customer_ident.label }}
+                    {{ form.customer_ident }}
+                    <input type=submit class="btn btn-sm btn-primary text-right" value="Search">
                 </form>
+                {% if search_customer != None %}
+                    <h3>Searched customer</h3>
+                    <form action="{{ url_for('authority.mark_positive', customer_id=search_customer.id) }}" method="POST">
+                        {{ search_customer.firstname }} {{ search_customer.lastname }} -- SSN: {{ search_customer.social_number }} | email: {{ search_customer.email }} | phone: {{ search_customer.phone }}
+                        <input type=submit class="btn btn-sm btn-primary text-right" value="Mark as positive">
+                    </form>
+                {% endif %}
                 {% if pos_customers != None %}
                     <h3>List of positive customers</h3>
                     {% for customer in pos_customers %}

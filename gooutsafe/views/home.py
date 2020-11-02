@@ -25,7 +25,7 @@ def index():
             else:
                 restaurants = search_by(search_field, search_filter).all()
                 if not restaurants:
-                    flash("There aren't restaurats for this search")
+                    flash("There aren't restaurants for this search")
             return render_template("index.html", restaurants = restaurants, form = form, current_user=current_user)
     return render_template("index.html", form = form, current_user=current_user)
 

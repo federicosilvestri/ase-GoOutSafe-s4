@@ -53,14 +53,14 @@ class Reservation(db.Model):
         self.restaurant = restaurant
 
     def set_people_number(self, people_number):
-        self.people_number
+        self.people_number = people_number
 
     def set_start_time(self, start_time):
         self.start_time = start_time
-        self.set_end_time(start_time + timedelta(self.MAX_TIME_RESERVATION))
+        self.set_end_time(start_time + timedelta(hours=self.MAX_TIME_RESERVATION))
     
     def get_end_time(self):
-        return self.__end_time
+        return self.end_time
     
     def set_end_time(self, end_time):
         Reservation.check_time(self.start_time, end_time)
