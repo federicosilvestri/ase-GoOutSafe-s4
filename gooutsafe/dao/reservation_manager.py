@@ -32,7 +32,7 @@ class ReservationManager(Manager):
         cond2 = db.and_(Reservation.start_time < pos_reservation.end_time, pos_reservation.end_time < Reservation.end_time)
         cond3 = db.or_(cond1,cond2)
         cond4 = db.and_(cond3, Reservation.restaurant_id==pos_reservation.restaurant_id)
-        return Reservation.query.filter(cond4).all()
+        return Reservation.query.filter(cond4).all()[1::]
 
     @staticmethod
     def retrieve_by_table_id(table_id):
@@ -41,10 +41,12 @@ class ReservationManager(Manager):
 
     @staticmethod
     def update_reservation(reservation: Reservation):
+        Manager.check_none(reservation=reservation)
         Manager.update(reservation=reservation)
 
     @staticmethod
     def delete_reservation(reservation: Reservation):
+        Manager.check_none(reservation=reservation)
         Manager.delete(reservation=reservation)
 
     @staticmethod

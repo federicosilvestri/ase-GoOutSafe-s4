@@ -60,7 +60,7 @@ class Reservation(db.Model):
         self.set_end_time(start_time + timedelta(self.MAX_TIME_RESERVATION))
     
     def get_end_time(self):
-        return self.__end_time
+        return self.end_time
     
     def set_end_time(self, end_time):
         Reservation.check_time(self.start_time, end_time)
