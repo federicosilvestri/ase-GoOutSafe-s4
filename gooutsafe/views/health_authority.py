@@ -4,19 +4,11 @@ from gooutsafe.auth import current_user
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
+from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.reservation import Reservation
-from gooutsafe.forms.authority import AuthorityForm
-
-from gooutsafe.forms.authority import AuthorityForm
-
-from gooutsafe.tasks.health_authority_tasks import schedule_revert_customer_health_status
-
-
-from gooutsafe.forms.authority import AuthorityForm
-
-from gooutsafe.tasks.health_authority_tasks import schedule_revert_customer_health_status
-
+from gooutsafe.tasks.health_authority_tasks import \
+    schedule_revert_customer_health_status
 
 authority = Blueprint('authority', __name__)
 

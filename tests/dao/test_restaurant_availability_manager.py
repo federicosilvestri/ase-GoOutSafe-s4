@@ -40,7 +40,7 @@ class TestRestaurantAvailabilityManager(DaoTest):
                 ava.set_times(s, e)
                 self.ram.update_availability(ava)
 
-        # test update
+        # test delete
         for avas in rests_ava:
             for ava in avas:
                 self.ram.delete_availability(ava)
