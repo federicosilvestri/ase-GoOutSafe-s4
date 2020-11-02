@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, NumberRange
 from wtforms.widgets.html5 import TimeInput
 from datetime import datetime, timedelta, time
 
+import datetime
 
 class ReservationForm(FlaskForm):
 
@@ -15,6 +16,14 @@ class ReservationForm(FlaskForm):
             DataRequired()
         ]
     )
+
+    def validate_on_submit(self):
+        result = super(ReservationForm, self).validate()
+        date = self.start_date.data
+        if date < datetime.date.today():
+            return False
+        else:
+            return result
 
     display = ['start_date', 'start_time', 'people_number']
     

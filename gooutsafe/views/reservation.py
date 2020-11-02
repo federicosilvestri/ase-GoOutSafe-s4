@@ -30,7 +30,7 @@ def create_reservation(restaurant_id):
     form = ReservationForm()
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
     if request.method == 'POST':
-        if form.is_submitted():
+        if form.validate_on_submit():
             start_data = form.data['start_date']
             start_time = form.data['start_time']
             people_number = form.data['people_number']
