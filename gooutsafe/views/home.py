@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import login_required
 
 from gooutsafe import db
@@ -9,7 +9,6 @@ from gooutsafe.forms.home import HomeForm
 
 
 home = Blueprint('home', __name__)
-
 
 @home.route('/', methods=['GET', 'POST'])
 def index():
@@ -22,10 +21,12 @@ def index():
             search_filter = form.data['filters']
             if not search_field:
                 restaurants = RestaurantManager.retrieve_all()
+                print("MOSTRA TUTTI I RISTORANTI")
             else:
-                restaurants = search_by(search_field, search_filter)
-        return render_template("index.html", restaurants = restaurants, form = form)
-    
+                restaurants = search_by(search_field, search_filter).all()
+                if not restaurants:
+                    flash("There aren't restaurats for this search")
+            return render_template("index.html", restaurants = restaurants, form = form, current_user=current_user)
     return render_template("index.html", form = form, current_user=current_user)
 
 def search_by(search_field, search_filter):
