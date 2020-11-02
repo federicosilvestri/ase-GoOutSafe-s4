@@ -33,7 +33,7 @@ def login():
             if user.type == 'operator':
                 return redirect('/operator/%d' % user.id)
             elif user.type == 'customer':
-                return render_template('customer_profile.html', current_user=user)
+                return redirect('/profile/%d' % user.id)
             else:
                 return redirect('/authority/%d' % user.id)
         else:
