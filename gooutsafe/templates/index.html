@@ -19,35 +19,35 @@
 <br>
 <h5> Restaurants </h5><br>
 
+<table class="table">
 {% for r in restaurants %}
     <tr>
         <td>
-            <ul>
-                <li>
-                    {{ r.name }} | {{ r.address }} | {{ r.city }}
-                    <td>
-                        {% if r.tables|length and r.availabilities|length and current_user.type == "customer" %}
-                            {% if current_user.health_status %}
-                                <a type="button" class="btn btn-primary disabled">
-                                    Book a Table
-                                </a>
-                            {% else %}
-                                <a type="button" class="btn btn-primary active"
-                                href="{{ url_for('reservation.create_reservation', restaurant_id=r.id) }}">
-                                    Book a Table
-                                </a>
-                            {% endif %}
-                        {% else %}
-                            <a type="button" class="btn btn-primary disabled">
-                                Book a Table
-                            </a>
-                        {% endif %}
-                    </td>
-                </li>
-            </ul>
+            {{ r.name }} | {{ r.address }} | {{ r.city }}
+        </td>
+        
+        <td>
+            {% if r.tables|length and r.availabilities|length and current_user.type == "customer" %}
+                {% if current_user.health_status %}
+                    <a type="button" class="btn btn-primary disabled">
+                        Book a Table
+                    </a>
+                {% else %}
+                    <a type="button" class="btn btn-primary active"
+                        href="{{ url_for('reservation.create_reservation', restaurant_id=r.id) }}">
+                        Book a Table
+                    </a>
+                {% endif %}
+
+            {% else %}
+                <a type="button" class="btn btn-primary disabled">
+                    Book a Table
+                </a>
+            {% endif %}
         </td>
     </tr>
 {% endfor %}
+</table>
 
 <!-- LISTA RISTORANTI BEST RESTAURANT-->
 

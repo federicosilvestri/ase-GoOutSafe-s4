@@ -69,7 +69,7 @@
                 <td>
                     {% for rest in restaurants %}
                         {% if rest.id == r.restaurant_id %}
-                            Restaurant: {{ rest.name }} <br>
+                            Restaurant: {{ rest.name }}, {{ rest.address }} <br>
                         {% endif %}
                     {% endfor %}
                 People: {{ r.people_number }} <br>
