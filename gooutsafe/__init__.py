@@ -34,7 +34,7 @@ def create_app():
     elif flask_env == 'testing':
         config_object = 'config.TestConfig'
     else:
-        raise RuntimeError("%s is not recognized as valid app environment. You have to setup the environment!" % env)
+        raise RuntimeError("%s is not recognized as valid app environment. You have to setup the environment!" % flask_env)
 
     # Load config
     env = Environments(app)
