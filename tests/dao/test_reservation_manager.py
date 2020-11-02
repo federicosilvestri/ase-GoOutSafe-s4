@@ -119,11 +119,13 @@ class TestReservationManager(DaoTest):
         positive_reservation = Reservation(positive_user, table1, restaurant, 1, start_time_positive)
         self.reservation_manager.create_reservation(positive_reservation)
         retriverd_contacted_reservations = self.reservation_manager.retrieve_all_contact_reservation_by_id(positive_reservation.id)
-        retriverd_contacted_reservations.sort(key=lambda positive_user: positive_user.id)
+        retriverd_contacted_users = []
+        for res in retriverd_contacted_reservations:
+            retriverd_contacted_reservations.append(res.user)
+        retriverd_contacted_users.sort(key=lambda positive_user: positive_user.id)
         contacted_users.sort(key=lambda positive_user: positive_user.id)
-        for res, contacted_user in zip(retriverd_contacted_reservations, contacted_users):
-            print(res.email + "-----" + contacted_users.email)
-            TestUser.assertUserEquals(contacted_user, res.user)
+        for retriverd_contacted_user, contacted_user in zip(retriverd_contacted_users, contacted_users):
+            TestUser.assertUserEquals(contacted_user, retriverd_contacted_user)
 
 
  
