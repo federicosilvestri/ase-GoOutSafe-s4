@@ -23,11 +23,11 @@
                     </div>
         <h3>Contacts of the positive customer</h3>
         {% if pos_contact|length != 0 %}
-            {% for c in pos_contact %}
+            {% for i in range(pos_contact|length) %}
                 <div>
                     <ul>
                         <li>
-                            {{ c.firstname }} {{ c.lastname }} -- SSN: {{ c.social_number }} | email: {{ c.email }} | phone: {{ c.phone }}
+                            {{ pos_contact[i].firstname }} {{ pos_contact[i].lastname }} -- SSN: {{ pos_contact[i].social_number }} | email: {{ pos_contact[i].email }} | phone: {{ pos_contact[i].phone }} -- Restaurant: {{res_contact[i]}} -- Date: {{date_contact[i]}}
                         </li>
                     </ul>
                 </div>  
