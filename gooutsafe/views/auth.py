@@ -5,8 +5,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from gooutsafe import db
 from gooutsafe.forms import LoginForm
 from gooutsafe.forms.authority import AuthorityForm
+from gooutsafe.forms.reservation import ReservationForm
+
 from gooutsafe.models.user import User
 from gooutsafe.models.restaurant import Restaurant
+
 from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.customer_manager import CustomerManager
@@ -42,10 +45,11 @@ def login():
 @login_required
 def profile(id):
     reservations = ReservationManager.retrieve_by_customer_id(id)
+    form = ReservationForm()
     customer = CustomerManager.retrieve_by_id(id)
     restaurants = RestaurantManager.retrieve_all()
     return render_template('customer_profile.html', customer=customer, 
-            reservations=reservations, restaurants=restaurants)
+            reservations=reservations, restaurants=restaurants, form=form)
 
 
 @auth.route('/operator/<int:id>', methods=['GET', 'POST'])

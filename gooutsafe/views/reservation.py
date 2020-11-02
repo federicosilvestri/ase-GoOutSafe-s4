@@ -135,6 +135,11 @@ def reservation_details(restaurant_id, reservation_id):
         user = user, table = table, restaurant = restaurant)
 
 
+    """Returns the whole list of reservations, given a restaurant.
+
+    Returns:
+        The template of the reservations.
+    """
 @reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
 def reservation_all(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
@@ -144,7 +149,46 @@ def reservation_all(restaurant_id):
         restaurant=restaurant, reservations=reservations)
 
 
-@reservation.route('/delete/<int:id>/<int:customer_id>')
+    """Given a customer and a reservation id,
+    this function delete the reservation from the database.
+
+    Returns:
+        Redirects the view to the customer profile page.
+    """
+@reservation.route('/delete/<int:id>/<int:customer_id>', methods=['GET', 'POST'])
 def delete_reservation_customer(id, customer_id):
     ReservationManager.delete_reservation_by_id(id)
     return redirect(url_for('auth.profile', id=id))
+
+
+    """Allows the customer to edit a single reservation,
+    if there's an available table within the opening hours
+    of the restaurant.
+
+    Returns:
+        Redirects the view to the customer profile page.
+    """
+@reservation.route('/edit/<int:reservation_id>/<int:customer_id>', methods=['GET', 'POST'])
+def edit_reservation(reservation_id, customer_id):
+    form = ReservationForm()
+    reservation = ReservationManager.retrieve_by_customer_id(user_id=customer_id)[0]
+    restaurant = RestaurantManager.retrieve_by_id(reservation.restaurant_id)
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            start_data = form.data['start_date']
+            start_time = form.data['start_time']
+            people_number = form.data['people_number']
+            print (people_number)
+            start_time_merged = datetime.combine(start_data, start_time)
+            table = validate_reservation(restaurant, start_time_merged, people_number)
+            if table != False:
+                reservation.set_people_number(people_number)
+                reservation.set_start_time(start_time)
+                reservation.set_table(table)
+                reservation.set_timestamp(start_data)
+                ReservationManager.update_reservation(reservation)
+            else:
+                flash("There aren't free tables for that hour or the restaurant is close")
+
+    return redirect(url_for('auth.profile', id=customer_id))

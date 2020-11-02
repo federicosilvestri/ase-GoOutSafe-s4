@@ -65,3 +65,6 @@ class Reservation(db.Model):
     def set_end_time(self, end_time):
         Reservation.check_time(self.start_time, end_time)
         self.end_time = end_time
+
+    def set_timestamp(self, timestamp):
+        self.timestamp = timestamp
