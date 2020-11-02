@@ -48,6 +48,17 @@ def create_reservation(restaurant_id):
 
 
 def validate_reservation(restaurant, start_datetime, people_number):
+    """
+    This method checks if the new reservation overlap with other already 
+    present for the restaurant.
+    Args:
+        restaurant (Restaurant): [description]
+        start_datetime (datetime): the datetime of the reservation
+        people_number (Integer): number of people declered in the reservation
+
+    Returns:
+        Teble, Boolean: false in case there are overlap or a table if the restaurant is open and there aren't overlap
+    """
     end_datetime = start_datetime + timedelta(hours=Reservation.MAX_TIME_RESERVATION)
     if check_rest_ava(restaurant, start_datetime, end_datetime):
         print('RISTORANTE APERTO')
@@ -86,6 +97,17 @@ def validate_reservation(restaurant, start_datetime, people_number):
     return False
 
 def check_rest_ava(restaurant, start_datetime, end_datetime):
+    """
+    This method check if the reservation datetime fall in the retaurant opening hours
+    
+    Args:
+        restaurant (Restaurant): the restaurant in whitch we are booking
+        start_datetime (datetime): reservation datetime 
+        end_datetime (datetime): reservation end datetime
+
+    Returns:
+        [Boolean]: True if the restaurant is open or False if the restaurant is close
+    """
     availabilities = restaurant.availabilities
     for ava in availabilities:
         print(ava.start_time)
