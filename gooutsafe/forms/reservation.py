@@ -9,6 +9,12 @@ class ReservationForm(FlaskForm):
 
     start_date = DateField('Date', validators=[DataRequired()])
     start_time = TimeField('Time', validators=[DataRequired()])
-    people_number = IntegerField('Number of Peoples', validators=[NumberRange(min=1, max=20), DataRequired()])
+    people_number = IntegerField('Number of Peoples', 
+        validators=[
+            NumberRange(min=1, max=20), 
+            DataRequired()
+        ]
+    )
+
     display = ['start_date', 'start_time', 'people_number']
     

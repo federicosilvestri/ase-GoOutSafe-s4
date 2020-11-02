@@ -31,7 +31,7 @@ class UserForm(FlaskForm):
     )
 
     birthdate = DateField(
-        'birthdate'
+        'birthday'
     )
 
     phone = TelField(

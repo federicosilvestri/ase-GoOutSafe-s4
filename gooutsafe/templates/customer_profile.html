@@ -67,7 +67,11 @@
             {% for r in reservations %}
             <tr>
                 <td>
-                Restaurant: {{ r.restaurant_id }} <br>
+                    {% for rest in restaurants %}
+                        {% if rest.id == r.restaurant_id %}
+                            Restaurant: {{ rest.name }} <br>
+                        {% endif %}
+                    {% endfor %}
                 People: {{ r.people_number }} <br>
                 Start time: {{ r.start_time }} -- End time: {{ r.end_time }}
                 </td>

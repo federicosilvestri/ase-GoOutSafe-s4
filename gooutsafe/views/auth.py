@@ -10,6 +10,7 @@ from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.customer_manager import CustomerManager
+from gooutsafe.dao.restaurant_manager import RestaurantManager
 
 auth = Blueprint('auth', __name__)
 
@@ -42,13 +43,15 @@ def login():
 def profile(id):
     reservations = ReservationManager.retrieve_by_customer_id(id)
     customer = CustomerManager.retrieve_by_id(id)
-    return render_template('customer_profile.html', customer=customer, reservations=reservations)
+    restaurants = RestaurantManager.retrieve_all()
+    return render_template('customer_profile.html', customer=customer, 
+            reservations=reservations, restaurants=restaurants)
 
 
 @auth.route('/operator/<int:id>', methods=['GET', 'POST'])
 @login_required
 def operator(id):
-    restaurant = Restaurant.query.filter_by(owner_id=id).first()
+    restaurant = RestaurantManager.retrieve_by_operator_id(id)
     return render_template('operator_profile.html', restaurant=restaurant)
 
 

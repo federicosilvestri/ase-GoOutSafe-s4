@@ -6,6 +6,8 @@ from gooutsafe.forms import UserForm, LoginForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.operator import Operator
 
+from datetime import date
+
 users = Blueprint('users', __name__)
 
 
@@ -20,7 +22,7 @@ def create_user_type(type):
     form = LoginForm()
     if type == "customer":
         form = UserForm()
-        user = Customer()
+        user = Customer()   
     else:
         user = Operator()
 

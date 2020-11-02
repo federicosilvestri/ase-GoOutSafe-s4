@@ -147,4 +147,4 @@ def reservation_all(restaurant_id):
 @reservation.route('/delete/<int:id>/<int:customer_id>')
 def delete_reservation_customer(id, customer_id):
     ReservationManager.delete_reservation_by_id(id)
-    return redirect(url_for('auth.profile', id=user.id))
+    return redirect(url_for('auth.profile', id=id))
