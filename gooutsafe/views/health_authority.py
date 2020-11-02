@@ -3,8 +3,15 @@ from flask_login import login_required, login_user, logout_user
 from gooutsafe.auth import current_user
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.reservation_manager import ReservationManager
+from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.reservation import Reservation
+from gooutsafe.forms.authority import AuthorityForm
+
+from gooutsafe.forms.authority import AuthorityForm
+
+from gooutsafe.tasks.health_authority_tasks import schedule_revert_customer_health_status
+
 
 from gooutsafe.forms.authority import AuthorityForm
 
@@ -39,12 +46,19 @@ def mark_positive():
 @login_required
 def contact_tracing(contact_id):
     customer = CustomerManager.retrieve_by_id(id_=contact_id)
+    #retrieve all the reservations for the positive customer
     pos_reservations = ReservationManager.retrieve_by_customer_id(user_id=customer.id)
-    all_contacs = []
+    cust_contacs = []
+    restaurant_contacs = []
+    date_contacts = []
     for res in pos_reservations:
-        print(res.start_time, res.end_time, res.restaurant_id, res.user_id)
+        #all reservations that intersect with the positive one
         contacs = ReservationManager.retrieve_all_contact_reservation_by_id(res.id)
         for c in contacs:
-            print(c.start_time, c.end_time,c.restaurant_id, c.user_id)
-        all_contacs = all_contacs + contacs
-    return render_template('contact_tracing_positive.html', customer=customer, pos_contact=all_contacs )
+            #discard the reservations for the same positive customer
+            if (customer.id != c.user_id):
+                cust = CustomerManager.retrieve_by_id(c.user_id)
+                cust_contacs.append(cust)
+                restaurant_contacs.append(RestaurantManager.retrieve_by_id(c.restaurant_id).name)
+                date_contacts.append(c.start_time.date())
+    return render_template('contact_tracing_positive.html', customer=customer, pos_contact=cust_contacs, res_contact=restaurant_contacs, date_contact=date_contacts)

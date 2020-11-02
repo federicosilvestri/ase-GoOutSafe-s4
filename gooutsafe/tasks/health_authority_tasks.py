@@ -11,7 +11,7 @@ def schedule_revert_customer_health_status(customer, eta=None):
     if not eta:
         eta = datetime.utcnow() + timedelta(days=14)
     customer_id = customer.id
-    revert_customer_health_status.apply_async(customer_id, eta=eta)
+    revert_customer_health_status.apply_async(kwargs={"customer_id":customer_id}, eta=eta)
 
 @celery.task
 def revert_customer_health_status(customer_id):
@@ -19,3 +19,5 @@ def revert_customer_health_status(customer_id):
     if customer:
         customer.set_health_status(False)
         CustomerManager.update_customer(customer=customer)
+    else:
+        raise ValueError('Customer does not exist anymore')
