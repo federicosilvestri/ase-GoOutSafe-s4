@@ -179,16 +179,16 @@ def edit_reservation(reservation_id, customer_id):
             start_data = form.data['start_date']
             start_time = form.data['start_time']
             people_number = form.data['people_number']
-            print (people_number)
             start_time_merged = datetime.combine(start_data, start_time)
             table = validate_reservation(restaurant, start_time_merged, people_number)
             if table != False:
                 reservation.set_people_number(people_number)
-                reservation.set_start_time(start_time)
+                reservation.set_start_time(start_time_merged)
                 reservation.set_table(table)
-                reservation.set_timestamp(start_data)
                 ReservationManager.update_reservation(reservation)
             else:
                 flash("There aren't free tables for that hour or the restaurant is close")
+        else:
+                flash("The form is not correct")
 
     return redirect(url_for('auth.profile', id=customer_id))
