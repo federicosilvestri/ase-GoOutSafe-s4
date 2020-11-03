@@ -8,7 +8,7 @@ from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.reservation import Reservation
 from gooutsafe.tasks.health_authority_tasks import \
-    schedule_revert_customer_health_status
+    schedule_revert_customer_health_status, notify_restaurant_owners_about_positive_past_customer
 
 authority = Blueprint('authority', __name__)
 
@@ -44,6 +44,7 @@ def mark_positive(customer_id):
             customer.set_health_status(status=True)
             CustomerManager.update_customer(customer)
             schedule_revert_customer_health_status(customer)
+            notify_restaurant_owners_about_positive_past_customer(customer)
             flash("Customer set to positive!")
     pos_customers = CustomerManager.retrieve_all_positive()    
     return render_template('authority_profile.html', form=form, pos_customers=pos_customers, search_customer=None)
