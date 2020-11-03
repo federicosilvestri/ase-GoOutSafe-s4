@@ -7,6 +7,7 @@ class DaoTest(unittest.TestCase):
     all classes that tests models
     """
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         from gooutsafe import create_app
         create_app()

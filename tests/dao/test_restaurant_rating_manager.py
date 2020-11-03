@@ -3,11 +3,12 @@ from .dao_test import DaoTest
 
 class RestaurantRatingManagerTest(DaoTest):
     
-    def setUp(self):
-        super(RestaurantRatingManagerTest, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(RestaurantRatingManagerTest, cls).setUpClass()
 
         from gooutsafe.dao.restaurant_rating_manager import RestaurantRating
-        self.restaurant_rating_manager = RestaurantRating
+        cls.restaurant_rating_manager = RestaurantRating
 
     def test_create_delete(self):
         """

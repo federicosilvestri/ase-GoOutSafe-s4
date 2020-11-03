@@ -40,9 +40,6 @@ def create_app():
     env = Environments(app)
     env.from_object(config_object)
 
-    login = flask_login.LoginManager(app)
-    login.login_view = 'auth.login'
-
     # registering db
     db = SQLAlchemy(
         app=app
@@ -56,6 +53,10 @@ def create_app():
 
     register_extensions(app)
     register_blueprints(app)
+
+    # loading login manager
+    import gooutsafe.auth as auth
+    login = auth.init_login_manager(app)
 
     # creating migrate
     migrate = Migrate(

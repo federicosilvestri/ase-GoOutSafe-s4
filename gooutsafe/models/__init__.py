@@ -12,5 +12,4 @@ from .table import Table
 from .user import User
 from .restaurant_availability import RestaurantAvailability
 from .restaurant_rating import RestaurantRating
-from .role import Role
-from. user_roles import UserRoles
+from .notification import Notification

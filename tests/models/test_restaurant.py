@@ -10,11 +10,12 @@ from .model_test import ModelTest
 class TestRestaurant(ModelTest):
     faker = Faker('it_IT')
 
-    def setUp(self):
-        super(TestRestaurant, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestRestaurant, cls).setUpClass()
 
         from gooutsafe.models import restaurant
-        self.restaurant = restaurant
+        cls.restaurant = restaurant
 
     @staticmethod
     def generate_random_restaurant():

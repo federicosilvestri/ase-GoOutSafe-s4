@@ -15,6 +15,7 @@ from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.table_manager import TableManager
 
 from gooutsafe.forms.reservation import ReservationForm
+from gooutsafe.forms.filter_form import FilterForm
 
 from datetime import time
 from datetime import datetime
@@ -216,3 +217,14 @@ def edit_reservation(reservation_id, customer_id):
                 flash("The form is not correct")
 
     return redirect(url_for('auth.profile', id=customer_id))
+
+
+    @reservation.route('/reservation_update/<int:customer_id>', methods=['GET', 'POST'])
+    def update_list_customer_reservation(customer_id):
+        form = FilterForm()
+        if request.method == 'POST':
+            if form.is_submitted():
+                filter_date = fomr.data['filter_date']
+
+        
+        return redirect(url_for('auth.profile', id=customer_id))
