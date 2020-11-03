@@ -38,10 +38,12 @@ class Reservation(db.Model):
 
     @staticmethod
     def check_time(start_time, end_time):
-        actual_time = datetime.now()
-        if start_time >= end_time or start_time < actual_time:
+        actual_time = datetime.utcnow()
+        if start_time >= end_time:
             raise ValueError('The start time cannot be greater than end_time')
-
+        # TODO: discuss the error below
+        # if start_time < actual_time:
+        #     raise ValueError('The reservation cannot be made in the past')
 
     def set_user(self, user):
         self.user = user
@@ -58,9 +60,6 @@ class Reservation(db.Model):
     def set_start_time(self, start_time):
         self.start_time = start_time
         self.set_end_time(start_time + timedelta(hours=self.MAX_TIME_RESERVATION))
-    
-    def get_end_time(self):
-        return self.end_time
     
     def set_end_time(self, end_time):
         Reservation.check_time(self.start_time, end_time)

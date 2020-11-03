@@ -1,6 +1,5 @@
 from .model_test import ModelTest
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from .test_restaurant import  TestRestaurant
 from .test_user import TestUser
 from .test_table import TestTable
@@ -28,14 +27,23 @@ class TestReservation(ModelTest):
         self.restaurant = restaurant
 
     @staticmethod
-    def generate_random_reservation():
+    def generate_random_reservation(user=None, restaurant=None, start_time_mode=None):
         from gooutsafe.models.reservation import Reservation
-        
-        user = TestUser.generate_random_user()
+        if user is None:
+            user = TestUser.generate_random_user()
         table, _ = TestTable.generate_random_table()
-        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        if restaurant is None:
+            restaurant, _ = TestRestaurant.generate_random_restaurant()
         people_number = TestReservation.faker.random_int(min=0,max=table.MAX_TABLE_CAPACITY)
-        start_time = TestReservation.faker.date_time_between('now', '+6w')
+        if start_time_mode == 'valid_past_contagion_time':
+            # start_time = TestReservation.faker.date_time_between('-14d', 'now')
+            start_time = TestReservation.faker.date_time_between_dates(datetime.utcnow()-timedelta(days=14), datetime.utcnow())
+            print("Now: ", datetime.utcnow())
+            print("Randomly generated starttime: ", start_time)
+        elif start_time_mode == 'valid_future_contagion_time':
+            start_time = TestReservation.faker.date_time_between('now', '+14d')
+        else:
+            start_time = TestReservation.faker.date_time_between('now', '+6w')
         reservation = Reservation(
             user = user,
             table = table,
