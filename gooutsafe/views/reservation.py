@@ -52,7 +52,7 @@ def validate_reservation(restaurant, start_datetime, people_number):
     This method checks if the new reservation overlap with other already 
     present for the restaurant.
     Args:
-        restaurant (Restaurant): [description]
+        restaurant (Restaurant): the reservation restaurant
         start_datetime (datetime): the datetime of the reservation
         people_number (Integer): number of people declered in the reservation
 
