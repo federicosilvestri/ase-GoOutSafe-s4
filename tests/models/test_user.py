@@ -1,18 +1,21 @@
-from .model_test import ModelTest
 import random
-from faker import Faker
 import unittest
+
+from faker import Faker
+
+from .model_test import ModelTest
 
 
 class TestUser(ModelTest):
 
     faker = Faker()
 
-    def setUp(self):
-        super(TestUser, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestUser, cls).setUpClass()
 
         from gooutsafe.models import user
-        self.user = user
+        cls.user = user
 
     @staticmethod
     def assertUserEquals(value, expected):

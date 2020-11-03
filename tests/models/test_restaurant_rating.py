@@ -8,16 +8,17 @@ from .model_test import ModelTest
 class TestRestaurantRating(ModelTest):
     fake = Faker()
 
-    def setUp(self):
-        super(TestRestaurantRating, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestRestaurantRating, cls).setUpClass()
 
         from gooutsafe.models import restaurant_rating
         from gooutsafe.models import customer
         from gooutsafe.models import restaurant
 
-        self.restaurant_rating = restaurant_rating
-        self.customer = customer
-        self.restaurant = restaurant
+        cls.restaurant_rating = restaurant_rating
+        cls.customer = customer
+        cls.restaurant = restaurant
 
     def test_init(self):
         for _ in range(0, 10):

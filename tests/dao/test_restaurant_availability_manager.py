@@ -1,30 +1,33 @@
 from faker import Faker
 from .dao_test import DaoTest
-from tests.models.test_restaurant import TestRestaurant
-from tests.models.test_restaurant_availability import TestRestaurantAvailability
 
 
 class TestRestaurantAvailabilityManager(DaoTest):
     faker = Faker()
 
-    def setUp(self):
-        super(TestRestaurantAvailabilityManager, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestRestaurantAvailabilityManager, cls).setUpClass()
 
+        from tests.models.test_restaurant import TestRestaurant
+        cls.test_restaurant = TestRestaurant
+        from tests.models.test_restaurant_availability import TestRestaurantAvailability
+        cls.test_restaurant_availability = TestRestaurantAvailability
         from gooutsafe.dao import restaurant_availability_manager
         from gooutsafe.dao import restaurant_manager
         from gooutsafe.models import restaurant_availability
-        self.ram = restaurant_availability_manager.RestaurantAvailabilityManager
-        self.ava = restaurant_availability
-        self.re_ma = restaurant_manager
+        cls.ram = restaurant_availability_manager.RestaurantAvailabilityManager
+        cls.ava = restaurant_availability
+        cls.re_ma = restaurant_manager
 
     def test_crud(self):
         rests = []
         for _ in range(0, 10):
-            restaurant, _ = TestRestaurant.generate_random_restaurant()
+            restaurant, _ = self.test_restaurant.generate_random_restaurant()
             self.re_ma.RestaurantManager.create_restaurant(restaurant)
             rests.append(restaurant)
 
-        rests_ava = TestRestaurantAvailability.generate_random_availabilities(
+        rests_ava = self.test_restaurant_availability.generate_random_availabilities(
             rests
         )
 
@@ -36,7 +39,7 @@ class TestRestaurantAvailabilityManager(DaoTest):
         # test update
         for avas in rests_ava:
             for ava in avas:
-                s, e = TestRestaurantAvailability.generate_correct_random_times()
+                s, e = self.test_restaurant_availability.generate_correct_random_times()
                 ava.set_times(s, e)
                 self.ram.update_availability(ava)
 

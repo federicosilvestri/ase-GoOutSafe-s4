@@ -10,10 +10,11 @@ class TestCustomer(ModelTest):
 
     faker = Faker('it_IT')
 
-    def setUp(self):
-        super(TestCustomer, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestCustomer, cls).setUpClass()
         from gooutsafe.models import customer
-        self.customer = customer
+        cls.customer = customer
 
     def test_cust_init(self):
         for i in range(0, 10):

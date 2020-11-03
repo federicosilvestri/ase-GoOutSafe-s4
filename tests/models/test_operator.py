@@ -4,11 +4,12 @@ import unittest
 
 class TestOperator(ModelTest):
 
-    def setUp(self):
-        super(TestOperator, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestOperator, cls).setUpClass()
 
         from gooutsafe.models import operator
-        self.operator = operator
+        cls.operator = operator
 
     def test_cust_init(self):
         for i in range(0, 10):
