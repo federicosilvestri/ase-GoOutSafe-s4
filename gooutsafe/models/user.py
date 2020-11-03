@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
     authenticated = db.Column(db.Boolean, default=True)
     is_anonymous = False
     type = db.Column(db.Unicode(128))
+    roles = db.relationship('Role', secondary='user_roles', backref="users")
 
     __mapper_args__ = {
         'polymorphic_identity': 'user',
