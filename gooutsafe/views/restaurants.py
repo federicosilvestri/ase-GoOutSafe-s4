@@ -9,11 +9,11 @@ from gooutsafe.forms.add_measure import MeasureForm
 from gooutsafe.forms.add_table import TableForm
 from gooutsafe.forms.add_times import TimesForm
 from gooutsafe.forms.restaurant import RestaurantForm
-from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.models.restaurant_availability import RestaurantAvailability
 from gooutsafe.models.restaurant_rating import RestaurantRating
 from gooutsafe.dao.restaurant_rating_manager import RestaurantRatingManager
+from gooutsafe.dao.like_manager import LikeManager
 from gooutsafe.models.table import Table
 
 restaurants = Blueprint('restaurants', __name__)
@@ -40,19 +40,13 @@ def restaurant_sheet(restaurant_id):
 
 @restaurants.route('/restaurants/like/<restaurant_id>')
 @login_required
-def _like(restaurant_id):
-    q = Like.query.filter_by(liker_id=current_user.id, restaurant_id=restaurant_id)
-
-    if q.first() is not None:
-        new_like = Like()
-        new_like.liker_id = current_user.id
-        new_like.restaurant_id = restaurant_id
-        db.session.add(new_like)
-        db.session.commit()
-        message = ''
+def like_toggle(restaurant_id):
+    if LikeManager.like_exists(current_user.id, restaurant_id):
+        LikeManager.delete_like(current_user.id, restaurant_id)
     else:
-        message = 'You\'ve already liked this place!'
-    return _restaurants(message)
+        LikeManager.create_like(current_user.id, restaurant_id)
+
+    return restaurant_sheet(restaurant_id)
 
 
 @restaurants.route('/restaurants/add/<int:id_op>', methods=['GET', 'POST'])
