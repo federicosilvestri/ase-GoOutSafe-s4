@@ -32,10 +32,7 @@ class RestaurantManager(Manager):
     @staticmethod
     def retrieve_by_menu_type(menu_type):
         Manager.check_none(menu_type=menu_type)
-        return Restaurant.query.filter_by(
-                func.lower(Restaurant.menu_type)==func.lower(menu_type)
-            ).all()
-        #return Restaurant.query.filter(func.lower(Restaurant.menu_type) == func.lower(menu_type))
+        return Restaurant.query.filter(func.lower(Restaurant.menu_type) == func.lower(menu_type))
 
     @staticmethod
     def retrieve_all():
