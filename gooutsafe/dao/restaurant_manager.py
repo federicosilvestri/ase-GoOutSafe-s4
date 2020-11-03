@@ -1,4 +1,5 @@
 from gooutsafe.models.restaurant import Restaurant
+from sqlalchemy import func
 from .manager import Manager
 
 
@@ -21,12 +22,20 @@ class RestaurantManager(Manager):
     @staticmethod
     def retrieve_by_restaurant_name(restaurant_name):
         Manager.check_none(restaurant_name=restaurant_name)
-        return Restaurant.query.filter(Restaurant.name==restaurant_name)
+        return Restaurant.query.filter(func.lower(Restaurant.name) == func.lower(restaurant_name))
 
     @staticmethod
     def retrieve_by_restaurant_city(restaurant_city):
         Manager.check_none(restaurant_city=restaurant_city)
-        return Restaurant.query.filter(Restaurant.city==restaurant_city)
+        return Restaurant.query.filter(func.lower(Restaurant.city) == func.lower(restaurant_city))
+    
+    @staticmethod
+    def retrieve_by_menu_type(menu_type):
+        Manager.check_none(menu_type=menu_type)
+        return Restaurant.query.filter_by(
+                func.lower(Restaurant.menu_type)==func.lower(menu_type)
+            ).all()
+        #return Restaurant.query.filter(func.lower(Restaurant.menu_type) == func.lower(menu_type))
 
     @staticmethod
     def retrieve_all():

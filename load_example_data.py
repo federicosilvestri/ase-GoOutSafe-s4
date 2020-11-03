@@ -30,4 +30,4 @@ def load_health_auth_data():
 
 if __name__ == "__main__":
     gooutsafe.create_app()
-    load_example_data()
+    load_health_auth_data()

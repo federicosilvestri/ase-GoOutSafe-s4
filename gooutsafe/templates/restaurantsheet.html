@@ -71,12 +71,20 @@
         <div class="col-sm-6">
             <h3 class="display-5 text-primary">Reservations</h3>
             {% if current_user.is_authenticated %}
+                {% if restaurant.tables|length and restaurant.availabilities|length and current_user.type == "customer" %}
                 <p>Are you <b>hungry</b>?
-                    <button type="button" class="btn btn-outline-primary"
-                            onclick="location.href={{ url_for('reservation.create_reservation', restaurant_id=restaurant.id ) }}">
+                    <a type="button" class="btn btn-primary active"
+                        href="{{ url_for('reservation.create_reservation', restaurant_id=restaurant.id) }}">
                         Book a Table
-                    </button>
+                    </a>
                 </p>
+                {% else %}
+                    <p>Are you <b>hungry</b>?
+                        <button type="button" class="btn btn-outline-primary disabled">
+                            Book a Table
+                        </button>
+                    </p>
+                {% endif %}
             {% endif %}
         </div>
     </div>

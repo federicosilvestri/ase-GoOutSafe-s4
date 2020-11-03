@@ -36,3 +36,6 @@ def search_by(search_field, search_filter):
     if search_filter == "City":
         restaurants = RestaurantManager.retrieve_by_restaurant_city(search_field)
         return restaurants
+    if search_filter == "Menu Type":
+        restaurants = RestaurantManager.retrieve_by_menu_type(search_field)
+        return restaurants
