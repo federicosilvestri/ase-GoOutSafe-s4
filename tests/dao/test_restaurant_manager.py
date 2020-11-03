@@ -45,7 +45,7 @@ class TestRestaurantManager(DaoTest):
 
     def test_retrieve_by_operator_id(self):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
-        operator, _ = TestOperator.generator_random_operator()
+        operator, _ = TestOperator.generate_random_operator()
         restaurant.owner = operator
         self.restaurant_manager.create_restaurant(restaurant=restaurant)
         self.customer_manager.create_customer(customer=operator)

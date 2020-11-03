@@ -12,7 +12,7 @@ class TestOperator(ModelTest):
 
     def test_cust_init(self):
         for i in range(0, 10):
-            random_operator = TestOperator.generator_random_operator()
+            random_operator = TestOperator.generate_random_operator()
             operator, (email, password, is_active, is_admin, is_anonymous) = random_operator
 
             self.assertEqual(operator.email, email)
@@ -31,7 +31,7 @@ class TestOperator(ModelTest):
         t.assertEqual(value.is_anonymous, expected.is_anonymous)
 
     @staticmethod
-    def generator_random_operator():
+    def generate_random_operator():
         from faker import Faker
         from gooutsafe.models import Operator
 

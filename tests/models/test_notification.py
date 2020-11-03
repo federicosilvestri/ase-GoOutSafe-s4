@@ -24,7 +24,7 @@ class TestNotification(ModelTest):
             if type_ == 'customer':
                 target_user, _ = TestCustomer.generate_random_customer()
             else:
-                target_user, _ = TestOperator.generator_random_operator()
+                target_user, _ = TestOperator.generate_random_operator()
         positive_customer, _ = TestCustomer.generate_random_customer()
         contagion_restaurant, _ = TestRestaurant.generate_random_restaurant()
         contagion_datetime = TestNotification.faker.date_time()
@@ -47,7 +47,7 @@ class TestNotification(ModelTest):
         self.assertEqual(customer.id, notification.target_user_id)
 
     def test_valid_target_operator_id(self):
-        operator, _ = TestOperator.generator_random_operator()
+        operator, _ = TestOperator.generate_random_operator()
         notification, _ = TestNotification.generate_random_notification()
         notification.set_target_user_id(operator.id)
         self.assertEqual(operator.id, notification.target_user_id)
