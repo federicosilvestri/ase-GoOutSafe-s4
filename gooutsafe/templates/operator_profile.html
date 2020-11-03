@@ -34,6 +34,7 @@
                     <div class="modal-body">
                         If you delete your account, <br>
                             everything will be lost!
+                        Even you restaurant, be careful.
                     </div>
 
                     <div class="modal-footer">
@@ -54,6 +55,25 @@
         </nav>
         <br>
         <h5> Hi {{ current_user.firstname }}! </h5><br>
+
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+              <a class="nav-link active" 
+                href="{{ url_for('users.update_user', id=current_user.id) }}">
+                  Edit Info
+              </a>
+            </li>
+        </ul>
+        <br>
+        <h5>
+            <table class="table">
+                <tr>
+                    <td> Email</td>
+                    <td> {{ current_user.email }} </td>
+                </tr>
+            </table>
+        </h5><br>
+
         {% if restaurant == None %}
             <a class="nav-link active"
                 href="{{ url_for('restaurants.add', id_op=current_user.id) }}">
@@ -61,6 +81,15 @@
             </a>
         {% else %}
             <h3>Your Restaurant</h3>
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                  <a class="nav-link active" 
+                    href="{{ url_for('restaurants.edit_restaurant',
+                        id_op=current_user.id, rest_id=restaurant.id) }}">
+                      Edit Restaurant
+                  </a>
+                </li>
+            </ul>
             <div>
                 <ul class="list-group">
                     <li class="list-group-item">

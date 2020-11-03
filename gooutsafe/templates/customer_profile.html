@@ -4,8 +4,6 @@
 
 {% block content %}
 
-    {% if current_user.is_authenticated %}
-
             <ul class="nav justify-content-end">
                 <li class="nav-item">
                     <a class="btn btn-outline-dark"
@@ -16,12 +14,12 @@
                 <!-- Button trigger modal -->
                 {% if customer.health_status %}
                 <button type="button" class="btn btn-danger disabled" data-toggle="modal">
-                    Delete account
+                        Delete account
                 </button>
                 {% else %}
                     <button type="button" class="btn btn-danger active" data-toggle="modal" 
                     data-target="#deleteModal">
-                    Delete account
+                        Delete account
                 </button>
                 {% endif %}
                     
@@ -60,7 +58,41 @@
         </nav>
         <br>
         
-        <h5> Hi {{ current_user.firstname }}! </h5><br>
+        <h3> Hi {{ current_user.firstname }}! </h3>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+              <a class="nav-link active" 
+                href="{{ url_for('users.update_user', id=current_user.id) }}">
+                  Edit Info
+              </a>
+            </li>
+        </ul>
+        <br>
+        <h5>
+            <table class="table">
+                <tr>
+                    <td> Social number </td>
+                    <td>{{ current_user.social_number }}</td>
+                </tr>
+                <tr>
+                    <td> Email</td>
+                    <td> {{ current_user.email }} </td>
+                </tr>
+                <tr>
+                    <td> Name and lastame </td>
+                    <td> {{ current_user.firstname }} {{ current_user.lastname }}</td>
+                </tr>
+                <tr>
+                    <td> Birthday </td>
+                    <td> {{ current_user.birthdate }}</td>
+                </tr>
+                <tr>
+                    <td> Phone</td>
+                    <td> {{ current_user.phone }}</td>
+                </tr>
+            </table>
+        </h5><br>
+
         <h3>Your reservations</h3><br>
 
         <table class="table">
@@ -162,7 +194,5 @@
             </tr>
             {% endfor %}
         </table>
-    {% endif %}
-
 
 {% endblock %}

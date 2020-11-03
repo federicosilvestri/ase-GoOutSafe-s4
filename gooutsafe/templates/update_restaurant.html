@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %} Edit Customer {% endblock %}
+
+{% block content %}
+    <br>
+    <h4> Make your changes </h4><br>
+
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+            <dl>
+            {% for field in form.display %}
+                <dt>{{ form[field].label }}</dt>
+                <dd>{{ form[field]() }}</dd>
+                {% if form[field].errors %}
+                    {% for e in form[field].errors %}
+                        <p class="help-block">{{ e }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+        </dl>
+        <p>
+        <input type="submit" value="Save">
+    </form>
+
+{% endblock %}

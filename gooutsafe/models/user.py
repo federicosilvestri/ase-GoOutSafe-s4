@@ -32,6 +32,9 @@ class User(UserMixin, db.Model):
     def set_password(self, password):
         self.password = password
 
+    def set_email(self, email):
+        self.email = email
+
     def is_authenticated(self):
         return self.authenticated
 
