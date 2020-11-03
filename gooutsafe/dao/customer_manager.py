@@ -15,30 +15,18 @@ class CustomerManager(Manager):
     
     @staticmethod
     def retrieve_by_ssn(ssn):
-        try:
-            customer = Customer.query.filter_by(social_number=ssn).first()
-            Manager.check_none(customer=customer)
-            return CustomerManager.retrieve_by_id(id_=customer.id)
-        except ValueError:
-            return None
+        Manager.check_none(ssn=ssn)
+        return Customer.query.filter_by(social_number=ssn).first()
 
     @staticmethod
     def retrieve_by_email(email):
-        try:
-            customer = Customer.query.filter_by(email=email).first()
-            Manager.check_none(customer=customer)
-            return CustomerManager.retrieve_by_id(id_=customer.id)
-        except ValueError:
-            return None
+        Manager.check_none(email=email)
+        return Customer.query.filter_by(email=email).first()
     
     @staticmethod
     def retrieve_by_phone(phone):
-        try:
-            customer = Customer.query.filter_by(phone=phone).first()
-            Manager.check_none(customer=customer)
-            return CustomerManager.retrieve_by_id(id_=customer.id)
-        except ValueError:
-            return None 
+        Manager.check_none(phone=phone)
+        return Customer.query.filter_by(phone=phone).first()
             
     @staticmethod
     def retrieve_all_positive():

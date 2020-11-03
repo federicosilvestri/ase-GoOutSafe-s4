@@ -16,11 +16,6 @@ from datetime import date
 users = Blueprint('users', __name__)
 
 
-@users.route('/users')
-def _users():
-    usrs = UserManager.retrieve()
-    return render_template("users.html", users=usrs)
-
 
 @users.route('/create_user/<string:type>', methods=['GET', 'POST'])
 def create_user_type(type):
