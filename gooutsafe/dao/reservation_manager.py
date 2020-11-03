@@ -1,6 +1,7 @@
 from gooutsafe.models.reservation import Reservation
 from .manager import Manager
 from gooutsafe import db
+from datetime import datetime, timedelta
 
 
 class ReservationManager(Manager):
@@ -23,6 +24,13 @@ class ReservationManager(Manager):
     def retrieve_by_customer_id(user_id):
         Manager.check_none(user_id=user_id)
         return Reservation.query.filter(Reservation.user_id==user_id).all()
+    
+    @staticmethod
+    def retrieve_by_customer_id_in_last_14_days(user_id):
+        Manager.check_none(user_id=user_id)
+        cond1 = db.and_(Reservation.user_id==user_id, Reservation.end_time >= (datetime.utcnow() - timedelta(days=14)))
+        cond2 = db.and_(cond1, Reservation.start_time <= datetime.utcnow())
+        return Reservation.query.filter(cond2).all()
 
     @staticmethod
     def retrieve_all_contact_reservation_by_id(id_):

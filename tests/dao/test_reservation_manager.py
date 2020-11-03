@@ -1,12 +1,12 @@
+from datetime import datetime, timedelta
+from random import randint
+
 from faker import Faker
-from datetime import timedelta, datetime
-from models.test_reservation import TestReservation
 from models.test_customer import TestCustomer
+from models.test_reservation import TestReservation
 from models.test_restaurant import TestRestaurant
-from models.test_user import TestUser
 from models.test_table import TestTable
-
-
+from models.test_user import TestUser
 
 from .dao_test import DaoTest
 
@@ -93,9 +93,37 @@ class TestReservationManager(DaoTest):
         for res in retrieved_reservation:
             TestReservation.assertEqualReservations(reservation, res)
 
+    def test_single_retrieve_by_customer_id_in_last_14_days(self):
+        customer, _ = TestCustomer.generate_random_customer()
+        self.customer_manager.create_customer(customer=customer)
+        valid_reservation, _ = TestReservation.generate_random_reservation(user=customer)
+        self.reservation_manager.create_reservation(reservation=valid_reservation)
+        invalid_reservation, _ = TestReservation.generate_random_reservation(user=customer)
+        invalid_reservation.set_start_time(datetime.utcnow() - timedelta(days=randint(15, 100)))
+        self.reservation_manager.create_reservation(reservation=invalid_reservation)
+        retrieved_reservation = self.reservation_manager.retrieve_by_customer_id_in_last_14_days(user_id=customer.id)
+        for res in retrieved_reservation:
+            TestReservation.assertEqualReservations(valid_reservation, res)
+
+    def test_multiple_retrieve_by_customer_id_in_last_14_days(self):
+        customer, _ = TestCustomer.generate_random_customer()
+        self.customer_manager.create_customer(customer=customer)
+        valid_reservations = []
+        for _ in range(randint(2, 10)):
+            valid_reservation, _ = TestReservation.generate_random_reservation(user=customer, start_time_mode='valid_past_contagion_time')
+            self.reservation_manager.create_reservation(reservation=valid_reservation)
+            valid_reservations.append(valid_reservation)
+        for _ in range(randint(2, 10)):
+            invalid_reservation, _ = TestReservation.generate_random_reservation(user=customer)
+            invalid_reservation.set_start_time(datetime.utcnow() - timedelta(days=randint(15, 100)))
+            self.reservation_manager.create_reservation(reservation=invalid_reservation)
+        retrieved_reservations = self.reservation_manager.retrieve_by_customer_id_in_last_14_days(user_id=customer.id)
+        for retrieved, valid in zip(retrieved_reservations, valid_reservations):
+            TestReservation.assertEqualReservations(valid, retrieved)
+
     def test_retrieve_all_contact_reservation_by_id(self):
-        from gooutsafe.models.table import Table
         from gooutsafe.models.reservation import Reservation
+        from gooutsafe.models.table import Table
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         self.restaurant_manager.create_restaurant(restaurant=restaurant)
         start_time_positive = datetime(year=2020, month=11, day=2, hour=11)
