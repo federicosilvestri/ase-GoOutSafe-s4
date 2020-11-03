@@ -30,6 +30,7 @@ class RestaurantRating(db.Model):
 
     value = db.Column(
         db.SmallInteger,
+        nullable=False
     )
 
     review = db.Column(

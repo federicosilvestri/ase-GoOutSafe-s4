@@ -11,7 +11,6 @@ from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.forms.reservation import ReservationForm
 from gooutsafe.forms.filter_form import FilterForm
 
-from gooutsafe.models.user import User
 from gooutsafe.models.restaurant import Restaurant
 
 from gooutsafe.dao.user_manager import UserManager
