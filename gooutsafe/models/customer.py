@@ -19,6 +19,7 @@ class Customer(User):
     health_status = db.Column(db.Boolean, default=False)
     phone = db.Column(db.String(length=MAX_PHONE_LEN))
     likes = relationship('Like', back_populates='liker')
+    ratings = relationship('RestaurantRating', back_populates='customer')
 
     __mapper_args__ = {
         'polymorphic_identity': 'customer',
