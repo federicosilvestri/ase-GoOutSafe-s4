@@ -59,3 +59,6 @@ class Customer(User):
     def set_social_number(self, social_number):
         Customer.check_social_number(social_number)
         self.social_number = social_number
+    
+    def set_last_notification_read_time(self, read_time):
+        self.last_notification_read_time = read_time
