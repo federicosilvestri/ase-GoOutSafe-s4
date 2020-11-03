@@ -27,4 +27,3 @@ class ReservationForm(FlaskForm):
             return result
 
     display = ['start_date', 'start_time', 'people_number']
-    

@@ -40,6 +40,10 @@ class ReservationManager(Manager):
     def retrieve_by_table_id(table_id):
         Manager.check_none(table_id=table_id)
         return Reservation.query.filter(Reservation.table_id==table_id).all()
+    @staticmethod
+    def retrieve_reservations_by_user_and_date(user_id, date):
+        pass
+        #TODO
 
     @staticmethod
     def update_reservation(reservation: Reservation):
