@@ -31,7 +31,7 @@ class TestReservation(ModelTest):
     def generate_random_reservation():
         from gooutsafe.models.reservation import Reservation
         
-        user = TestUser.create_random_user()
+        user = TestUser.generate_random_user()
         table, _ = TestTable.generate_random_table()
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         people_number = TestReservation.faker.random_int(min=0,max=table.MAX_TABLE_CAPACITY)
@@ -45,7 +45,6 @@ class TestReservation(ModelTest):
         )
 
         return reservation, (user, table, restaurant, start_time)
-
 
     @staticmethod
     def assertEqualReservations(r1, r2):

@@ -16,7 +16,7 @@ class TestUserManager(DaoTest):
 
     def test_crud(self):
         for _ in range(0, 10):
-            user = TestUser.create_random_user()
+            user = TestUser.generate_random_user()
             self.user_manager.create_user(user=user)
             user1 = self.user_manager.retrieve_by_id(user.id)
             TestUser.assertUserEquals(user1, user)
@@ -30,7 +30,7 @@ class TestUserManager(DaoTest):
             self.user_manager.delete_user(user=user)
 
     def test_retried_by_email(self):
-        base_user = TestUser.create_random_user()
+        base_user = TestUser.generate_random_user()
         self.user_manager.create_user(user=base_user)
         retrieved_user = self.user_manager.retrieve_by_email(email=base_user.email)
         TestUser.assertUserEquals(base_user, retrieved_user)

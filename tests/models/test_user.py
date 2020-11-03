@@ -24,7 +24,7 @@ class TestUser(ModelTest):
         t.assertEqual(value.is_anonymous, expected.is_anonymous)
 
     @staticmethod
-    def create_random_user():
+    def generate_random_user():
         email = TestUser.faker.email()
         password = TestUser.faker.password()
         is_active = TestUser.faker.boolean()

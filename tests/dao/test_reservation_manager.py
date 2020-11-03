@@ -29,8 +29,6 @@ class TestReservationManager(DaoTest):
         self.table_manager = table_manager.TableManager
         from gooutsafe.dao import customer_manager
         self.customer_manager = customer_manager.CustomerManager
-
-    
     
     def test_create_reservation(self):
         reservation1, _ = TestReservation.generate_random_reservation()
@@ -107,14 +105,14 @@ class TestReservationManager(DaoTest):
             table,_ = TestTable.generate_random_table(fixed_restaurant=restaurant)
             self.table_manager.create_table(table)
             start_time = self.faker.date_time_between_dates(datetime_start=start_time_positive, datetime_end=end_time_positive)
-            contacted_user = TestUser.create_random_user()
+            contacted_user = TestUser.generate_random_user()
             contacted_users.append(contacted_user)
             self.user_manager.create_user(contacted_user)
             reservation = Reservation(contacted_user, table, restaurant, 1, start_time)
             self.reservation_manager.create_reservation(reservation)
 
         table1, _= TestTable.generate_random_table(fixed_restaurant=restaurant)
-        positive_user = TestUser.create_random_user()
+        positive_user = TestUser.generate_random_user()
         self.user_manager.create_user(positive_user)
         positive_reservation = Reservation(positive_user, table1, restaurant, 1, start_time_positive)
         self.reservation_manager.create_reservation(positive_reservation)
