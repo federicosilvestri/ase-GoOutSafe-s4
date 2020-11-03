@@ -27,16 +27,12 @@ class RestaurantManager(Manager):
     @staticmethod
     def retrieve_by_restaurant_city(restaurant_city):
         Manager.check_none(restaurant_city=restaurant_city)
-<<<<<<< HEAD
         return Restaurant.query.filter(func.lower(Restaurant.city) == func.lower(restaurant_city))
     
     @staticmethod
     def retrieve_by_menu_type(menu_type):
         Manager.check_none(menu_type=menu_type)
         return Restaurant.query.filter(func.lower(Restaurant.menu_type) == func.lower(menu_type))
-=======
-        return Restaurant.query.filter(Restaurant.city == restaurant_city)
->>>>>>> f4b4d54e6f956e023c80c829dad40cde51bf7707
 
     @staticmethod
     def retrieve_all():
