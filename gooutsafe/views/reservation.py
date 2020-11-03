@@ -157,13 +157,14 @@ def reservation_details(restaurant_id, reservation_id):
         user = user, table = table, restaurant = restaurant)
 
 
+    
+@reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
+def reservation_all(restaurant_id):
     """Returns the whole list of reservations, given a restaurant.
 
     Returns:
         The template of the reservations.
     """
-@reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
-def reservation_all(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
     reservations = ReservationManager.retrieve_by_restaurant_id(restaurant_id)
     
@@ -171,18 +172,21 @@ def reservation_all(restaurant_id):
         restaurant=restaurant, reservations=reservations)
 
 
+    
+@reservation.route('/delete/<int:id>/<int:customer_id>', methods=['GET', 'POST'])
+def delete_reservation_customer(id, customer_id):
     """Given a customer and a reservation id,
     this function delete the reservation from the database.
 
     Returns:
         Redirects the view to the customer profile page.
     """
-@reservation.route('/delete/<int:id>/<int:customer_id>', methods=['GET', 'POST'])
-def delete_reservation_customer(id, customer_id):
     ReservationManager.delete_reservation_by_id(id)
     return redirect(url_for('auth.profile', id=id))
 
 
+@reservation.route('/edit/<int:reservation_id>/<int:customer_id>', methods=['GET', 'POST'])
+def edit_reservation(reservation_id, customer_id):
     """Allows the customer to edit a single reservation,
     if there's an available table within the opening hours
     of the restaurant.
@@ -190,8 +194,6 @@ def delete_reservation_customer(id, customer_id):
     Returns:
         Redirects the view to the customer profile page.
     """
-@reservation.route('/edit/<int:reservation_id>/<int:customer_id>', methods=['GET', 'POST'])
-def edit_reservation(reservation_id, customer_id):
     form = ReservationForm()
     reservation = ReservationManager.retrieve_by_customer_id(user_id=customer_id)[0]
     restaurant = RestaurantManager.retrieve_by_id(reservation.restaurant_id)
