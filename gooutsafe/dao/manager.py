@@ -3,6 +3,8 @@ from gooutsafe import db
 
 class Manager(object):
 
+    db_session = db.session
+
     @staticmethod
     def check_none(**kwargs):
         for name, arg in zip(kwargs.keys(), kwargs.values()):

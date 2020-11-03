@@ -26,7 +26,7 @@ class RestaurantManager(Manager):
     @staticmethod
     def retrieve_by_restaurant_city(restaurant_city):
         Manager.check_none(restaurant_city=restaurant_city)
-        return Restaurant.query.filter(Restaurant.city==restaurant_city)
+        return Restaurant.query.filter(Restaurant.city == restaurant_city)
 
     @staticmethod
     def retrieve_all():
