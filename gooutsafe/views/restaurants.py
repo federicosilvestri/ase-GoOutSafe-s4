@@ -6,10 +6,12 @@ from gooutsafe.models.like import Like
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.models.table import Table
 from gooutsafe.models.restaurant_availability import RestaurantAvailability
+
 from gooutsafe.forms.restaurant import RestaurantForm
 from gooutsafe.forms.add_table import TableForm
 from gooutsafe.forms.add_times import TimesForm
 from gooutsafe.forms.add_measure import MeasureForm
+
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.table_manager import TableManager
 from gooutsafe.dao.restaurant_availability_manager import RestaurantAvailabilityManager
@@ -141,6 +143,31 @@ def save_measure(id_op, rest_id):
                 list_measure.append(measure)
             string = ','.join(list_measure)
             restaurant.set_measures(string)
-            RestaurantManager.update()
+            RestaurantManager.update_restaurant(restaurant)
 
     return redirect (url_for('restaurants.details',id_op=id_op))
+
+
+@restaurants.route('/edit_restaurant/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+@login_required
+def edit_restaurant(id_op, rest_id):
+    form = RestaurantForm()
+    restaurant = RestaurantManager.retrieve_by_id(rest_id)
+
+    if request.method == "POST":
+        if form.is_submitted():
+            name = form.data['name']
+            restaurant.set_name(name)
+            address = form.data['address']
+            restaurant.set_address(address)
+            city = form.data['city']
+            restaurant.set_city(city)
+            phone = form.data['phone']
+            restaurant.set_phone(phone)
+            menu_type = form.data['menu_type']
+            restaurant.set_menu_type(menu_type)
+
+            RestaurantManager.update_restaurant(restaurant)
+            return redirect(url_for('auth.operator', id=id_op))
+
+    return render_template('update_restaurant.html', form=form)

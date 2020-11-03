@@ -5,11 +5,11 @@ from wtforms.fields.html5 import TimeField
 
 
 class TimesForm(FlaskForm):
-    start_time = TimeField('start time', 
+    start_time = TimeField('Start time', 
         validators=[
             DataRequired()
     ])
-    end_time = TimeField('end time', 
+    end_time = TimeField('Snd time', 
         validators=[
             DataRequired()
     ])

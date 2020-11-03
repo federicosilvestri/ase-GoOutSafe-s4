@@ -66,7 +66,8 @@ def authority(id):
     authority = AuthorityManager.retrieve_by_id(id)
     ha_form = AuthorityForm()
     pos_customers = CustomerManager.retrieve_all_positive()
-    return render_template('authority_profile.html', current_user=authority, form=ha_form, pos_customers=pos_customers, search_customer=None)
+    return render_template('authority_profile.html', current_user=authority, 
+        form=ha_form, pos_customers=pos_customers, search_customer=None)
 
 
 @auth.route('/logout')
