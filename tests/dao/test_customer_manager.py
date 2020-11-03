@@ -34,9 +34,9 @@ class TestCustomerManager(DaoTest):
         customer_ssn = self.customer_manager.retrieve_by_ssn(ssn=customer_fake.social_number)
         customer_email = self.customer_manager.retrieve_by_email(email=customer_fake.email)
         customer_phone = self.customer_manager.retrieve_by_phone(phone=customer_fake.phone)
-        self.assertIsNone(customer_ssn, None)
-        self.assertIsNone(customer_email, None)
-        self.assertIsNone(customer_phone, None)
+        self.assertIsNone(customer_ssn)
+        self.assertIsNone(customer_email)
+        self.assertIsNone(customer_phone)
 
     def test_retrieve_positive_customers(self):
         pos_customers = self.customer_manager.retrieve_all_positive()

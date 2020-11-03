@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<< HEAD:migrations/versions/b78131921273_.py
-Revision ID: b78131921273
+Revision ID: 30b62b8445c8
 Revises: 
-Create Date: 2020-11-03 00:09:36.262866
-=======
-Revision ID: c77afa49ea45
-Revises: 
-Create Date: 2020-11-03 21:06:50.327705
->>>>>>> f4b4d54e6f956e023c80c829dad40cde51bf7707:migrations/versions/c77afa49ea45_.py
+Create Date: 2020-11-03 23:27:59.404418
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<< HEAD:migrations/versions/b78131921273_.py
-revision = 'b78131921273'
-=======
-revision = 'c77afa49ea45'
->>>>>>> f4b4d54e6f956e023c80c829dad40cde51bf7707:migrations/versions/c77afa49ea45_.py
+revision = '30b62b8445c8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -98,7 +88,7 @@ def upgrade():
     op.create_table('RestaurantRating',
     sa.Column('customer_id', sa.Integer(), nullable=False),
     sa.Column('restaurant_id', sa.Integer(), nullable=False),
-    sa.Column('value', sa.SmallInteger(), nullable=True),
+    sa.Column('value', sa.SmallInteger(), nullable=False),
     sa.Column('review', sa.Text(length=200), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['customer_id'], ['Customer.id'], ),
