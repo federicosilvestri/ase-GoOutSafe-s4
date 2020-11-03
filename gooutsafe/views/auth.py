@@ -2,13 +2,10 @@ from flask import Blueprint, render_template, redirect, flash
 from flask_login import (logout_user, login_user, login_required)
 from werkzeug.security import check_password_hash
 
-from gooutsafe.dao.customer_manager import CustomerManager
-from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.forms import LoginForm
 from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.forms.reservation import ReservationForm
 
-from gooutsafe.models.user import User
 from gooutsafe.models.restaurant import Restaurant
 
 from gooutsafe.dao.user_manager import UserManager

@@ -37,3 +37,9 @@ class RestaurantRatingManager(Manager):
         if scalar is None:
             return None
         return float(scalar)
+
+    @staticmethod
+    def check_existence(restaurant_id, user_id):
+        base_query = RestaurantRating.query.filter_by(restaurant_id=restaurant_id, customer_id=user_id)
+
+        return base_query.count() != 0
