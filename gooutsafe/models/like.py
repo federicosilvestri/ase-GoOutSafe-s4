@@ -1,5 +1,6 @@
-from sqlalchemy.orm import relationship
 import datetime
+
+from sqlalchemy.orm import relationship
 
 from gooutsafe import db
 
@@ -39,5 +40,3 @@ class Like(db.Model):
 
     def __init__(self, *args, **kw):
         super(Like, self).__init__(*args, **kw)
-
-

@@ -1,5 +1,6 @@
+from tests.models.test_customer import TestCustomer
+from tests.models.test_restaurant import TestRestaurant
 from .dao_test import DaoTest
-from tests.models.test_like import TestLike
 
 
 class TestLikeManager(DaoTest):
@@ -10,21 +11,25 @@ class TestLikeManager(DaoTest):
         from gooutsafe.dao import like_manager
         cls.like_manager = like_manager
 
-    def test_crud(self):
-        pass
+    def test_create_delete(self):
+        restaurant, _ = TestRestaurant.generate_random_restaurant()
+        customer, _ = TestCustomer.generate_random_customer()
 
-        """
-    @staticmethod
-    def create_like(user_id, restaurant_id):
-        like = Like(
-            user_id=user_id,
-            restaurant_id=restaurant_id
+        from gooutsafe.dao.customer_manager import CustomerManager
+        from gooutsafe.dao.restaurant_manager import RestaurantManager
+
+        # Adding restaurant
+        RestaurantManager.create_restaurant(restaurant=restaurant)
+        # Adding user
+        CustomerManager.create_customer(customer=customer)
+
+        self.like_manager.LikeManager.create_like(customer.id, restaurant.id)
+        self.like_manager.LikeManager.delete_like(customer.id, restaurant.id)
+
+        self.assertEqual(
+            False,
+            self.like_manager.LikeManager.like_exists(
+                restaurant_id=restaurant.id,
+                user_id=customer.id
+            )
         )
-        Manager.create(like=like)
-
-    @staticmethod
-    def get_like_by_id(user_id, restaurant_id):
-        like = Like.query.get(user_id, restaurant_id)
-        return like
-
-        """

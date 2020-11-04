@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, flash
 
-from gooutsafe.auth import current_user
+from flask_login import current_user
 from gooutsafe.dao.restaurant_manager import RestaurantManager
-from gooutsafe.forms.home import HomeForm
+from gooutsafe.forms.restaurant_search import HomeForm
 
 home = Blueprint('home', __name__)
 
@@ -10,8 +10,6 @@ home = Blueprint('home', __name__)
 @home.route('/', methods=['GET', 'POST'])
 def index():
     form = HomeForm()
-    restaurants = []
-    tables = []
     if request.method == 'POST':
         if form.is_submitted():
             search_field = form.data['search_field']

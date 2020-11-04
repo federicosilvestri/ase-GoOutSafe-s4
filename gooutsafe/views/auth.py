@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, flash, url_for
 from flask_login import (logout_user, login_user, login_required)
 
-from gooutsafe.auth import current_user
+from flask_login import current_user
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.health_authority_manager import AuthorityManager
 from gooutsafe.dao.reservation_manager import ReservationManager
@@ -78,9 +78,19 @@ def operator(id):
         filter_form = FilterForm()
         restaurant = Restaurant.query.filter_by(owner_id=id).first()
         return render_template('operator_profile.html',
-                               restaurant=restaurant, filter_form=FilterForm())
+                               restaurant=restaurant, filter_form=filter_form)
 
     return redirect(url_for('home.index'))
+
+
+@auth.route('/my_operator')
+@login_required
+def my_operator():
+    filter_form = FilterForm()
+    restaurant = Restaurant.query.filter_by(owner_id=current_user.id).first()
+    return render_template('operator_profile.html',
+                           restaurant=restaurant, filter_form=filter_form
+                           )
 
 
 @auth.route('/authority/<int:id>/<int:positive_id>', methods=['GET', 'POST'])

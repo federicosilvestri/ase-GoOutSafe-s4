@@ -1,21 +1,20 @@
+import datetime
+from datetime import datetime
+
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import DateField, TimeField, IntegerField
 from wtforms.validators import DataRequired, NumberRange
-from wtforms.widgets.html5 import TimeInput
-from datetime import datetime, timedelta, time
 
-import datetime
 
 class ReservationForm(FlaskForm):
-
     start_date = DateField('Date', validators=[DataRequired()])
     start_time = TimeField('Time', validators=[DataRequired()])
-    people_number = IntegerField('Number of Persons', 
-        validators=[
-            NumberRange(min=1, max=20), 
-            DataRequired()
-        ]
-    )
+    people_number = IntegerField('Number of Persons',
+                                 validators=[
+                                     NumberRange(min=1, max=20),
+                                     DataRequired()
+                                 ]
+                                 )
 
     def validate_on_submit(self):
         result = super(ReservationForm, self).validate()
