@@ -16,32 +16,36 @@
 
 <body>
 
-<main role="main" class="container">
-    {% block navbar %}
-        {% if current_user.is_authenticated %}
-            {% if current_user.is_customer() %}
-                {% include "components/navbar/customer_navbar.html" %}
-            {% elif current_user.is_rest_operator() %}
-                {% include "components/navbar/rest_operator_navbar.html" %}
-            {% else %}
-                {% include "components/navbar/lha_navbar.html" %}
-            {% endif %}
+{% block navbar %}
+    {% if current_user.is_authenticated %}
+        {% if current_user.is_customer() %}
+            {% include "components/navbar/customer_navbar.html" %}
+        {% elif current_user.is_rest_operator() %}
+            {% include "components/navbar/rest_operator_navbar.html" %}
         {% else %}
-            {% include "components/navbar/anonymous_navbar.html" %}
+            {% include "components/navbar/lha_navbar.html" %}
         {% endif %}
-    {% endblock %}
+    {% else %}
+        {% include "components/navbar/anonymous_navbar.html" %}
+    {% endif %}
+{% endblock %}
 
+<main role="main" class="container">
     {% block flashing_messages %}
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <ul class=flashes>
-                    {% for message in messages %}
-                        <div class="alert alert-warning">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </ul>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="flashes">
+                            {% for message in messages %}
+                                <div class="alert alert-warning">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             {% endif %}
         {% endwith %}
     {% endblock %}
