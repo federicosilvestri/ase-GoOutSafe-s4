@@ -36,7 +36,6 @@ def create_reservation(restaurant_id):
             start_time = form.data['start_time']
             people_number = form.data['people_number']
             start_time_merged = datetime.combine(start_data, start_time)
-            print(str(start_time_merged))
             table = validate_reservation(restaurant, start_time_merged, people_number)
             if table != False:
                 reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
@@ -157,21 +156,48 @@ def reservation_details(restaurant_id, reservation_id):
     return render_template("reservation_details.html", reservation = reservation, 
         user = user, table = table, restaurant = restaurant)
 
-
     
 @reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
 def reservation_all(restaurant_id):
     """Returns the whole list of reservations, given a restaurant.
+    It also gives to the operator the opportunity to filter reservations
+    by date, so it's possible to count people.
 
     Returns:
         The template of the reservations.
     """
-    restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
+    filter_form = FilterForm()
     reservations = ReservationManager.retrieve_by_restaurant_id(restaurant_id)
+    restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
+    people = 0
+    for r in reservations:
+        people = people + r.people_number        
+    
+    if request.method == 'POST': 
+        if filter_form.is_submitted():
+            filter_date = filter_form.data['filter_date']
+            start_time = filter_form.data['start_time']
+            end_time = filter_form.data['end_time']
+
+            if filter_date is not None and start_time is not None and end_time is not None:
+                start_date_time = datetime.combine(filter_date, start_time)
+                end_date_time = datetime.combine(filter_date, end_time)
+                res = ReservationManager.retrieve_by_date_and_time(
+                    restaurant_id, start_date_time, end_date_time
+                )
+                people = 0
+                for r in res:
+                    people = people + r.people_number
+
+                return render_template("restaurant_reservation.html", 
+                    restaurant=restaurant, reservations=res,
+                    filter_form=filter_form, people=people) 
+            else:
+                flash("The form is not correct")
     
     return render_template("restaurant_reservation.html", 
-        restaurant=restaurant, reservations=reservations)
-
+        restaurant=restaurant, reservations=reservations,
+        filter_form=filter_form, people=people)
 
     
 @reservation.route('/delete/<int:id>/<int:customer_id>', methods=['GET', 'POST'])
@@ -217,14 +243,3 @@ def edit_reservation(reservation_id, customer_id):
                 flash("The form is not correct")
 
     return redirect(url_for('auth.profile', id=customer_id))
-
-
-    @reservation.route('/reservation_update/<int:customer_id>', methods=['GET', 'POST'])
-    def update_list_customer_reservation(customer_id):
-        form = FilterForm()
-        if request.method == 'POST':
-            if form.is_submitted():
-                filter_date = fomr.data['filter_date']
-
-        
-        return redirect(url_for('auth.profile', id=customer_id))

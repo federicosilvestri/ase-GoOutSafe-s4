@@ -104,7 +104,7 @@
                         <form action="{{ url_for('restaurants.save_time', id_op=current_user.id, rest_id=restaurant.id) }}"
                             method="POST">
 
-                            { time_form.hidden_tag() }}
+                            {{ time_form.hidden_tag() }}
                                 <dl>
                             {% for field in time_form.display %}
                                 <dt>{{ time_form[field].label }}</dt>

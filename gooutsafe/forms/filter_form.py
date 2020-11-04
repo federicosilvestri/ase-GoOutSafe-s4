@@ -8,6 +8,8 @@ import datetime
 
 
 class FilterForm(FlaskForm):
-    filter_date = DateField('Filter Date')
-    start_time = TimeField('Start Time')
-    end_time = TimeField('End Time')
+    filter_date = DateField(default=datetime.date.today())
+    start_time = TimeField(default=time(hour=0))
+    end_time = TimeField(default=time(hour=23))
+
+    display = ['filter_date', 'start_time', 'end_time']
