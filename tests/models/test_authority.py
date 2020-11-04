@@ -4,11 +4,12 @@ import unittest
 
 class TestAuthority(ModelTest):
 
-    def setUp(self):
-        super(TestAuthority, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestAuthority, cls).setUpClass()
 
         from gooutsafe.models import health_authority
-        self.health_authority = health_authority
+        cls.health_authority = health_authority
 
     def test_cust_init(self):
         for i in range(0, 10):

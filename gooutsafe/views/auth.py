@@ -1,36 +1,30 @@
 from flask import Blueprint, render_template, redirect, flash, url_for
 from flask_login import (logout_user, login_user, login_required)
-from werkzeug.security import check_password_hash
 
 from gooutsafe.auth import current_user
-
 from gooutsafe.dao.customer_manager import CustomerManager
+from gooutsafe.dao.health_authority_manager import AuthorityManager
+from gooutsafe.dao.reservation_manager import ReservationManager
+from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.forms import LoginForm
 from gooutsafe.forms.authority import AuthorityForm
-from gooutsafe.forms.reservation import ReservationForm
 from gooutsafe.forms.filter_form import FilterForm
-
+from gooutsafe.forms.reservation import ReservationForm
 from gooutsafe.models.restaurant import Restaurant
-
-from gooutsafe.dao.user_manager import UserManager
-from gooutsafe.dao.reservation_manager import ReservationManager
-from gooutsafe.dao.customer_manager import CustomerManager
-from gooutsafe.dao.restaurant_manager import RestaurantManager
-from gooutsafe.dao.health_authority_manager import AuthorityManager
 
 auth = Blueprint('auth', __name__)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
-def login():
+def login(re=False):
     form = LoginForm()
 
     if form.is_submitted():
         email, password = form.data['email'], form.data['password']
         user = UserManager.retrieve_by_email(email)
 
-        if user is not None and check_password_hash(user.password, password):
+        if user is not None and user.authenticate(password):
             login_user(user)
             if user.type == 'operator':
                 return redirect('/operator/%d' % user.id)
@@ -41,7 +35,12 @@ def login():
         else:
             flash('Invalid credentials')
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, re_login=re)
+
+
+@auth.route('/relogin')
+def re_login():
+    return login(re_login=True)
 
 
 @auth.route('/profile/<int:id>', methods=['GET', 'POST'])
@@ -53,8 +52,8 @@ def profile(id):
         filter_form = FilterForm()
         customer = CustomerManager.retrieve_by_id(id)
         restaurants = RestaurantManager.retrieve_all()
-        return render_template('customer_profile.html', customer=customer, 
-                reservations=reservations, restaurants=restaurants, form=form, filter_form=filter_form)
+        return render_template('customer_profile.html', customer=customer,
+                               reservations=reservations, restaurants=restaurants, form=form, filter_form=filter_form)
     return redirect(url_for('home.index'))
 
 
@@ -75,8 +74,8 @@ def authority(id, positive_id):
         ha_form = AuthorityForm()
         pos_customers = CustomerManager.retrieve_all_positive()
         search_customer = CustomerManager.retrieve_by_id(positive_id)
-        return render_template('authority_profile.html', current_user=authority, 
-            form=ha_form, pos_customers=pos_customers, search_customer=search_customer)
+        return render_template('authority_profile.html', current_user=authority,
+                               form=ha_form, pos_customers=pos_customers, search_customer=search_customer)
     return redirect(url_for('home.index'))
 
 

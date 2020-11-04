@@ -1,6 +1,7 @@
 from gooutsafe import db
 from .user import User
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 
 class Customer(User):
@@ -20,6 +21,7 @@ class Customer(User):
     phone = db.Column(db.String(length=MAX_PHONE_LEN))
     likes = relationship('Like', back_populates='liker')
     ratings = relationship('RestaurantRating', back_populates='customer')
+    last_notification_read_time = db.Column(db.DateTime, default=datetime.utcnow)
 
     __mapper_args__ = {
         'polymorphic_identity': 'customer',
@@ -58,3 +60,6 @@ class Customer(User):
     def set_social_number(self, social_number):
         Customer.check_social_number(social_number)
         self.social_number = social_number
+    
+    def set_last_notification_read_time(self, read_time):
+        self.last_notification_read_time = read_time

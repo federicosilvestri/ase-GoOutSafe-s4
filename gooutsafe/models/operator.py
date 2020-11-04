@@ -17,3 +17,5 @@ class Operator(User):
         super(Operator, self).__init__(*args, **kw)
         self._authenticated = False
         
+    def set_restaurant(self, restaurant):
+        self.restaurant = restaurant

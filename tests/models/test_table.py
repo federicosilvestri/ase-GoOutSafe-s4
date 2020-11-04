@@ -1,8 +1,6 @@
-from .model_test import ModelTest
-from datetime import datetime
-from datetime import timedelta
-from .test_restaurant import TestRestaurant
 import unittest
+from datetime import datetime, timedelta
+
 from faker import Faker
 
 from .model_test import ModelTest
@@ -11,21 +9,23 @@ from .model_test import ModelTest
 class TestTable(ModelTest):
     faker = Faker('it_IT')
 
-    def setUp(self):
-        super(TestTable, self).setUp()
-
-        from gooutsafe.models import table
-        from gooutsafe.models import restaurant
-
-        self.table = table
-        self.restaurant = restaurant
+    @classmethod
+    def setUpClass(cls):
+        super(TestTable, cls).setUpClass()
+        from gooutsafe.models import restaurant, table
+        cls.table = table
+        cls.restaurant = restaurant
+        from .test_restaurant import TestRestaurant
+        cls.test_restaurant = TestRestaurant
 
     @staticmethod
     def generate_random_table(fixed_restaurant=None):
         from gooutsafe.models.table import Table
         capacity = TestTable.faker.random_int(min=0,max=15)
         if fixed_restaurant is None:
-            restaurant, _ = TestRestaurant.generate_random_restaurant()
+            test_table = TestTable()
+            test_table.setUpClass()
+            restaurant, _ = test_table.test_restaurant.generate_random_restaurant()
         else:
             restaurant = fixed_restaurant
 

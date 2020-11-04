@@ -10,10 +10,11 @@ class TestCustomer(ModelTest):
 
     faker = Faker('it_IT')
 
-    def setUp(self):
-        super(TestCustomer, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestCustomer, cls).setUpClass()
         from gooutsafe.models import customer
-        self.customer = customer
+        cls.customer = customer
 
     def test_cust_init(self):
         for i in range(0, 10):
@@ -98,3 +99,9 @@ class TestCustomer(ModelTest):
         with self.assertRaises(ValueError):
             phone = ""
             customer.set_phone(phone)
+
+    def test_set_last_notification_read_time(self):
+        customer, _ = TestCustomer.generate_random_customer()
+        read_time = TestCustomer.faker.date_time()
+        customer.set_last_notification_read_time(read_time)
+        self.assertEqual(read_time, customer.last_notification_read_time)

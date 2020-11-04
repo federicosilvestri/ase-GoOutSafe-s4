@@ -3,19 +3,23 @@ import unittest
 from faker import Faker
 
 from .model_test import ModelTest
-from .test_restaurant import TestRestaurant
+
 
 
 class TestRestaurantAvailability(ModelTest):
     faker = Faker()
 
-    def setUp(self):
-        super(TestRestaurantAvailability, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestRestaurantAvailability, cls).setUpClass()
 
         from gooutsafe.models import restaurant
         from gooutsafe.models import restaurant_availability
-        self.restaurant = restaurant
-        self.availability = restaurant_availability
+        cls.restaurant = restaurant
+        cls.availability = restaurant_availability
+        from .test_restaurant import TestRestaurant
+        cls.test_restaurant = TestRestaurant
+
 
     @staticmethod
     def generate_correct_random_times():
@@ -59,7 +63,7 @@ class TestRestaurantAvailability(ModelTest):
 
     def test_init(self):
         for _ in range(0, 10):
-            restaurant, _ = TestRestaurant.generate_random_restaurant()
+            restaurant, _ = self.test_restaurant.generate_random_restaurant()
             start_time, end_time = self.generate_correct_random_times()
             _avail = self.availability.RestaurantAvailability(
                 restaurant.id,
@@ -72,7 +76,7 @@ class TestRestaurantAvailability(ModelTest):
 
     def test_set_times(self):
         for _ in range(0, 10):
-            restaurant, _ = TestRestaurant.generate_random_restaurant()
+            restaurant, _ = self.test_restaurant.generate_random_restaurant()
             start_time, end_time = self.generate_correct_random_times()
             _avail = self.availability.RestaurantAvailability(
                 restaurant.id,
