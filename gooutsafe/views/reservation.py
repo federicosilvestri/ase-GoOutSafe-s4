@@ -250,4 +250,9 @@ def edit_reservation(reservation_id, customer_id):
 @reservation.route('/my_reservations')
 def my_reservations():
     restaurant = RestaurantManager.retrieve_by_operator_id(current_user.id)
+
+    if restaurant is None:
+        from gooutsafe.views.restaurants import add
+        return add(current_user.id)
+
     return reservation_all(restaurant.id)

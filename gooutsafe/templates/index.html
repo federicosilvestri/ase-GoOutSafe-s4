@@ -2,50 +2,16 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-
-    <div class="row">
-    <div class="col-md-12">
-        <h3 class="display-5">Restaurants</h3>
+    <div class="jumbotron">
+        <h1 class="display-4">MUSCA BECCO!</h1>
+        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
+            featured content or information.</p>
+        <hr class="my-4">
+        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{{ url_for('home.search') }}" role="button">Learn more</a>
+        </p>
     </div>
-    </div>
-    <table class="table">
-        {% for r in restaurants %}
-            <tr>
-                <td>
-                    {{ r.name }} | {{ r.address }} | {{ r.city }}
-                </td>
-
-                <td>
-                    {% if r.tables|length and r.availabilities|length and current_user.type == "customer" %}
-                        {% if current_user.health_status %}
-                            <a type="button" class="btn btn-primary disabled">
-                                Book a Table
-                            </a>
-                        {% else %}
-                            <a type="button" class="btn btn-primary active"
-                               href="{{ url_for('reservation.create_reservation', restaurant_id=r.id) }}">
-                                Book a Table
-                            </a>
-                        {% endif %}
-
-                    {% else %}
-                        <a type="button" class="btn btn-primary disabled">
-                            Book a Table
-                        </a>
-                    {% endif %}
-
-                    <a type="button" class="btn btn-primary active"
-                       href="{{ url_for('restaurants.restaurant_sheet', restaurant_id=r.id) }}">
-                        See Details
-                    </a>
-
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    <!-- LISTA RISTORANTI BEST RESTAURANT-->
-
 {% endblock %}
 
 {% block footer %}

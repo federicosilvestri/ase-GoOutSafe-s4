@@ -82,6 +82,10 @@ def details(id_op):
     time_form = TimesForm()
     measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+
+    if restaurant is None:
+        return add(current_user.id)
+
     list_measure = restaurant.measures.split(',')
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities

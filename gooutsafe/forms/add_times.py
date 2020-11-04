@@ -16,4 +16,4 @@ class TimesForm(FlaskForm):
                          validators=[
                              DataRequired()
                          ])
-    display = ['start_time', 'end_time']
+    display = ['day', 'start_time', 'end_time']

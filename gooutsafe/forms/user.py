@@ -9,7 +9,8 @@ from gooutsafe.validators.age import AgeValidator
 class UserForm(FlaskForm):
     social_number = f.StringField(
         'Social Number',
-        validators=[DataRequired()]
+        validators=[DataRequired()],
+
     )
 
     email = EmailField(
