@@ -26,12 +26,6 @@ def my_restaurant():
     return details(current_user.id)
 
 
-@restaurants.route('/restaurants')
-def _restaurants(message=''):
-    all_restaurants = db.session.query(Restaurant)
-    return render_template("restaurants.html", message=message, restaurants=all_restaurants)
-
-
 @restaurants.route('/restaurants/<restaurant_id>')
 def restaurant_sheet(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)

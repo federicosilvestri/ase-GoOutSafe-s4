@@ -24,23 +24,25 @@ reservation = Blueprint('reservation', __name__)
 @login_required
 # @roles_required('customer')
 def create_reservation(restaurant_id):
-    form = ReservationForm()
-    restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
-    if request.method == 'POST':
-        if form.is_submitted():
-            start_data = form.data['start_date']
-            start_time = form.data['start_time']
-            people_number = form.data['people_number']
-            start_time_merged = datetime.combine(start_data, start_time)
-            table = validate_reservation(restaurant, start_time_merged, people_number)
-            if table != False:
-                reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
-                ReservationManager.create_reservation(reservation)
-                return redirect(url_for('reservation.reservation_details',
-                                        restaurant_id=restaurant_id, reservation_id=reservation.id))
-            else:
-                flash("There aren't free tables for that hour or the restaurant is close")
-    return render_template('create_reservation.html', restaurant=restaurant, form=form)
+    if current_user.type == 'customer':
+        form = ReservationForm()
+        restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
+        if request.method == 'POST':
+            if form.is_submitted():
+                start_data = form.data['start_date']
+                start_time = form.data['start_time']
+                people_number = form.data['people_number']
+                start_time_merged = datetime.combine(start_data, start_time)
+                table = validate_reservation(restaurant, start_time_merged, people_number)
+                if table != False:
+                    reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
+                    ReservationManager.create_reservation(reservation)
+                    return redirect(url_for('reservation.reservation_details',
+                                            restaurant_id=restaurant_id, reservation_id=reservation.id))
+                else:
+                    flash("There aren't free tables for that hour or the restaurant is close")
+        return render_template('create_reservation.html', restaurant=restaurant, form=form)
+    return redirect(url_for('home.index'))
 
 
 def validate_reservation(restaurant, start_datetime, people_number):
