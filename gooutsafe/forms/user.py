@@ -1,9 +1,8 @@
 import wtforms as f
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import DateField, EmailField, TelField
-from wtforms.validators import DataRequired
-
-import datetime
+from wtforms.validators import DataRequired, Email
+from gooutsafe.validators.age import AgeValidator
 
 
 class UserForm(FlaskForm):
@@ -14,7 +13,7 @@ class UserForm(FlaskForm):
 
     email = EmailField(
         'Email',
-        validators=[DataRequired()]
+        validators=[DataRequired(), Email()]
     )
 
     firstname = f.StringField(
@@ -33,21 +32,14 @@ class UserForm(FlaskForm):
     )
 
     birthdate = DateField(
-        'Birthday'
+        'Birthday',
+        validators=[AgeValidator(min_age=18)]
     )
 
     phone = TelField(
         'Phone',
         validators=[DataRequired()]
     )
-
-    def validate_on_submit(self):
-        result = super(UserForm, self).validate()
-        this_year = datetime.date.today().year
-        if this_year - self.birthdate.data.year < 18:
-            return False
-        else:
-            return result
 
     display = ['social_number', 'email', 'firstname', 'lastname', 'password',
                'birthdate', 'phone']

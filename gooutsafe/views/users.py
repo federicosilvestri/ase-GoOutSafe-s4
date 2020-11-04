@@ -1,15 +1,12 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import (login_user, login_required)
 
-from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
-
+from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.forms import UserForm, LoginForm
 from gooutsafe.forms.update_customer import UpdateCustomerForm
-
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.operator import Operator
-
 
 users = Blueprint('users', __name__)
 
@@ -19,7 +16,7 @@ def create_user_type(type_):
     form = LoginForm()
     if type_ == "customer":
         form = UserForm()
-        user = Customer()   
+        user = Customer()
     else:
         user = Operator()
 
@@ -28,9 +25,9 @@ def create_user_type(type_):
             email = form.data['email']
             searched_user = UserManager.retrieve_by_email(email)
             if searched_user is not None:
-                flash ("Data already present in the database.")
+                flash("Data already present in the database.")
                 return render_template('create_user.html', form=form)
-                
+
             form.populate_obj(user)
             user.set_password(form.password.data)
 
@@ -43,6 +40,10 @@ def create_user_type(type_):
                 return redirect(url_for('auth.operator', id=user.id))
             else:
                 return redirect(url_for('auth.profile', id=user.id))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for errorMessage in errorMessages:
+                    flash('The field %s is incorrect: %s' % (fieldName, errorMessage))
 
     return render_template('create_user.html', form=form, user_type=type_)
 
@@ -73,21 +74,21 @@ def update_user(id):
             email = form.data['email']
             searched_user = UserManager.retrieve_by_email(email)
             if searched_user is not None and id != searched_user.id:
-                flash ("Data already present in the database.")
+                flash("Data already present in the database.")
                 return render_template('update_customer.html', form=form)
 
             password = form.data['password']
-            user.set_email(email)            
+            user.set_email(email)
             user.set_password(generate_password_hash(password))
 
-            if user.type == "customer": 
+            if user.type == "customer":
                 phone = form.data['phone']
                 user.set_phone(phone)
                 UserManager.update_user(user)
 
                 return redirect(url_for('auth.profile', id=user.id))
-            
-            elif user.type == "operator":         
+
+            elif user.type == "operator":
                 UserManager.update_user(user)
                 return redirect(url_for('auth.operator', id=user.id))
 

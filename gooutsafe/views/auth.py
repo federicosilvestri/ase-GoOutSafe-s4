@@ -55,8 +55,20 @@ def profile(id):
         restaurants = RestaurantManager.retrieve_all()
         return render_template('customer_profile.html', customer=customer,
                                reservations=reservations, restaurants=restaurants, form=form)
-    
+
     return redirect(url_for('home.index'))
+
+
+@auth.route('/my_profile')
+@login_required
+def my_profile():
+    reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
+    form = ReservationForm()
+    customer = CustomerManager.retrieve_by_id(current_user.id)
+    restaurants = RestaurantManager.retrieve_all()
+
+    return render_template('customer_profile.html', customer=customer,
+                           reservations=reservations, restaurants=restaurants, form=form)
 
 
 @auth.route('/operator/<int:id>', methods=['GET', 'POST'])
@@ -65,8 +77,8 @@ def operator(id):
     if current_user.id == id:
         filter_form = FilterForm()
         restaurant = Restaurant.query.filter_by(owner_id=id).first()
-        return render_template('operator_profile.html', 
-                restaurant=restaurant, filter_form = FilterForm())
+        return render_template('operator_profile.html',
+                               restaurant=restaurant, filter_form=FilterForm())
 
     return redirect(url_for('home.index'))
 
