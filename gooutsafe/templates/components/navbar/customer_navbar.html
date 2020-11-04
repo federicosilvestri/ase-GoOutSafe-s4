@@ -20,6 +20,14 @@
                         Profile
                     </a>
                 {% endif %}
+                <a class="btn btn-outline-primary"
+                    href="{{ url_for('auth.notifications') }}">
+                    Notifications
+                    {% set new_notifications = current_user.new_notifications() %}
+                    {% if new_notifications %}
+                    <span class="badge">{{ new_notifications }}</span>
+                    {% endif %}
+                </a>
             </li>
         </ul>
     </nav>

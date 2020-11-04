@@ -19,3 +19,6 @@ class Operator(User):
         
     def set_restaurant(self, restaurant):
         self.restaurant = restaurant
+
+    def new_notifications(self):
+        return 0
