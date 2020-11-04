@@ -78,9 +78,19 @@ def operator(id):
         filter_form = FilterForm()
         restaurant = Restaurant.query.filter_by(owner_id=id).first()
         return render_template('operator_profile.html',
-                               restaurant=restaurant, filter_form=FilterForm())
+                               restaurant=restaurant, filter_form=filter_form)
 
     return redirect(url_for('home.index'))
+
+
+@auth.route('/my_operator')
+@login_required
+def my_operator():
+    filter_form = FilterForm()
+    restaurant = Restaurant.query.filter_by(owner_id=current_user.id).first()
+    return render_template('operator_profile.html',
+                           restaurant=restaurant, filter_form=filter_form
+                           )
 
 
 @auth.route('/authority/<int:id>/<int:positive_id>', methods=['GET', 'POST'])

@@ -21,6 +21,11 @@ from gooutsafe.models.table import Table
 restaurants = Blueprint('restaurants', __name__)
 
 
+@restaurants.route('/my_restaurant')
+def my_restaurant():
+    return details(current_user.id)
+
+
 @restaurants.route('/restaurants')
 def _restaurants(message=''):
     all_restaurants = db.session.query(Restaurant)
