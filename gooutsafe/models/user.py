@@ -1,12 +1,7 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from gooutsafe import db, login
-
-
-@login.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
+from gooutsafe import db
 
 
 class User(UserMixin, db.Model):
@@ -30,7 +25,7 @@ class User(UserMixin, db.Model):
         self.authenticated = False
 
     def set_password(self, password):
-        self.password = password
+        self.password = generate_password_hash(password)
 
     def set_email(self, email):
         self.email = email

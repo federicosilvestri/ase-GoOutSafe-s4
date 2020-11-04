@@ -2,7 +2,6 @@ import random
 import unittest
 
 from faker import Faker
-from werkzeug.security import generate_password_hash
 
 from .model_test import ModelTest
 
@@ -35,7 +34,6 @@ class TestUser(ModelTest):
         is_admin = TestUser.faker.boolean()
         authenticated = TestUser.faker.boolean()
         is_anonymous = TestUser.faker.boolean()
-        type_ = random.choice(['customer', 'operator', 'authority'])
 
         from gooutsafe.models import User
 
@@ -46,17 +44,19 @@ class TestUser(ModelTest):
             is_admin=is_admin,
             authenticated=authenticated,
             is_anonymous=is_anonymous,
-            type=type_
         )
 
         return user
-
 
     def test_set_password(self):
         user = TestUser.generate_random_user()
         password = self.faker.password(length=10, special_chars=False, upper_case=False)
         user.set_password(password)
-        self.assertEqual(password, user.password)
+
+        self.assertEqual(
+            user.authenticate(password),
+            True
+        )
     
     def test_set_email(self):
         user = TestUser.generate_random_user()
