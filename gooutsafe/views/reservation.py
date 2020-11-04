@@ -44,7 +44,7 @@ def create_reservation(restaurant_id):
                 return redirect(url_for('reservation.reservation_details',
                     restaurant_id=restaurant_id, reservation_id=reservation.id)) 
             else:
-                flash("There aren't free tables for that hour or the restaurant is close")
+                flash("There aren't free tables for that hour or the restaurant is closed")
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
 
 
@@ -145,7 +145,7 @@ def check_time_interval(start_time1, end_time1, start_time2, end_time2):
 @reservation.route('/delete/<int:id>/<restaurant_id>')
 def delete_reservation(id, restaurant_id):
     ReservationManager.delete_reservation_by_id(id)
-    return redirect (url_for('reservation.reservation_all', restaurant_id=restaurant.id))
+    return redirect (url_for('reservation.reservation_all', restaurant_id=restaurant_id))
 
 
 @reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
@@ -212,7 +212,7 @@ def edit_reservation(reservation_id, customer_id):
                 reservation.set_table(table)
                 ReservationManager.update_reservation(reservation)
             else:
-                flash("There aren't free tables for that hour or the restaurant is close")
+                flash("There aren't free tables for that hour or the restaurant is closed")
         else:
                 flash("The form is not correct")
 
@@ -224,7 +224,7 @@ def edit_reservation(reservation_id, customer_id):
         form = FilterForm()
         if request.method == 'POST':
             if form.is_submitted():
-                filter_date = fomr.data['filter_date']
+                filter_date = form.data['filter_date']
 
         
         return redirect(url_for('auth.profile', id=customer_id))

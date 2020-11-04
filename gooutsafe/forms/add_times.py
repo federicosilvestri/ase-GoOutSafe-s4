@@ -9,7 +9,7 @@ class TimesForm(FlaskForm):
         validators=[
             DataRequired()
     ])
-    end_time = TimeField('Snd time', 
+    end_time = TimeField('End time', 
         validators=[
             DataRequired()
     ])
