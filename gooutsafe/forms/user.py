@@ -8,36 +8,36 @@ import datetime
 
 class UserForm(FlaskForm):
     social_number = f.StringField(
-        'social_number',
+        'Social Number',
         validators=[DataRequired()]
     )
 
     email = EmailField(
-        'email',
+        'Email',
         validators=[DataRequired()]
     )
 
     firstname = f.StringField(
-        'firstname',
+        'Firstname',
         validators=[DataRequired()]
     )
 
     lastname = f.StringField(
-        'lastname',
+        'Lastname',
         validators=[DataRequired()]
     )
 
     password = f.PasswordField(
-        'password',
+        'Password',
         validators=[DataRequired()]
     )
 
     birthdate = DateField(
-        'birthday'
+        'Birthday'
     )
 
     phone = TelField(
-        'phone',
+        'Phone',
         validators=[DataRequired()]
     )
 

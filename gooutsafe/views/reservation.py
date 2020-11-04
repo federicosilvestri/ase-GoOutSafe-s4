@@ -15,6 +15,7 @@ from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.table_manager import TableManager
 
 from gooutsafe.forms.reservation import ReservationForm
+from gooutsafe.forms.filter_form import FilterForm
 
 from datetime import time
 from datetime import datetime
@@ -48,6 +49,17 @@ def create_reservation(restaurant_id):
 
 
 def validate_reservation(restaurant, start_datetime, people_number):
+    """
+    This method checks if the new reservation overlap with other already 
+    present for the restaurant.
+    Args:
+        restaurant (Restaurant): the reservation restaurant
+        start_datetime (datetime): the datetime of the reservation
+        people_number (Integer): number of people declered in the reservation
+
+    Returns:
+        Teble, Boolean: false in case there are overlap or a table if the restaurant is open and there aren't overlap
+    """
     end_datetime = start_datetime + timedelta(hours=Reservation.MAX_TIME_RESERVATION)
     if check_rest_ava(restaurant, start_datetime, end_datetime):
         print('RISTORANTE APERTO')
@@ -86,6 +98,17 @@ def validate_reservation(restaurant, start_datetime, people_number):
     return False
 
 def check_rest_ava(restaurant, start_datetime, end_datetime):
+    """
+    This method check if the reservation datetime fall in the retaurant opening hours
+    
+    Args:
+        restaurant (Restaurant): the restaurant in whitch we are booking
+        start_datetime (datetime): reservation datetime 
+        end_datetime (datetime): reservation end datetime
+
+    Returns:
+        [Boolean]: True if the restaurant is open or False if the restaurant is close
+    """
     availabilities = restaurant.availabilities
     for ava in availabilities:
         print(ava.start_time)
@@ -135,13 +158,14 @@ def reservation_details(restaurant_id, reservation_id):
         user = user, table = table, restaurant = restaurant)
 
 
+    
+@reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
+def reservation_all(restaurant_id):
     """Returns the whole list of reservations, given a restaurant.
 
     Returns:
         The template of the reservations.
     """
-@reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
-def reservation_all(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
     reservations = ReservationManager.retrieve_by_restaurant_id(restaurant_id)
     
@@ -149,18 +173,21 @@ def reservation_all(restaurant_id):
         restaurant=restaurant, reservations=reservations)
 
 
+    
+@reservation.route('/delete/<int:id>/<int:customer_id>', methods=['GET', 'POST'])
+def delete_reservation_customer(id, customer_id):
     """Given a customer and a reservation id,
     this function delete the reservation from the database.
 
     Returns:
         Redirects the view to the customer profile page.
     """
-@reservation.route('/delete/<int:id>/<int:customer_id>', methods=['GET', 'POST'])
-def delete_reservation_customer(id, customer_id):
     ReservationManager.delete_reservation_by_id(id)
     return redirect(url_for('auth.profile', id=id))
 
 
+@reservation.route('/edit/<int:reservation_id>/<int:customer_id>', methods=['GET', 'POST'])
+def edit_reservation(reservation_id, customer_id):
     """Allows the customer to edit a single reservation,
     if there's an available table within the opening hours
     of the restaurant.
@@ -168,8 +195,6 @@ def delete_reservation_customer(id, customer_id):
     Returns:
         Redirects the view to the customer profile page.
     """
-@reservation.route('/edit/<int:reservation_id>/<int:customer_id>', methods=['GET', 'POST'])
-def edit_reservation(reservation_id, customer_id):
     form = ReservationForm()
     reservation = ReservationManager.retrieve_by_customer_id(user_id=customer_id)[0]
     restaurant = RestaurantManager.retrieve_by_id(reservation.restaurant_id)
@@ -192,3 +217,14 @@ def edit_reservation(reservation_id, customer_id):
                 flash("The form is not correct")
 
     return redirect(url_for('auth.profile', id=customer_id))
+
+
+    @reservation.route('/reservation_update/<int:customer_id>', methods=['GET', 'POST'])
+    def update_list_customer_reservation(customer_id):
+        form = FilterForm()
+        if request.method == 'POST':
+            if form.is_submitted():
+                filter_date = fomr.data['filter_date']
+
+        
+        return redirect(url_for('auth.profile', id=customer_id))

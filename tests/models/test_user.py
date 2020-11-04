@@ -2,6 +2,7 @@ import random
 import unittest
 
 from faker import Faker
+from werkzeug.security import generate_password_hash
 
 from .model_test import ModelTest
 
@@ -49,3 +50,44 @@ class TestUser(ModelTest):
         )
 
         return user
+
+
+    def test_set_password(self):
+        user = TestUser.generate_random_user()
+        password = self.faker.password(length=10, special_chars=False, upper_case=False)
+        user.set_password(password)
+        self.assertEqual(password, user.password)
+    
+    def test_set_email(self):
+        user = TestUser.generate_random_user()
+        email = self.faker.email()
+        user.set_email(email)
+        self.assertEqual(email, user.email)
+    
+    """
+    def test_authenticate(self):
+        user = TestUser.generate_random_user()
+        password = self.faker.password(length=10, special_chars=False, upper_case=False)
+        user.set_password(generate_password_hash(password))
+        self.assertTrue(user.authenticate(generate_password_hash(password)))
+    """
+
+    def test_is_authenticated(self):
+        user = TestUser.generate_random_user()
+        self.assertFalse(user.is_authenticated())
+
+    def test_is_lha(self):
+        from .test_authority import TestAuthority
+        user,_ = TestAuthority.generate_random_authority()
+        self.assertTrue(user.is_lha())
+
+    def test_is_rest_operator(self):
+        from .test_operator import TestOperator
+        user,_ = TestOperator.generate_random_operator()
+        self.assertTrue(user.is_customer)
+
+    def test_is_customer(self):
+        from .test_customer import TestCustomer
+        user,_ = TestCustomer.generate_random_customer()
+        self.assertTrue(user.is_customer)
+

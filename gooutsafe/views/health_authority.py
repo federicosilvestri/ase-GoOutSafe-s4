@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, login_user, logout_user
 from gooutsafe.auth import current_user
 from gooutsafe.dao.customer_manager import CustomerManager
@@ -23,14 +23,15 @@ def search_customer():
         customer_ident = form.data['customer_ident']
         if(track_type == 'SSN'):
             customer = CustomerManager.retrieve_by_ssn(ssn=customer_ident)
-        elif(track_type == 'email'):
+        elif(track_type == 'Email'):
             customer = CustomerManager.retrieve_by_email(email=customer_ident)
+            print(customer.email)
         else:
             customer = CustomerManager.retrieve_by_phone(phone=customer_ident)
-        if(customer is None):
+        if customer is None:
             flash("The customer doesn't exist")
-    pos_customers = CustomerManager.retrieve_all_positive()
-    return render_template('authority_profile.html', form=form, search_customer=customer, pos_customers=pos_customers)
+            return redirect(url_for('auth.authority', id=current_user.id, positive_id=0))
+    return redirect(url_for('auth.authority', id=current_user.id, positive_id=customer.id))
 
 @authority.route('/ha/mark_positive/<customer_id>', methods = ['GET','POST'])
 @login_required

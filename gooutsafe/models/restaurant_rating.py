@@ -1,5 +1,7 @@
 from gooutsafe import db
 from sqlalchemy.orm import relationship
+import datetime
+import timeago
 
 
 class RestaurantRating(db.Model):
@@ -16,6 +18,8 @@ class RestaurantRating(db.Model):
         primary_key=True
     )
 
+    customer = relationship('Customer', back_populates='ratings')
+
     restaurant_id = db.Column(
         db.Integer,
         db.ForeignKey('Restaurant.id'),
@@ -26,6 +30,7 @@ class RestaurantRating(db.Model):
 
     value = db.Column(
         db.SmallInteger,
+        nullable=False
     )
 
     review = db.Column(
@@ -34,6 +39,8 @@ class RestaurantRating(db.Model):
         ),
         nullable=True
     )
+
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, customer_id, restaurant_id, value: int, review=None):
         self.customer_id = customer_id
@@ -58,3 +65,6 @@ class RestaurantRating(db.Model):
     def set_review(self, review):
         RestaurantRating.check_review(review)
         self.review = review
+
+    def get_how_long_ago(self):
+        return timeago.format(datetime.datetime.now(), self.timestamp)

@@ -40,13 +40,17 @@ class ReservationManager(Manager):
         cond2 = db.and_(Reservation.start_time < pos_reservation.end_time, pos_reservation.end_time < Reservation.end_time)
         cond3 = db.or_(cond1,cond2)
         cond4 = db.and_(cond3, Reservation.restaurant_id==pos_reservation.restaurant_id)
-        cond5 = db.and_(cond4, Reservation.user_id!=pos_reservation.user_id) #discard the reservations for the same positive customer
+        cond5 = db.and_(cond4, Reservation.user_id!=pos_reservation.user_id, Reservation.start_time < datetime.today() ) #discard the reservations for the same positive customer
         return Reservation.query.filter(cond5).all()
 
     @staticmethod
     def retrieve_by_table_id(table_id):
         Manager.check_none(table_id=table_id)
         return Reservation.query.filter(Reservation.table_id==table_id).all()
+    @staticmethod
+    def retrieve_reservations_by_user_and_date(user_id, date):
+        pass
+        #TODO
 
     @staticmethod
     def update_reservation(reservation: Reservation):

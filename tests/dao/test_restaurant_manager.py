@@ -53,3 +53,31 @@ class TestRestaurantManager(DaoTest):
         self.customer_manager.create_customer(customer=operator)
         retrieved_restaurant = self.restaurant_manager.retrieve_by_operator_id(operator_id=operator.id)
         self.test_restaurant.assertEqualRestaurants(restaurant, retrieved_restaurant)
+    
+    def test_retrieve_by_menu_type(self):
+        menu_type = 'Italian'
+        for _ in range(0, 10):
+            restaurant, _ = self.test_restaurant.generate_random_restaurant()
+            restaurant.set_menu_type(menu_type)
+            self.restaurant_manager.create_restaurant(restaurant)
+        retrieved_restaurants = self.restaurant_manager.retrieve_by_menu_type(menu_type).all()
+        for res in retrieved_restaurants:
+            self.assertEqual(menu_type, res.menu_type)
+
+    def test_retrieve_by_restaurant_name(self):
+        name = 'Pizza da Musca'
+        restaurant, _ = self.test_restaurant.generate_random_restaurant()
+        restaurant.set_name(name)
+        self.restaurant_manager.create_restaurant(restaurant)
+        retrieved_restaurants = self.restaurant_manager.retrieve_by_restaurant_name(name).all()
+        for res in retrieved_restaurants:
+            self.assertEqual(name, res.name)
+
+    def test_retrieve_by_restaurant_city(self):
+        city = 'Muscacity'
+        restaurant, _ = self.test_restaurant.generate_random_restaurant()
+        restaurant.set_city(city)
+        self.restaurant_manager.create_restaurant(restaurant)
+        retrieved_restaurants = self.restaurant_manager.retrieve_by_restaurant_city(city).all()
+        for res in retrieved_restaurants:
+            self.assertEqual(city, res.city)

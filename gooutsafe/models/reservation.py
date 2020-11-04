@@ -34,8 +34,8 @@ class Reservation(db.Model):
             self.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
         else:
             Reservation.check_time(start_time, end_time)
-            self.end_time = end_time
-
+            self.set_end_time(end_time)
+    
     @staticmethod
     def check_time(start_time, end_time):
         actual_time = datetime.utcnow()

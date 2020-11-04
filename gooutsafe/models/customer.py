@@ -20,6 +20,7 @@ class Customer(User):
     health_status = db.Column(db.Boolean, default=False)
     phone = db.Column(db.String(length=MAX_PHONE_LEN))
     likes = relationship('Like', back_populates='liker')
+    ratings = relationship('RestaurantRating', back_populates='customer')
     last_notification_read_time = db.Column(db.DateTime, default=datetime.utcnow)
 
     __mapper_args__ = {

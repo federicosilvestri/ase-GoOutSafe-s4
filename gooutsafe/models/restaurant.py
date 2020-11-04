@@ -115,3 +115,6 @@ class Restaurant(db.Model):
 
     def set_is_open(self, is_open):
         self.is_open = is_open
+
+    def likes_count(self):
+        return len(self.likes)

@@ -71,6 +71,34 @@ class TestReservation(ModelTest):
 
     # def test_set_start_time(self):
     #     reservation, _ = TestReservation.generate_random_reservation()
-    #     wrong_start_time = TestReservation.faker.date_time_between_dates(reservation.end_time, reservation.end_time + timedelta(weeks=10))
+    #     wrong_start_time = TestReservation.faker.date_time_between('-4y','now')
     #     with self.assertRaises(ValueError):
-    #         reservation.set_start_time(wrong_start_time)
+    #             reservation.set_start_time(wrong_start_time)
+
+    def test_set_table(self):        
+        reservation, _ = TestReservation.generate_random_reservation()
+        table, _  = self.test_table.generate_random_table()
+        reservation.set_table(table)
+        self.test_table.assertEqualTables(table, reservation.table)
+
+    def test_set_restaurant(self):
+        reservation, _ = TestReservation.generate_random_reservation()
+        restaurant, _  = self.test_restaurant.generate_random_restaurant()
+        reservation.set_restaurant(restaurant)
+        self.test_restaurant.assertEqualRestaurants(restaurant, reservation.restaurant)
+
+
+    def test_set_people_number(self):
+        reservation, _ = TestReservation.generate_random_reservation()
+        people_number = self.faker.random_int(min=0, max=reservation.table.capacity)
+        reservation.set_people_number(people_number)
+        self.assertEqual(people_number, reservation.people_number)
+
+    def test_set_end_time(self):
+        reservation, _ = TestReservation.generate_random_reservation()
+        wrong_endtime = self.faker.date_time_between_dates(
+            datetime_start=reservation.start_time - timedelta(days=3), 
+            datetime_end=reservation.start_time
+            )
+        with self.assertRaises(ValueError):
+                reservation.set_end_time(wrong_endtime)
