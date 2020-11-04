@@ -91,3 +91,36 @@ class TestHealthAuthorityTasks(TasksTest):
             self.assertEqual(notification.positive_customer_id, customer.id)
             self.assertEqual(notification.contagion_restaurant_id, restaurant.id)
             self.assertEqual(notification.contagion_datetime, reservation.start_time)
+
+
+    def test_notify_restaurant_owners_about_positive_booked_customer(self):
+        # create positive customer
+        customer, _ = self.test_customer.generate_random_customer()
+        customer.set_health_status(True)
+        self.customer_manager.create_customer(customer=customer)
+        customer_id = customer.id
+        notifications_data = []
+        for _ in range(randint(2, 10)):
+            # create random owners
+            operator, _ = self.test_operator.generate_random_operator()
+            # create random restaurant for each owner
+            restaurant, _ = self.test_restaurant.generate_random_restaurant()
+            self.operator_manager.create_operator(operator=operator)
+            restaurant.owner_id = operator.id
+            self.restaurant_manager.create_restaurant(restaurant=restaurant)
+            # create random reservation for customer in each restaurant
+            reservation, _ = self.test_reservation.generate_random_reservation(user=customer, restaurant=restaurant, start_time_mode='valid_future_contagion_time')
+            self.reservation_manager.create_reservation(reservation=reservation)
+            notifications_data.append((operator.id, restaurant.id, reservation.id))
+        self.health_authority_tasks.notify_restaurant_owners_about_positive_booked_customer(customer)
+        # check if notifications are there
+        customer = self.customer_manager.retrieve_by_id(customer_id)
+        for operator_id, restaurant_id, reservation_id in notifications_data:
+            operator = self.operator_manager.retrieve_by_id(operator_id)
+            restaurant = self.restaurant_manager.retrieve_by_id(restaurant_id)
+            reservation = self.reservation_manager.retrieve_by_id(reservation_id)
+            notification = self.notification_manager.retrieve_by_target_user_id(operator.id)[0]
+            self.assertEqual(notification.target_user_id, operator.id)
+            self.assertEqual(notification.positive_customer_id, customer.id)
+            self.assertEqual(notification.contagion_restaurant_id, restaurant.id)
+            self.assertEqual(notification.contagion_datetime, reservation.start_time)

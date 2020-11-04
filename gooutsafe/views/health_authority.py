@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user
 from gooutsafe.auth import current_user
 from gooutsafe.dao.customer_manager import CustomerManager
@@ -7,8 +7,10 @@ from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.reservation import Reservation
-from gooutsafe.tasks.health_authority_tasks import \
-    schedule_revert_customer_health_status, notify_restaurant_owners_about_positive_past_customer
+from gooutsafe.tasks.health_authority_tasks import (
+    notify_restaurant_owners_about_positive_booked_customer,
+    notify_restaurant_owners_about_positive_past_customer,
+    schedule_revert_customer_health_status)
 
 authority = Blueprint('authority', __name__)
 
@@ -46,6 +48,7 @@ def mark_positive(customer_id):
             CustomerManager.update_customer(customer)
             schedule_revert_customer_health_status(customer)
             notify_restaurant_owners_about_positive_past_customer(customer)
+            notify_restaurant_owners_about_positive_booked_customer(customer)
             flash("Customer set to positive!")
     pos_customers = CustomerManager.retrieve_all_positive()    
     return render_template('authority_profile.html', form=form, pos_customers=pos_customers, search_customer=None)

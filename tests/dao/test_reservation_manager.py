@@ -128,6 +128,22 @@ class TestReservationManager(DaoTest):
         for retrieved, valid in zip(retrieved_reservations, valid_reservations):
             self.test_reservation.assertEqualReservations(valid, retrieved)
 
+    def test_retrieve_by_customer_id_in_future(self):
+        customer, _ = self.test_customer.generate_random_customer()
+        self.customer_manager.create_customer(customer=customer)
+        valid_reservations = []
+        for _ in range(randint(2, 10)):
+            valid_reservation, _ = self.test_reservation.generate_random_reservation(user=customer, start_time_mode='valid_future_contagion_time')
+            self.reservation_manager.create_reservation(reservation=valid_reservation)
+            valid_reservations.append(valid_reservation)
+        for _ in range(randint(2, 10)):
+            invalid_reservation, _ = self.test_reservation.generate_random_reservation(user=customer)
+            invalid_reservation.set_start_time(datetime.utcnow() - timedelta(days=randint(1, 100)))
+            self.reservation_manager.create_reservation(reservation=invalid_reservation)
+        retrieved_reservations = self.reservation_manager.retrieve_by_customer_id_in_future(user_id=customer.id)
+        for retrieved, valid in zip(retrieved_reservations, valid_reservations):
+            self.test_reservation.assertEqualReservations(valid, retrieved)
+
     def test_retrieve_all_contact_reservation_by_id(self):
         from gooutsafe.models.reservation import Reservation
         from gooutsafe.models.table import Table

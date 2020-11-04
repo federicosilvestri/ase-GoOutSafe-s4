@@ -30,3 +30,13 @@ def notify_restaurant_owners_about_positive_past_customer(customer):
         owner = restaurant.owner
         notification = Notification(owner.id, customer.id, restaurant.id, reservation.start_time)
         NotificationManager.create_notification(notification=notification)
+
+
+@celery.task
+def notify_restaurant_owners_about_positive_booked_customer(customer):
+    reservations = ReservationManager.retrieve_by_customer_id_in_future(customer.id)
+    for reservation in reservations:
+        restaurant = reservation.restaurant
+        owner = restaurant.owner
+        notification = Notification(owner.id, customer.id, restaurant.id, reservation.start_time)
+        NotificationManager.create_notification(notification=notification)
