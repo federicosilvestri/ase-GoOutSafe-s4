@@ -1,19 +1,16 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash
-from flask_login import login_required
+from flask import Blueprint, render_template, request, flash
 
-from gooutsafe import db
 from gooutsafe.auth import current_user
-from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.forms.home import HomeForm
 
-
 home = Blueprint('home', __name__)
+
 
 @home.route('/', methods=['GET', 'POST'])
 def index():
     form = HomeForm()
-    restaurants=[]
+    restaurants = []
     tables = []
     if request.method == 'POST':
         if form.is_submitted():
@@ -26,8 +23,9 @@ def index():
                 restaurants = search_by(search_field, search_filter).all()
                 if not restaurants:
                     flash("There aren't restaurants for this search")
-            return render_template("index.html", restaurants = restaurants, form = form, current_user=current_user)
-    return render_template("index.html", form = form, current_user=current_user)
+            return render_template("index.html", restaurants=restaurants, form=form, current_user=current_user)
+    return render_template("index.html", form=form, current_user=current_user)
+
 
 def search_by(search_field, search_filter):
     if search_filter == "Name":

@@ -176,5 +176,5 @@ class TestReservationManager(DaoTest):
         for retrieved_contacted_user, contacted_user in zip(retrieved_contacted_users, contacted_users):
             self.test_user.assertUserEquals(contacted_user, retrieved_contacted_user)
 
-
- 
+    def test_retrieve_by_date_and_time(self):
+        pass

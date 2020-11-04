@@ -8,6 +8,7 @@ from .model_test import ModelTest
 
 class TestRestaurantAvailability(ModelTest):
     faker = Faker()
+    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday']
 
     @classmethod
     def setUpClass(cls):
@@ -38,14 +39,17 @@ class TestRestaurantAvailability(ModelTest):
         :return: a list of a list of availabilities
         """
         from gooutsafe.models.restaurant_availability import RestaurantAvailability
-
+        faker = Faker()
         rest_ava = []
+        week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday']
         for rest in restaurants:
             avas = []
             for _ in range(0, random.randint(1, max_ava)):
                 s, e = TestRestaurantAvailability.generate_correct_random_times()
+                day = week_days[faker.random_int(min=0, max=6)]
                 ava = RestaurantAvailability(
                     rest.id,
+                    day,
                     s,
                     e
                 )
@@ -67,6 +71,7 @@ class TestRestaurantAvailability(ModelTest):
             start_time, end_time = self.generate_correct_random_times()
             _avail = self.availability.RestaurantAvailability(
                 restaurant.id,
+                self.week_days[self.faker.random_int(min=0, max=6)],
                 start_time,
                 end_time
             )
@@ -80,6 +85,7 @@ class TestRestaurantAvailability(ModelTest):
             start_time, end_time = self.generate_correct_random_times()
             _avail = self.availability.RestaurantAvailability(
                 restaurant.id,
+                self.week_days[self.faker.random_int(min=0, max=6)],
                 start_time,
                 end_time
             )
@@ -87,3 +93,18 @@ class TestRestaurantAvailability(ModelTest):
 
             self.assertEqual(start_time, _avail.start_time)
             self.assertEqual(end_time, _avail.end_time)
+    
+    def test_set_day(self):
+        for _ in range(0, 10):
+            restaurant, _ = self.test_restaurant.generate_random_restaurant()
+            start_time, end_time = self.generate_correct_random_times()
+            _avail = self.availability.RestaurantAvailability(
+                restaurant.id,
+                self.week_days[self.faker.random_int(min=0, max=6)],
+                start_time,
+                end_time
+            )
+            day = self.week_days[self.faker.random_int(min=0, max=6)]
+            _avail.set_day(day)
+
+            self.assertEqual(day, _avail.day)

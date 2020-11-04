@@ -9,8 +9,4 @@ class TestHome(ViewTest):
 
     def test_get_home(self):
         rv = self.app.get('/')    
-        self.assertEqual(rv.status_code, 200) 
-    
-    """def test_get_template(self):
-        self.app.get('/')
-        self.assert_template_used("index.html")"""
+        assert rv.status_code == 200

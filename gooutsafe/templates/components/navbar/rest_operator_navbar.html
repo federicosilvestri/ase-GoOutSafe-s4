@@ -1,4 +1,5 @@
 {% extends "components/navbar/base_navbar.html" %}
+<<<<<<< HEAD
 {% block navbar_content %}
     <nav class="navbar navbar-light bg-light">
         <a class="navbar-brand" href="/"></a>
@@ -31,4 +32,21 @@
             </li>
         </ul>
     </nav>
+=======
+{% block navbar_links %}
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('restaurants.my_restaurant') }}">My Restaurant</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('reservation.my_reservations') }}">My Reservations</a>
+        </li>
+    </ul>
+{% endblock %}
+{% block navbar_profile_links %}
+    <div class="btn-group">
+        <a class="btn btn-warning" href="{{ url_for('auth.logout') }}">Logout</a>
+        <a class="btn btn-info" href="{{ url_for('auth.my_operator') }}">My Profile</a>
+    </div>
+>>>>>>> d60944e6d19eae54d1aa9d949bbfa12e6d695bcc
 {% endblock %}

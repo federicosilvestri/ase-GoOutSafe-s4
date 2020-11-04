@@ -5,10 +5,12 @@ from gooutsafe import db
 from gooutsafe.dao.restaurant_availability_manager import RestaurantAvailabilityManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.table_manager import TableManager
+
 from gooutsafe.forms.add_measure import MeasureForm
 from gooutsafe.forms.add_table import TableForm
 from gooutsafe.forms.add_times import TimesForm
 from gooutsafe.forms.restaurant import RestaurantForm
+
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.models.restaurant_availability import RestaurantAvailability
 from gooutsafe.models.restaurant_rating import RestaurantRating
@@ -19,6 +21,11 @@ from gooutsafe.models.table import Table
 restaurants = Blueprint('restaurants', __name__)
 
 
+@restaurants.route('/my_restaurant')
+def my_restaurant():
+    return details(current_user.id)
+
+
 @restaurants.route('/restaurants')
 def _restaurants(message=''):
     all_restaurants = db.session.query(Restaurant)
@@ -26,7 +33,6 @@ def _restaurants(message=''):
 
 
 @restaurants.route('/restaurants/<restaurant_id>')
-@login_required
 def restaurant_sheet(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)
     list_measure = restaurant.measures.split(',')
@@ -114,11 +120,12 @@ def save_time(id_op, rest_id):
 
     if request.method == "POST":
         if time_form.is_submitted():
+            day = time_form.data['day']
             start_time = time_form.data['start_time']
             end_time = time_form.data['end_time']
 
             if end_time > start_time:
-                time = RestaurantAvailability(rest_id, start_time, end_time)
+                time = RestaurantAvailability(rest_id, day, start_time, end_time)
                 RestaurantAvailabilityManager.create_availability(time)
 
     return redirect(url_for('restaurants.details', id_op=id_op))

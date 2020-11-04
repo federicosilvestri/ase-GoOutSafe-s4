@@ -85,7 +85,7 @@
                     <tbody>
                     {% for opening in restaurant.availabilities %}
                         <tr>
-                            <td>{# opening.day #}</td>
+                            <td>{{ opening.day }}</td>
                             <td>{{ opening.start_time }}-{{ opening.end_time }}</td>
                         </tr>
                     {% endfor %}
@@ -174,5 +174,6 @@
             {% endif %}
         </div>
     </div>
-    {% block footer %}{% endblock %}
+    {% endblock %}
+{% block footer %}
 {% endblock %}

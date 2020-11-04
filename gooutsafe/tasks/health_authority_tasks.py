@@ -9,8 +9,7 @@ from gooutsafe.models.notification import Notification
 
 def schedule_revert_customer_health_status(customer_id, eta=None):
     if not eta:
-        # eta = datetime.utcnow() + timedelta(days=14)
-        eta = datetime.utcnow()# + timedelta(days=14)
+        eta = datetime.utcnow() + timedelta(days=14)
     revert_customer_health_status.apply_async(kwargs={"customer_id": customer_id}, eta=eta)
 
 @celery.task
