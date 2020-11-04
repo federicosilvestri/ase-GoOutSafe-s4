@@ -8,5 +8,6 @@ import datetime
 
 
 class FilterForm(FlaskForm):
-
     filter_date = DateField('Filter Date')
+    start_time = TimeField('Start Time')
+    end_time = TimeField('End Time')

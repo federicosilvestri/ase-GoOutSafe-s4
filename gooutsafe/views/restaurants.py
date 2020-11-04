@@ -5,10 +5,13 @@ from gooutsafe import db
 from gooutsafe.dao.restaurant_availability_manager import RestaurantAvailabilityManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.table_manager import TableManager
+
 from gooutsafe.forms.add_measure import MeasureForm
 from gooutsafe.forms.add_table import TableForm
 from gooutsafe.forms.add_times import TimesForm
 from gooutsafe.forms.restaurant import RestaurantForm
+from gooutsafe.forms.filter_form import FilterForm
+
 from gooutsafe.models.restaurant import Restaurant
 from gooutsafe.models.restaurant_availability import RestaurantAvailability
 from gooutsafe.models.restaurant_rating import RestaurantRating
@@ -166,3 +169,10 @@ def edit_restaurant(id_op, rest_id):
             return redirect(url_for('auth.operator', id=id_op))
 
     return render_template('update_restaurant.html', form=form)
+
+
+@restaurants.route('/show_people/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+@login_required
+def show_people(id_op, rest_id):
+    form = FilterForm()
+    return redirect(url_for('auth.operator', id=id_op))
