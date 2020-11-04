@@ -11,7 +11,8 @@ design pattern to be used when you write test cases.
 import unittest
 
 class TestMyClass(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         from gooutsafe import create_app
         create_app('config.TestConfig')
 
@@ -21,14 +22,12 @@ class TestMyClass(unittest.TestCase):
             and set it as class properties
         '''
         from gooutsafe.models import restaurant
-        self.restaurant = restaurant
+        cls.restaurant = restaurant
 
     def test_restaurant(self):
         rest = self.restaurant.Restaurant()
         # test it
 ``` 
 
-In this way we fix the issue by
-executing the Flask initialization code in the setUp method, that is executed before all
-test cases execution.
+In this way we fix the issue by executing the Flask initialization code in the setUpClass method, that is executed once before the execution of the tests in the class.
 

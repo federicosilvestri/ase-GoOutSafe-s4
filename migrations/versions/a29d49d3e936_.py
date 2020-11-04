@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: d74f39afe2dd
+Revision ID: a29d49d3e936
 Revises: 
-Create Date: 2020-11-02 18:42:06.058154
+Create Date: 2020-11-04 01:29:39.129670
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd74f39afe2dd'
+revision = 'a29d49d3e936'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,6 +46,7 @@ def upgrade():
     sa.Column('social_number', sa.Unicode(length=16), nullable=True),
     sa.Column('health_status', sa.Boolean(), nullable=True),
     sa.Column('phone', sa.String(length=25), nullable=True),
+    sa.Column('last_notification_read_time', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['id'], ['User.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -76,6 +77,18 @@ def upgrade():
     sa.ForeignKeyConstraint(['liker_id'], ['Customer.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['restaurant_id'], ['Restaurant.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('liker_id', 'restaurant_id')
+    )
+    op.create_table('Notification',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('target_user_id', sa.Integer(), nullable=True),
+    sa.Column('positive_customer_id', sa.Integer(), nullable=True),
+    sa.Column('contagion_restaurant_id', sa.Integer(), nullable=True),
+    sa.Column('contagion_datetime', sa.DateTime(), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['contagion_restaurant_id'], ['Restaurant.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['positive_customer_id'], ['Customer.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['target_user_id'], ['User.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('RestaurantAvailability',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -124,6 +137,7 @@ def downgrade():
     op.drop_table('Table')
     op.drop_table('RestaurantRating')
     op.drop_table('RestaurantAvailability')
+    op.drop_table('Notification')
     op.drop_table('Like')
     op.drop_table('Restaurant')
     op.drop_table('Operator')
