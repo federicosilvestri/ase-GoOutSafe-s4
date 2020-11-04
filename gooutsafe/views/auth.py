@@ -24,7 +24,9 @@ def login(re=False):
         email, password = form.data['email'], form.data['password']
         user = UserManager.retrieve_by_email(email)
 
-        if user is not None and user.authenticate(password):
+        if user is None:
+            flash('The user does not exist!')
+        elif user.authenticate(password) is True:
             login_user(user)
             if user.type == 'operator':
                 return redirect('/operator/%d' % user.id)
@@ -33,7 +35,7 @@ def login(re=False):
             else:
                 return redirect('/authority/%d/0' % user.id)
         else:
-            flash('Invalid credentials')
+            flash('Invalid password')
 
     return render_template('login.html', form=form, re_login=re)
 

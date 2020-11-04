@@ -1,16 +1,8 @@
 {% extends "components/navbar/base_navbar.html" %}
-{% block navbar_content %}
-    <nav class="navbar navbar-light bg-light">
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <a type="button" class="btn btn-outline-primary"
-                        href="{{ url_for('users.create_user_type', type='customer') }}">Sign up
-                </a>
-
-                <a type="button" class="btn btn-outline-success"
-                        href="{{ url_for('auth.login') }}">Login
-                </a>
-            </li>
-        </ul>
-    </nav>
+{% block navbar_links %}{# no content #}{% endblock %}
+{% block navbar_profile_links %}
+    <div class="btn-group">
+        <a class="btn btn-info" href="{{ url_for('auth.login') }}">Login</a>
+        <a class="btn btn-success" href="{{ url_for('users.create_user_type', type_="customer") }}">Sign Up</a>
+    </div>
 {% endblock %}
