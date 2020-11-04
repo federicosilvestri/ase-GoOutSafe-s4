@@ -1,13 +1,14 @@
 from sqlalchemy.orm import relationship
-from enum import Enum
+
 from gooutsafe import db
+
 
 class RestaurantAvailability(db.Model):
     __tablename__ = 'RestaurantAvailability'
 
-    MAX_DAY_LENGTH = 10    
+    MAX_DAY_LENGTH = 10
 
-    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday']
+    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     start_time = db.Column(db.Time)
@@ -26,10 +27,9 @@ class RestaurantAvailability(db.Model):
         self.start_time = start_time
         self.end_time = end_time
 
-
     def set_day(self, day):
         day = day.title()
         if day in self.week_days:
             self.day = day
         else:
-            raise('The string must be one of the week days')
+            raise ('The string must be one of the week days')

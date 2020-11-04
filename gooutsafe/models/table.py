@@ -20,8 +20,8 @@ class Table(db.Model):
 
     def set_capacity(self, capacity):
         if capacity < self.MIN_TABLE_CAPACITY or capacity > self.MAX_TABLE_CAPACITY:
-            raise ValueError('You can\'t set a negative value, zero or greater than ' 
-        + str(self.MAX_TABLE_CAPACITY))
+            raise ValueError('You can\'t set a negative value, zero or greater than '
+                             + str(self.MAX_TABLE_CAPACITY))
         self.capacity = capacity
 
     def set_restaurant(self, restaurant):

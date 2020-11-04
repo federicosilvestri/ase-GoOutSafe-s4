@@ -2,6 +2,7 @@ import wtforms as f
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import DateField, EmailField, TelField
 from wtforms.validators import DataRequired, Email
+
 from gooutsafe.validators.age import AgeValidator
 
 
