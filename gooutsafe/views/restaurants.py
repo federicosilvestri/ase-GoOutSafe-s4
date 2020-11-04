@@ -12,11 +12,13 @@ from gooutsafe.forms.add_times import TimesForm
 from gooutsafe.forms.restaurant import RestaurantForm
 
 from gooutsafe.models.restaurant import Restaurant
+from gooutsafe.models.restaurant import geolocator
 from gooutsafe.models.restaurant_availability import RestaurantAvailability
 from gooutsafe.models.restaurant_rating import RestaurantRating
 from gooutsafe.dao.restaurant_rating_manager import RestaurantRatingManager
 from gooutsafe.dao.like_manager import LikeManager
 from gooutsafe.models.table import Table
+
 
 restaurants = Blueprint('restaurants', __name__)
 
@@ -62,7 +64,14 @@ def add(id_op):
             city = form.data['city']
             phone = form.data['phone']
             menu_type = form.data['menu_type']
-            restaurant = Restaurant(name, address, city, 0, 0, phone, menu_type)
+            location = geolocator.geocode(address+" "+city)
+            #assigned zero if the location is not valid
+            lat = 0
+            lon = 0
+            if location is not None:
+                lat = location.latitude
+                lon = location.longitude
+            restaurant = Restaurant(name, address, city, lat , lon , phone, menu_type)
             restaurant.owner_id = id_op
 
             RestaurantManager.create_restaurant(restaurant)

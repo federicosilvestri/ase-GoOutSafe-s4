@@ -37,7 +37,7 @@ def search_customer():
     else:
         return redirect(url_for('home.index'))
 
-@authority.route('/ha/mark_positive/<customer_id>', methods = ['GET','POST'])
+@authority.route('/ha/mark_positive/<int:customer_id>', methods = ['GET','POST'])
 @login_required
 def mark_positive(customer_id):
     #only health authority can mark a customer as positive
