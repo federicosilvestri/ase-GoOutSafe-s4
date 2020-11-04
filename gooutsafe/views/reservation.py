@@ -110,12 +110,16 @@ def check_rest_ava(restaurant, start_datetime, end_datetime):
         [Boolean]: True if the restaurant is open or False if the restaurant is close
     """
     availabilities = restaurant.availabilities
+    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday']
     for ava in availabilities:
         print(ava.start_time)
         print(ava.end_time)
-        if check_time_interval(start_datetime.time(), end_datetime.time(), ava.start_time, ava.end_time):
-            return True
-        print('RISTORANTE CHIUSO')
+        ava_day = ava.day
+        res_day = week_days[start_datetime.weekday()]
+        if ava_day == res_day:
+            if check_time_interval(start_datetime.time(), end_datetime.time(), ava.start_time, ava.end_time):
+                return True
+            print('RISTORANTE CHIUSO')
     return False
 
         

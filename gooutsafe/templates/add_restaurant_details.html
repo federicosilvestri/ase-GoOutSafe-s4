@@ -79,7 +79,7 @@
     <ul>
         <h5> Opening hours </h5>
         {% for t in times %}
-            <li> Start time: {{ t.start_time}} -- End time: {{ t.end_time }} </li>
+            <li> Day: {{ t.day }} -- Start time: {{ t.start_time}} -- End time: {{ t.end_time }} </li>
         {% endfor %}
     </ul>
     
@@ -108,6 +108,8 @@
 
                 {{ time_form.hidden_tag() }}
                 <dl>
+                            <dt>{{ time_form.day.label}}</dt>
+                            <dd>{{ time_form.day }}</dd>
                         {% for field in time_form.display %}
                             <dt>{{ time_form[field].label }}</dt>
                             <dd>{{ time_form[field]() }}</dd>
