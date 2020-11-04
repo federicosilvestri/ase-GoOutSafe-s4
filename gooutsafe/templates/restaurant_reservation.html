@@ -4,11 +4,37 @@
 
 {% block content %}
     <br>
-    <h3> {{ restaurant.name }} </h3> <br>
+    <h3> {{ restaurant.name }} </h3><br>
     <h5> All your reservations </h5><br>
 
-    <table class="table">
+    <form action="{{ url_for('reservation.reservation_all', restaurant_id=restaurant.id ) }}" 
+      method="POST">
+        {{ filter_form.hidden_tag() }}
+        <table class="table">
+          <dl>
+            <tr>
+              {% for field in filter_form.display %}
+              <td> <dt>{{ filter_form[field].label }}</dt></td>
+              <td> <dd>{{ filter_form[field]() }}</dd></td>                     
+                  {% if filter_form[field].errors %}
+                      {% for e in filter_form[field].errors %}
+                          <p class="help-block">{{ e }}</p>
+                      {% endfor %}
+                  {% endif %}
+              {% endfor %}
+            </tr>
+            <tr>
+                <td>
+                <input type=submit value="Search">
+                </td>
+            </tr>
+          </dl>
+          <p>
+          </table>       
+      </form>
 
+    <h5>Total People: {{ people }}</h5><br>
+    <table class="table">
         {% for r in reservations %}
         <tr>
             <td>

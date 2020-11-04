@@ -1,6 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
-from flask_login import (logout_user, login_user, login_required)
-from werkzeug.security import generate_password_hash
+from flask_login import (login_user, login_required)
 
 from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
@@ -11,16 +10,14 @@ from gooutsafe.forms.update_customer import UpdateCustomerForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.operator import Operator
 
-from datetime import date
 
 users = Blueprint('users', __name__)
 
 
-
-@users.route('/create_user/<string:type>', methods=['GET', 'POST'])
-def create_user_type(type):
+@users.route('/create_user/<string:type_>', methods=['GET', 'POST'])
+def create_user_type(type_):
     form = LoginForm()
-    if type == "customer":
+    if type_ == "customer":
         form = UserForm()
         user = Customer()   
     else:
@@ -35,7 +32,7 @@ def create_user_type(type):
                 return render_template('create_user.html', form=form)
                 
             form.populate_obj(user)
-            user.set_password(generate_password_hash(form.password.data))
+            user.set_password(form.password.data)
 
             UserManager.create_user(user)
 
@@ -47,7 +44,7 @@ def create_user_type(type):
             else:
                 return redirect(url_for('auth.profile', id=user.id))
 
-    return render_template('create_user.html', form=form)
+    return render_template('create_user.html', form=form, user_type=type_)
 
 
 @users.route('/delete_user/<int:id_>', methods=['GET', 'POST'])

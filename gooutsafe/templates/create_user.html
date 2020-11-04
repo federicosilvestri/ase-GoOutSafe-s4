@@ -1,27 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %} Create new User {% endblock %}
+{% block title %} Sign up {% endblock %}
 
 {% block content %}
-    <ul class="nav" id="pills-tab" role="tablist">
+    <div class="row">
+        <div class="col-md-12">
+            {% if user_type == 'customer' %}
+                <p class="lead">Are you a restaurant operator? <a
+                        href="{{ url_for('users.create_user_type', type_='operator') }}">Switch the form</a></p>
+            {% else %}
+                <p class="lead">Are you a simple customer? <a
+                        href="{{ url_for('users.create_user_type', type_='customer') }}">Switch the form</a></p>
+            {% endif %}
+        </div>
+    </div>
 
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="pills-customer-tab" data-toggle="pill"
-               onclick="location.href='/create_user/customer'"
-               role="tab" aria-controls="pills-home" aria-selected="true">Customer</a>
-        </li>
-
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="pills-operator-tab" data-toggle="pill"
-               onclick="location.href='/create_user/operator'"
-               role="tab" aria-controls="pills-profile" aria-selected="false">Restaurant Operator</a>
-        </li>
-    </ul>
-
-    <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-customer" role="tabpanel"
-             aria-labelledby="pills-customer-tab">
-
+    <div class="row">
+        <div class="col-md-12">
             <form action="" method="POST">
                 {{ form.hidden_tag() }}
                 <dl>
