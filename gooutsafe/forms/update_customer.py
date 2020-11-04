@@ -5,7 +5,6 @@ from wtforms.validators import DataRequired
 
 
 class UpdateCustomerForm(FlaskForm):
-
     email = EmailField(
         'email',
         validators=[DataRequired()]

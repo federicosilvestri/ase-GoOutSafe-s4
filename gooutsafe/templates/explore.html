@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="display-5 text-info">Your search</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Menu Type</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for r in restaurants %}
+                    <tr>
+                        <th scope="row">{{ r.id }}</th>
+                        <td><a href="{{ url_for('restaurants.restaurant_sheet', restaurant_id=r.id) }}">{{ r.name }}</a>
+                        </td>
+                        <td>{{ r.city }}</td>
+                        <td>{{ r.menu_type }}</td>
+                        <td>
+                            {% if r.tables|length and r.availabilities|length and current_user.type == "customer" %}
+                                {% if current_user.health_status %}
+                                    <a type="button" class="btn btn-danger disabled">
+                                        You can't book
+                                    </a>
+                                {% else %}
+                                    <a type="button" class="btn btn-primary active"
+                                       href="{{ url_for('reservation.create_reservation', restaurant_id=r.id) }}">
+                                        Book a Table
+                                    </a>
+                                {% endif %}
+
+                            {% else %}
+                                <a type="button" class="btn btn-warning disabled">
+                                    Sorry :(
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+{% endblock %}

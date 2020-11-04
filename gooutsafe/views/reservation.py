@@ -5,7 +5,7 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import login_required
 
 # from flask_user import roles_required
-from gooutsafe.auth import current_user
+from flask_login import current_user
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
@@ -61,7 +61,7 @@ def validate_reservation(restaurant, start_datetime, people_number):
     if check_rest_ava(restaurant, start_datetime, end_datetime):
         print('RISTORANTE APERTO')
         tables = TableManager.retrieve_by_restaurant_id(restaurant.id).order_by(Table.capacity)
-        reservation_table = None
+
         for table in tables:
             print('RICERCA TAVOLO')
             if table.capacity >= people_number:
@@ -109,7 +109,7 @@ def check_rest_ava(restaurant, start_datetime, end_datetime):
         [Boolean]: True if the restaurant is open or False if the restaurant is close
     """
     availabilities = restaurant.availabilities
-    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday']
+    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     for ava in availabilities:
         print(ava.start_time)
         print(ava.end_time)
@@ -252,4 +252,9 @@ def edit_reservation(reservation_id, customer_id):
 @reservation.route('/my_reservations')
 def my_reservations():
     restaurant = RestaurantManager.retrieve_by_operator_id(current_user.id)
+
+    if restaurant is None:
+        from gooutsafe.views.restaurants import add
+        return add(current_user.id)
+
     return reservation_all(restaurant.id)

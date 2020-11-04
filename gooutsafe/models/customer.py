@@ -1,11 +1,12 @@
+from datetime import datetime
+
+from sqlalchemy.orm import relationship
+
 from gooutsafe import db
 from .user import User
-from sqlalchemy.orm import relationship
-from datetime import datetime
 
 
 class Customer(User):
-
     SOCIAL_CODE_LENGTH = 16
 
     __tablename__ = 'Customer'
@@ -30,12 +31,12 @@ class Customer(User):
     def __init__(self, *args, **kw):
         super(Customer, self).__init__(*args, **kw)
         self._authenticated = False
-    
+
     @staticmethod
     def check_phone_number(phone):
         if len(phone) > Customer.MAX_PHONE_LEN or len(phone) <= 0:
             raise ValueError("Invalid phone number")
-    
+
     def set_phone(self, phone):
         Customer.check_phone_number(phone)
         self.phone = phone
@@ -51,7 +52,7 @@ class Customer(User):
 
     def set_health_status(self, status):
         self.health_status = status
-    
+
     @staticmethod
     def check_social_number(social_number):
         if len(social_number) != Customer.SOCIAL_CODE_LENGTH:
@@ -60,6 +61,6 @@ class Customer(User):
     def set_social_number(self, social_number):
         Customer.check_social_number(social_number)
         self.social_number = social_number
-    
+
     def set_last_notification_read_time(self, read_time):
         self.last_notification_read_time = read_time

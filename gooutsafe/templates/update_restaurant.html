@@ -1,28 +1,28 @@
 {% extends "base.html" %}
+{% from 'bootstrap/wtf.html' import form_field %}
 
-{% block title %} Edit Customer {% endblock %}
+{% block title %} Edit your restaurant {% endblock %}
 
 {% block content %}
-    <br>
-    <h4> Make your changes </h4><br>
+    <div class="row">
+        <div class="col-md-8">
+            <h4> Make your changes </h4>
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
 
-    <form action="" method="POST">
-        {{ form.hidden_tag() }}
-            <dl>
-            {% for field in form.display %}
-                <dt>{{ form[field].label }}</dt>
-                <dd>{{ form[field]() }}</dd>
-                {% if form[field].errors %}
-                    {% for e in form[field].errors %}
-                        <p class="help-block">{{ e }}</p>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-
-        </dl>
-        <p>
-        <input type="submit" value="Save">
-    </form>
+                {% for field in form.display %}
+                    {{ form_field(form[field]) }}
+                {% endfor %}
+                <input type="submit" value="Update" class="btn btn-primary">
+                <button class="btn btn-secondary" onclick="history.back()">Cancel</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <p class="text-center text-primary">
+                Take your time...
+            </p>
+        </div>
+    </div>
 
 {% endblock %}
 

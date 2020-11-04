@@ -2,13 +2,15 @@ import wtforms as f
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import DateField, EmailField, TelField
 from wtforms.validators import DataRequired, Email
+
 from gooutsafe.validators.age import AgeValidator
 
 
 class UserForm(FlaskForm):
     social_number = f.StringField(
         'Social Number',
-        validators=[DataRequired()]
+        validators=[DataRequired()],
+
     )
 
     email = EmailField(

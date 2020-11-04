@@ -1,6 +1,7 @@
+from sqlalchemy.orm import relationship
+
 from gooutsafe import db
 from .user import User
-from sqlalchemy.orm import relationship
 
 
 class Operator(User):
@@ -16,6 +17,6 @@ class Operator(User):
     def __init__(self, *args, **kw):
         super(Operator, self).__init__(*args, **kw)
         self._authenticated = False
-        
+
     def set_restaurant(self, restaurant):
         self.restaurant = restaurant

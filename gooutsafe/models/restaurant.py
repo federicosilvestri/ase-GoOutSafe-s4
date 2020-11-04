@@ -2,6 +2,9 @@ from sqlalchemy.orm import relationship
 
 from gooutsafe import db
 
+from geopy.geocoders import Nominatim
+geolocator = Nominatim(user_agent="ASE-GOOUTSAFE-S4")
+
 
 class Restaurant(db.Model):
     __tablename__ = 'Restaurant'
@@ -85,10 +88,27 @@ class Restaurant(db.Model):
     def set_address(self, address):
         Restaurant.check_string_attribute(address)
         self.address = address
+        location = geolocator.geocode(address+" "+self.city)
+        lat = 0
+        lon = 0
+        if location is not None:
+            lat = location.latitude
+            lon = location.longitude
+        self.set_lat(lat)
+        self.set_lon(lon)
+            
 
     def set_city(self, city):
         Restaurant.check_string_attribute(city)
         self.city = city
+        location = geolocator.geocode(self.address+" "+city)
+        lat = 0
+        lon = 0
+        if location is not None:
+            lat = location.latitude
+            lon = location.longitude
+        self.set_lat(lat)
+        self.set_lon(lon)
 
     def set_lat(self, lat):
         if self.MIN_LAT <= lat <= self.MAX_LAT:

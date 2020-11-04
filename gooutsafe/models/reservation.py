@@ -1,5 +1,6 @@
-from datetime import timedelta
 from datetime import datetime
+from datetime import timedelta
+
 from sqlalchemy.orm import relationship
 
 from gooutsafe import db
@@ -35,7 +36,7 @@ class Reservation(db.Model):
         else:
             Reservation.check_time(start_time, end_time)
             self.set_end_time(end_time)
-    
+
     @staticmethod
     def check_time(start_time, end_time):
         actual_time = datetime.utcnow()
@@ -50,7 +51,7 @@ class Reservation(db.Model):
 
     def set_table(self, table):
         self.table = table
-    
+
     def set_restaurant(self, restaurant):
         self.restaurant = restaurant
 
@@ -60,7 +61,7 @@ class Reservation(db.Model):
     def set_start_time(self, start_time):
         self.start_time = start_time
         self.set_end_time(start_time + timedelta(hours=self.MAX_TIME_RESERVATION))
-    
+
     def set_end_time(self, end_time):
         Reservation.check_time(self.start_time, end_time)
         self.end_time = end_time

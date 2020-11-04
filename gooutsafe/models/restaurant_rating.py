@@ -1,7 +1,9 @@
-from gooutsafe import db
-from sqlalchemy.orm import relationship
 import datetime
+
 import timeago
+from sqlalchemy.orm import relationship
+
+from gooutsafe import db
 
 
 class RestaurantRating(db.Model):
