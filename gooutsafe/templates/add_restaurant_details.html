@@ -26,80 +26,50 @@
                         {% for t in tables %}
                             <li> {{ t.id }} -- Max capacity: {{ t.capacity }} </li>
                         {% endfor %}
-                </dl>
-                <p>
-                    <input type=submit value="Publish">
-            </form>
-        </div>
-      </div>
-      </div>
-    </div>
-        </td>
+                    </ul>
 
-    <p>
-        <td>
-    <!-- General sheet of the availabilities -->
-    <ul>
-        <h5> Opening hours </h5>
-        {% for t in times %}
-            <li> Day: {{ t.day }} -- Start time: {{ t.start_time}} -- End time: {{ t.end_time }} </li>
-        {% endfor %}
-    </ul>
-    
-    <!-- Button add times trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" 
-            data-target="#addTimes">
-        Add times
-    </button>
-  
-    <!-- Modal add table -->
-    <div class="modal fade" id="addTimes" tabindex="-1" 
-        aria-labelledby="addTimes" aria-hidden="true">
-        
-       <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addTable">Add time</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+                    <!-- Button add table trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#addTable">
+                        Add a table
+                    </button>
 
-        <div class="modal-body">
-            <form action="{{ url_for('restaurants.save_time', id_op=current_user.id, rest_id=restaurant.id) }}"
-                method="POST">
+                    <!-- Modal add table -->
+                    <div class="modal fade" id="addTable" tabindex="-1"
+                         aria-labelledby="addTable" aria-hidden="true">
 
-                {{ time_form.hidden_tag() }}
-                <dl>
-                            <dt>{{ time_form.day.label}}</dt>
-                            <dd>{{ time_form.day }}</dd>
-                        {% for field in time_form.display %}
-                            <dt>{{ time_form[field].label }}</dt>
-                            <dd>{{ time_form[field]() }}</dd>
-                            {% if time_form[field].errors %}
-                                {% for e in time_form[field].errors %}
-                                    <p class="help-block">{{ e }}</p>
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                </dl>
-                <p>
-                    <input type=submit value="Publish">
-            </form>
-        </div>
-      </div>
-      </div>
-    </div>
-    </td>
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addTable">Add a table</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
 
-        <td>
-        <!-- General sheet of the measures -->
-        <ul>
-        <h5> Precaution measures </h5>
-            {% for m in list_measure %}
-            <li> {{ m }} </li>
-            {% endfor %}
-        </ul>
+                                <div class="modal-body">
+                                    <form action="{{ url_for('restaurants.save_details', id_op=current_user.id, rest_id=restaurant.id) }}"
+                                          method="POST">
+                                        {{ table_form.hidden_tag() }}
+                                        <dl>
+                                            {% for field in table_form.display %}
+                                                <dt>{{ table_form[field].label }}</dt>
+                                                <dd>{{ table_form[field]() }}</dd>
+                                                {% if table_form[field].errors %}
+                                                    {% for e in table_form[field].errors %}
+                                                        <p class="help-block">{{ e }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </dl>
+                                        <p>
+                                            <input type=submit value="Publish">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
 
                 <p>
                     <td>
@@ -117,7 +87,7 @@
                     Add times
                 </button>
 
-                <!-- Modal add table -->
+                <!-- Modal add times -->
                 <div class="modal fade" id="addTimes" tabindex="-1"
                         aria-labelledby="addTimes" aria-hidden="true">
 
@@ -136,6 +106,8 @@
 
                             {{ time_form.hidden_tag() }}
                                 <dl>
+                                <dt>{{ time_form.day.label}}</dt>
+                                <dd>{{ time_form.day }}</dd>
                             {% for field in time_form.display %}
                                 <dt>{{ time_form[field].label }}</dt>
                                 <dd>{{ time_form[field]() }}</dd>
