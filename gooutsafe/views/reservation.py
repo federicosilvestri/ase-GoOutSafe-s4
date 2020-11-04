@@ -1,32 +1,28 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash
-from flask_login import login_required
-#from flask_user import roles_required
-from gooutsafe import db
-from gooutsafe.auth import current_user
-
-from gooutsafe.models.restaurant import Restaurant
-from gooutsafe.models.reservation import Reservation
-from gooutsafe.models.restaurant_availability import RestaurantAvailability
-from gooutsafe.models.table import Table
-
-from gooutsafe.dao.reservation_manager import ReservationManager
-from gooutsafe.dao.restaurant_manager import RestaurantManager
-from gooutsafe.dao.customer_manager import CustomerManager
-from gooutsafe.dao.table_manager import TableManager
-
-from gooutsafe.forms.reservation import ReservationForm
-from gooutsafe.forms.filter_form import FilterForm
-
-from datetime import time
 from datetime import datetime
 from datetime import timedelta
 
+from flask import Blueprint, redirect, render_template, request, url_for, flash
+from flask_login import login_required
+
+# from flask_user import roles_required
+from gooutsafe.auth import current_user
+from gooutsafe.dao.customer_manager import CustomerManager
+from gooutsafe.dao.reservation_manager import ReservationManager
+from gooutsafe.dao.restaurant_manager import RestaurantManager
+from gooutsafe.dao.table_manager import TableManager
+from gooutsafe.forms.filter_form import FilterForm
+from gooutsafe.forms.reservation import ReservationForm
+from gooutsafe.models.reservation import Reservation
+from gooutsafe.models.restaurant import Restaurant
+from gooutsafe.models.table import Table
+
 reservation = Blueprint('reservation', __name__)
 
-#TODO: only customer can create a new reservation
+
+# TODO: only customer can create a new reservation
 @reservation.route('/create_reservation/<restaurant_id>', methods=['GET', 'POST'])
 @login_required
-#@roles_required('customer')
+# @roles_required('customer')
 def create_reservation(restaurant_id):
     form = ReservationForm()
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
@@ -41,7 +37,7 @@ def create_reservation(restaurant_id):
                 reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
                 ReservationManager.create_reservation(reservation)
                 return redirect(url_for('reservation.reservation_details',
-                    restaurant_id=restaurant_id, reservation_id=reservation.id)) 
+                                        restaurant_id=restaurant_id, reservation_id=reservation.id))
             else:
                 flash("There aren't free tables for that hour or the restaurant is close")
     return render_template('create_reservation.html', restaurant=restaurant, form=form)
@@ -79,7 +75,8 @@ def validate_reservation(restaurant, start_datetime, people_number):
                         print(old_end_datetime)
                         if start_datetime.date() == old_start_datetime.date():
                             print('OVERLAP DATA\n')
-                            if check_time_interval(start_datetime.time(), end_datetime.time(), old_start_datetime.time(), old_end_datetime.time()):
+                            if check_time_interval(start_datetime.time(), end_datetime.time(),
+                                                   old_start_datetime.time(), old_end_datetime.time()):
                                 print('OVERLAP PRENOTAZIONI')
                                 pass
                             else:
@@ -95,6 +92,7 @@ def validate_reservation(restaurant, start_datetime, people_number):
                 print('NON CI SONO TAVOLI DISPONIBILE')
                 return False
     return False
+
 
 def check_rest_ava(restaurant, start_datetime, end_datetime):
     """
@@ -117,7 +115,7 @@ def check_rest_ava(restaurant, start_datetime, end_datetime):
         print('RISTORANTE CHIUSO')
     return False
 
-        
+
 def check_time_interval(start_time1, end_time1, start_time2, end_time2):
     """
     This method check if start_time1 and end_time1 overlap
@@ -139,12 +137,12 @@ def check_time_interval(start_time1, end_time1, start_time2, end_time2):
         print('***OVERLAP 2***')
         return True
     return False
-    
+
 
 @reservation.route('/delete/<int:id>/<restaurant_id>')
 def delete_reservation(id, restaurant_id):
     ReservationManager.delete_reservation_by_id(id)
-    return redirect (url_for('reservation.reservation_all', restaurant_id=restaurant.id))
+    return redirect(url_for('reservation.reservation_all', restaurant_id=restaurant.id))
 
 
 @reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
@@ -153,10 +151,10 @@ def reservation_details(restaurant_id, reservation_id):
     user = CustomerManager.retrieve_by_id(reservation.user.id)
     table = reservation.table
     restaurant = reservation.restaurant
-    return render_template("reservation_details.html", reservation = reservation, 
-        user = user, table = table, restaurant = restaurant)
+    return render_template("reservation_details.html", reservation=reservation,
+                           user=user, table=table, restaurant=restaurant)
 
-    
+
 @reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
 def reservation_all(restaurant_id):
     """Returns the whole list of reservations, given a restaurant.
@@ -171,9 +169,9 @@ def reservation_all(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
     people = 0
     for r in reservations:
-        people = people + r.people_number        
-    
-    if request.method == 'POST': 
+        people = people + r.people_number
+
+    if request.method == 'POST':
         if filter_form.is_submitted():
             filter_date = filter_form.data['filter_date']
             start_time = filter_form.data['start_time']
@@ -189,17 +187,17 @@ def reservation_all(restaurant_id):
                 for r in res:
                     people = people + r.people_number
 
-                return render_template("restaurant_reservation.html", 
-                    restaurant=restaurant, reservations=res,
-                    filter_form=filter_form, people=people) 
+                return render_template("restaurant_reservation.html",
+                                       restaurant=restaurant, reservations=res,
+                                       filter_form=filter_form, people=people)
             else:
                 flash("The form is not correct")
-    
-    return render_template("restaurant_reservation.html", 
-        restaurant=restaurant, reservations=reservations,
-        filter_form=filter_form, people=people)
 
-    
+    return render_template("restaurant_reservation.html",
+                           restaurant=restaurant, reservations=reservations,
+                           filter_form=filter_form, people=people)
+
+
 @reservation.route('/delete/<int:id>/<int:customer_id>', methods=['GET', 'POST'])
 def delete_reservation_customer(id, customer_id):
     """Given a customer and a reservation id,
@@ -240,6 +238,6 @@ def edit_reservation(reservation_id, customer_id):
             else:
                 flash("There aren't free tables for that hour or the restaurant is close")
         else:
-                flash("The form is not correct")
+            flash("The form is not correct")
 
     return redirect(url_for('auth.profile', id=customer_id))
