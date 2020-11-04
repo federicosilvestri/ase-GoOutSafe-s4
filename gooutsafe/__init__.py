@@ -1,6 +1,5 @@
 import os
 
-import flask_login
 from celery import Celery
 from flask import Flask
 from flask_bootstrap import Bootstrap
@@ -30,7 +29,6 @@ def create_app():
     flask_env = os.getenv('FLASK_ENV', 'None')
     if flask_env == 'development':
         config_object = 'config.DevConfig'
-        register_cli(app)
     elif flask_env == 'testing':
         config_object = 'config.TestConfig'
     else:
@@ -69,8 +67,6 @@ def create_app():
         # we need to populate the db
         db.create_all()
         print("CREATING SB")
-    elif flask_env == 'development':
-        register_cli(app)
 
     return app
 
@@ -104,12 +100,6 @@ def register_blueprints(app):
     from gooutsafe.views import blueprints
     for bp in blueprints:
         app.register_blueprint(bp, url_prefix='/')
-
-
-def register_cli(app):
-    @app.cli.command(short_help="Display list of URLs")
-    def urls():
-        print(app.url_map)
 
 
 def make_celery(app):

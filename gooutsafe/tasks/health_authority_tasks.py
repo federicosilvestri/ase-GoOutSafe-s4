@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 
 from gooutsafe import celery
 from gooutsafe.dao.customer_manager import CustomerManager
-from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.notification_manager import NotificationManager
+from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.models.notification import Notification
 
 
@@ -11,6 +11,7 @@ def schedule_revert_customer_health_status(customer_id, eta=None):
     if not eta:
         eta = datetime.utcnow() + timedelta(days=14)
     revert_customer_health_status.apply_async(kwargs={"customer_id": customer_id}, eta=eta)
+
 
 @celery.task
 def revert_customer_health_status(customer_id):

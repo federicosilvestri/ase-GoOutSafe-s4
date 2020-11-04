@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, flash, url_for
 from flask_login import (logout_user, login_user, login_required)
 
-from gooutsafe.auth import current_user
+from flask_login import current_user
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.health_authority_manager import AuthorityManager
 from gooutsafe.dao.reservation_manager import ReservationManager

@@ -79,7 +79,7 @@ def update_user(id):
 
             password = form.data['password']
             user.set_email(email)
-            user.set_password(generate_password_hash(password))
+            user.set_password(password)
 
             if user.type == "customer":
                 phone = form.data['phone']
