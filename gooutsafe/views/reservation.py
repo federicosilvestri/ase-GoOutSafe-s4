@@ -27,7 +27,7 @@ def create_reservation(restaurant_id):
     form = ReservationForm()
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
     if request.method == 'POST':
-        if form.validate_on_submit():
+        if form.is_submitted():
             start_data = form.data['start_date']
             start_time = form.data['start_time']
             people_number = form.data['people_number']
@@ -107,11 +107,15 @@ def check_rest_ava(restaurant, start_datetime, end_datetime):
         [Boolean]: True if the restaurant is open or False if the restaurant is close
     """
     availabilities = restaurant.availabilities
+    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday']
     for ava in availabilities:
         print(ava.start_time)
         print(ava.end_time)
-        if check_time_interval(start_datetime.time(), end_datetime.time(), ava.start_time, ava.end_time):
-            return True
+        ava_day = ava.day
+        res_day = week_days[start_datetime.weekday()]
+        if ava_day == res_day:
+            if check_time_interval(start_datetime.time(), end_datetime.time(), ava.start_time, ava.end_time):
+                return True
         print('RISTORANTE CHIUSO')
     return False
 

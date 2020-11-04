@@ -33,7 +33,6 @@ def _restaurants(message=''):
 
 
 @restaurants.route('/restaurants/<restaurant_id>')
-@login_required
 def restaurant_sheet(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)
     list_measure = restaurant.measures.split(',')
@@ -121,11 +120,12 @@ def save_time(id_op, rest_id):
 
     if request.method == "POST":
         if time_form.is_submitted():
+            day = time_form.data['day']
             start_time = time_form.data['start_time']
             end_time = time_form.data['end_time']
 
             if end_time > start_time:
-                time = RestaurantAvailability(rest_id, start_time, end_time)
+                time = RestaurantAvailability(rest_id, day, start_time, end_time)
                 RestaurantAvailabilityManager.create_availability(time)
 
     return redirect(url_for('restaurants.details', id_op=id_op))

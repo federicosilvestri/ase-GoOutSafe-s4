@@ -87,7 +87,7 @@
                     Add times
                 </button>
 
-                <!-- Modal add table -->
+                <!-- Modal add times -->
                 <div class="modal fade" id="addTimes" tabindex="-1"
                         aria-labelledby="addTimes" aria-hidden="true">
 
@@ -106,6 +106,8 @@
 
                             {{ time_form.hidden_tag() }}
                                 <dl>
+                                <dt>{{ time_form.day.label}}</dt>
+                                <dd>{{ time_form.day }}</dd>
                             {% for field in time_form.display %}
                                 <dt>{{ time_form[field].label }}</dt>
                                 <dd>{{ time_form[field]() }}</dd>
