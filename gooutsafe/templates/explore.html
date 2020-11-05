@@ -54,6 +54,56 @@
             </table>
         </div>
     </div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjbQDBu-v27OLB7U_egd3pUlpYkpwks8I&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+    <style type="text/css">
+      /* Set the size of the div element that contains the map */
+      #map {
+        margin-left: auto;
+        margin-right: auto;
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 60%;
+        /* The width is the width of the web page */
+      }
+    </style>
+    <script>
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        var rest = JSON.parse({{json_res|tojson}});
+        locations = [];
+        for (i=0; i < rest.length; i++) {
+            locations.push([rest[i].name, rest[i].lat, rest[i].lon]);
+        };
+        var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: new google.maps.LatLng(43.719818, 10.407320),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < locations.length; i++) {  
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                infowindow.setContent(locations[i][0]);
+                infowindow.open(map, marker);
+                }
+            })(marker, i));
+        }
+      }
+    </script>
+    <div id="map"></div>
 {% endblock %}
 {% block footer %}
 {% endblock %}

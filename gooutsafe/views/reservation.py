@@ -2,10 +2,10 @@ from datetime import datetime
 from datetime import timedelta
 
 from flask import Blueprint, redirect, render_template, request, url_for, flash
-from flask_login import login_required
-
 # from flask_user import roles_required
 from flask_login import current_user
+from flask_login import login_required
+
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
@@ -148,7 +148,7 @@ def check_time_interval(start_time1, end_time1, start_time2, end_time2):
 @reservation.route('/delete/<int:id>/<restaurant_id>')
 def delete_reservation(id, restaurant_id):
     ReservationManager.delete_reservation_by_id(id)
-    return redirect(url_for('reservation.reservation_all', restaurant_id=restaurant.id))
+    return redirect(url_for('reservation.reservation_all', restaurant_id=restaurant_id))
 
 
 @reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
@@ -231,10 +231,10 @@ def edit_reservation(reservation_id, customer_id):
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            start_data = form.data['start_date']
+            start_date = form.data['start_date']
             start_time = form.data['start_time']
             people_number = form.data['people_number']
-            start_time_merged = datetime.combine(start_data, start_time)
+            start_time_merged = datetime.combine(start_date, start_time)
             table = validate_reservation(restaurant, start_time_merged, people_number)
             if table != False:
                 reservation.set_people_number(people_number)
@@ -242,11 +242,18 @@ def edit_reservation(reservation_id, customer_id):
                 reservation.set_table(table)
                 ReservationManager.update_reservation(reservation)
             else:
-                flash("There aren't free tables for that hour or the restaurant is close")
+                flash("There aren't free tables for that hour or the restaurant is closed")
         else:
             flash("The form is not correct")
 
     return redirect(url_for('auth.profile', id=customer_id))
+
+
+@reservation.route('/customer/my_reservations')
+def customer_my_reservation():
+    form = ReservationForm()
+    reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
+    return render_template('customer_reservations.html', reservations=reservations, form=form)
 
 
 @reservation.route('/my_reservations')

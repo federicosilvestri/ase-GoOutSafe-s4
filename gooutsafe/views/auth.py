@@ -7,6 +7,7 @@ from gooutsafe.dao.health_authority_manager import AuthorityManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.user_manager import UserManager
+from gooutsafe.dao.notification_manager import NotificationManager
 from gooutsafe.forms import LoginForm
 from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.forms.filter_form import FilterForm
@@ -111,3 +112,29 @@ def authority(id, positive_id):
 def logout():
     logout_user()
     return redirect('/')
+
+
+@auth.route('/notifications', methods=['GET'])
+@login_required
+def notifications():
+    notifications = NotificationManager.retrieve_by_target_user_id(current_user.id)
+    # TODO: erase them after 14 days?
+    processed_notification_info = []
+    if current_user.type == "customer":
+        for notification in notifications:
+            restaurant_name = RestaurantManager.retrieve_by_id(notification.contagion_restaurant_id).name
+            processed_notification_info.append({"timestamp": notification.timestamp,
+                                                 "contagion_datetime": notification.contagion_datetime,
+                                                 "contagion_restaurant_name": restaurant_name})
+        return render_template('customer_notifications.html', current_user=current_user, notifications=processed_notification_info)
+    elif current_user.type == "operator":
+        for notification in notifications:
+            info = {"timestamp": notification.timestamp,
+                    "contagion_datetime": notification.contagion_datetime}
+            is_future = notification.timestamp < notification.contagion_datetime
+            info['is_future'] = is_future
+            if is_future:
+                customer_phone_number = UserManager.retrieve_by_id(notification.positive_customer_id).phone
+                info['customer_phone_number'] = customer_phone_number
+            processed_notification_info.append(info)
+        return render_template('operator_notifications.html', current_user=current_user, notifications=processed_notification_info)

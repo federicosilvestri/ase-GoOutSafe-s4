@@ -64,3 +64,6 @@ class Customer(User):
 
     def set_last_notification_read_time(self, read_time):
         self.last_notification_read_time = read_time
+
+    def new_notifications(self):
+        return 0

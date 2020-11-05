@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, render_template, request, flash
 from flask_login import current_user
 
@@ -42,8 +44,13 @@ def search():
         restaurants = search_by(keyword, filters)
     else:
         restaurants = RestaurantManager.retrieve_all()
+        json_list = []
+        #create a json object to show markers on a map
+        for r in restaurants:
+            json_list.append({"name": r.name, "lat": r.lat, "lon": r.lon })
+        json_list = json.dumps(json_list)
 
-    return render_template('explore.html', search_form=form, restaurants=restaurants)
+    return render_template('explore.html', search_form=form, restaurants=restaurants, json_res=json_list)
 
 
 def search_by(search_field, search_filter):
