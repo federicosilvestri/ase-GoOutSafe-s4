@@ -143,7 +143,7 @@ def register_handlers(app):
     :param app: application object
     :return: None
     """
-    import handlers as ha
+    from .handlers import page_404, error_500
 
-    app.register_error_handler(404, ha.page_404)
-    app.register_error_handler(500, ha.error_500)
+    app.register_error_handler(404, page_404)
+    app.register_error_handler(500, error_500)
