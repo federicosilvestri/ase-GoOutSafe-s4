@@ -2,10 +2,10 @@ from datetime import datetime
 from datetime import timedelta
 
 from flask import Blueprint, redirect, render_template, request, url_for, flash
-from flask_login import login_required
-
 # from flask_user import roles_required
 from flask_login import current_user
+from flask_login import login_required
+
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
@@ -245,6 +245,14 @@ def edit_reservation(reservation_id, customer_id):
             flash("The form is not correct")
 
     return redirect(url_for('auth.profile', id=customer_id))
+
+
+@reservation.route('/customer/my_reservations')
+def customer_my_reservation():
+    form = ReservationForm()
+    reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
+    return render_template('customer_reservations.html', reservations=reservations, form=form)
+
 
 @reservation.route('/my_reservations')
 def my_reservations():
