@@ -122,17 +122,25 @@ def save_details(id_op, rest_id):
 @login_required
 def save_time(id_op, rest_id):
     time_form = TimesForm()
-
+    restaurant = RestaurantManager.retrieve_by_id(rest_id)
+    availabilities = restaurant.availabilities
+    present = False
     if request.method == "POST":
         if time_form.is_submitted():
             day = time_form.data['day']
             start_time = time_form.data['start_time']
             end_time = time_form.data['end_time']
-
             if end_time > start_time:
-                time = RestaurantAvailability(rest_id, day, start_time, end_time)
-                RestaurantAvailabilityManager.create_availability(time)
-
+                for ava in availabilities:
+                    if ava.day == day:
+                        ava.set_times(start_time, end_time)
+                        RestaurantAvailabilityManager.update_availability(ava)
+                        present = True
+                
+                if not present:
+                    time = RestaurantAvailability(rest_id, day, start_time, end_time)    
+                    RestaurantAvailabilityManager.create_availability(time)   
+                         
     return redirect(url_for('restaurants.details', id_op=id_op))
 
 

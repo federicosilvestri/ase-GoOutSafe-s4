@@ -22,6 +22,7 @@ class Reservation(db.Model):
     people_number = db.Column(db.Integer)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
+    is_confirmed = db.Column(db.Boolean, default=False)
 
     def __init__(self, user, table, restaurant, people_number, start_time):
         self.user = user
@@ -69,3 +70,7 @@ class Reservation(db.Model):
     def set_end_time(self, end_time):
         Reservation.check_time(self.start_time, end_time)
         self.end_time = end_time
+    
+    def set_is_confirmed(self):
+        self.is_confirmed = True
+

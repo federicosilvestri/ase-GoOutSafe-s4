@@ -124,3 +124,8 @@ class TestReservation(ModelTest):
             )
         with self.assertRaises(ValueError):
                 reservation.set_end_time(wrong_endtime)
+
+    def test_set_is_confirmed(self):
+        reservation, _ = TestReservation.generate_random_reservation()
+        reservation.set_is_confirmed()
+        self.assertTrue(reservation.is_confirmed)

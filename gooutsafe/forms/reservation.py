@@ -19,8 +19,10 @@ class ReservationForm(FlaskForm):
     def validate_on_submit(self):
         result = super(ReservationForm, self).validate()
         date = self.start_date.data
+        time = self.start_time.data
         people_number = self.people_number.data
-        if date < datetime.date.today() or people_number <= 0:
+        start_time_merged = datetime.combine(date, time)
+        if start_time_merged < datetime.now() or people_number <= 0:
             return False
         else:
             return result
