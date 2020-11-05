@@ -55,8 +55,10 @@ def notify_customers_about_positive_contact(customer_id):
 
 @celery.task
 def notify_customers_about_positive_contact_task(customer_id):
-    reservations = ReservationManager.retrieve_all_contact_reservation_by_id(customer_id)
+    reservations = ReservationManager.retrieve_by_customer_id_in_last_14_days(customer_id)
     for reservation in reservations:
-        restaurant = reservation.restaurant
-        notification = Notification(reservation.user_id, customer_id, restaurant.id, reservation.start_time)
-        NotificationManager.create_notification(notification=notification)
+        contact_reservations = ReservationManager.retrieve_all_contact_reservation_by_id(reservation.id)
+        for contact_reservation in contact_reservations:
+            restaurant = contact_reservation.restaurant
+            notification = Notification(contact_reservation.user_id, customer_id, restaurant.id, reservation.start_time)
+            NotificationManager.create_notification(notification=notification)
