@@ -22,20 +22,16 @@ class Reservation(db.Model):
     people_number = db.Column(db.Integer)
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
+    is_confirmed = db.Column(db.Boolean, default=False)
 
-    def __init__(self, user, table, restaurant, people_number, start_time, end_time=None):
+    def __init__(self, user, table, restaurant, people_number, start_time):
         self.user = user
         self.table = table
         self.restaurant = restaurant
         self.people_number = people_number
-        self.start_time = start_time
-
-        if end_time is None:
-            # end_time will be set automatically as start_time + 3 hours
-            self.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
-        else:
-            Reservation.check_time(start_time, end_time)
-            self.set_end_time(end_time)
+        self.start_time = start_time        
+        # end_time will be set automatically as start_time + 3 hours
+        self.set_end_time_by_avg_stay(restaurant.avg_stay)    
 
     @staticmethod
     def check_time(start_time, end_time):
@@ -45,6 +41,15 @@ class Reservation(db.Model):
         # TODO: discuss the error below
         # if start_time < actual_time:
         #     raise ValueError('The reservation cannot be made in the past')
+
+    def set_end_time_by_avg_stay(self, avg_stay):
+        if avg_stay is None:
+            self.end_time = self.start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
+        else:
+            avg_stay = self.restaurant.avg_stay
+            h_avg_stay = avg_stay//60
+            m_avg_stay = avg_stay - (h_avg_stay*60)
+            self.end_time = self.start_time + timedelta(hours=h_avg_stay, minutes=m_avg_stay)
 
     def set_user(self, user):
         self.user = user
@@ -65,3 +70,7 @@ class Reservation(db.Model):
     def set_end_time(self, end_time):
         Reservation.check_time(self.start_time, end_time)
         self.end_time = end_time
+    
+    def set_is_confirmed(self):
+        self.is_confirmed = True
+

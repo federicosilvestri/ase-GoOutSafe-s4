@@ -21,11 +21,9 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login(re=False):
     form = LoginForm()
-
     if form.is_submitted():
         email, password = form.data['email'], form.data['password']
         user = UserManager.retrieve_by_email(email)
-
         if user is None:
             flash('The user does not exist!')
         elif user.authenticate(password) is True:

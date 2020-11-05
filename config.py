@@ -33,6 +33,7 @@ class TestConfig(Config):
 
     import os
     SECRET_KEY = os.urandom(24)
+    WTF_CSRF_ENABLED = False
 
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
