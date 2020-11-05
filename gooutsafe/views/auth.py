@@ -12,6 +12,7 @@ from gooutsafe.forms import LoginForm
 from gooutsafe.forms.authority import AuthorityForm
 from gooutsafe.forms.filter_form import FilterForm
 from gooutsafe.forms.reservation import ReservationForm
+from gooutsafe.forms.update_customer import AddSocialNumberForm
 from gooutsafe.models.restaurant import Restaurant
 
 auth = Blueprint('auth', __name__)
@@ -52,10 +53,12 @@ def profile(id):
     if current_user.id == id:
         reservations = ReservationManager.retrieve_by_customer_id(id)
         form = ReservationForm()
+        social_form = AddSocialNumberForm()
         customer = CustomerManager.retrieve_by_id(id)
         restaurants = RestaurantManager.retrieve_all()
         return render_template('customer_profile.html', customer=customer,
-                               reservations=reservations, restaurants=restaurants, form=form)
+                               reservations=reservations, restaurants=restaurants, 
+                               form=form, social_form=social_form)
 
     return redirect(url_for('home.index'))
 
@@ -65,11 +68,13 @@ def profile(id):
 def my_profile():
     reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
     form = ReservationForm()
+    social_form = AddSocialNumberForm()
     customer = CustomerManager.retrieve_by_id(current_user.id)
     restaurants = RestaurantManager.retrieve_all()
 
     return render_template('customer_profile.html', customer=customer,
-                           reservations=reservations, restaurants=restaurants, form=form)
+                           reservations=reservations, restaurants=restaurants, 
+                           form=form, social_form=social_form)
 
 
 @auth.route('/operator/<int:id>', methods=['GET', 'POST'])

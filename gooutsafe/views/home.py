@@ -11,9 +11,10 @@ home = Blueprint('home', __name__)
 
 @home.route('/', methods=['GET', 'POST'])
 def index():
-    form = RestaurantSearchForm()
+    """form = RestaurantSearchForm()
     if request.method == 'POST':
         if form.is_submitted():
+            print(form.data)
             search_field = form.data['search_field']
             search_filter = form.data['filters']
             if not search_field:
@@ -23,8 +24,8 @@ def index():
                 restaurants = search_by(search_field, search_filter).all()
                 if not restaurants:
                     flash("There aren't restaurants for this search")
-            return render_template("index.html", restaurants=restaurants, form=form, current_user=current_user)
-    return render_template("index.html", form=form, current_user=current_user)
+            return render_template("index.html", restaurants=restaurants, form=form, current_user=current_user)"""
+    return render_template("index.html")
 
 
 @home.route('/search', methods=['GET'])
@@ -36,7 +37,7 @@ def search():
     filters = request.args.get('filters', default=None, type=str)
 
     keyword = None if keyword is None or len(keyword) == 0 else keyword
-
+    json_list = []
     if keyword is not None and filters is None:
         # searching by name
         restaurants = search_by(keyword, form.DEFAULT_SEARCH_FILTER)
@@ -44,7 +45,6 @@ def search():
         restaurants = search_by(keyword, filters)
     else:
         restaurants = RestaurantManager.retrieve_all()
-        json_list = []
         #create a json object to show markers on a map
         for r in restaurants:
             json_list.append({"name": r.name, "lat": r.lat, "lon": r.lon })

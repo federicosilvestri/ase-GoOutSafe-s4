@@ -12,6 +12,6 @@ install:
   - export FLASK_ENV=testing
   - flask db upgrade
 script:
-  - python -m pytest --cov-report term --cov=tests/
+  - python -m pytest --cov-report term --cov=gooutsafe/
 after_success:
   - codecov

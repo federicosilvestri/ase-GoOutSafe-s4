@@ -4,7 +4,7 @@ from flask_login import (login_user, login_required)
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.user_manager import UserManager
 from gooutsafe.forms import UserForm, LoginForm
-from gooutsafe.forms.update_customer import UpdateCustomerForm
+from gooutsafe.forms.update_customer import UpdateCustomerForm, AddSocialNumberForm
 from gooutsafe.models.customer import Customer
 from gooutsafe.models.operator import Operator
 
@@ -64,7 +64,7 @@ def delete_user(id_):
 @login_required
 def update_user(id):
     user = UserManager.retrieve_by_id(id)
-    if user.type == "customer":
+    if user.type == "customer":        
         form = UpdateCustomerForm()
     elif user.type == "operator":
         form = LoginForm()
@@ -93,3 +93,16 @@ def update_user(id):
                 return redirect(url_for('auth.operator', id=user.id))
 
     return render_template('update_customer.html', form=form)
+
+
+@users.route('/add_social_number/<int:id>', methods=['GET', 'POST'])
+@login_required
+def add_social_number(id):
+    social_form = AddSocialNumberForm()
+    user = UserManager.retrieve_by_id(id)
+    if request.method == "POST":
+        if social_form.is_submitted():
+            social_number = social_form.data['social_number']
+            user.set_social_number(social_number)
+            UserManager.update_user(user)
+    return redirect(url_for('auth.profile', id=user.id))
