@@ -9,7 +9,7 @@ class TestCustomerManager(DaoTest):
     @classmethod
     def setUpClass(cls):
         super(TestCustomerManager, cls).setUpClass()
-        from models.test_customer import TestCustomer
+        from tests.models.test_customer import TestCustomer
         cls.test_customer = TestCustomer
         from gooutsafe.dao import customer_manager
         cls.customer_manager = customer_manager.CustomerManager

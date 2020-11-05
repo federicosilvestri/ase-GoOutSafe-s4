@@ -13,7 +13,7 @@ class ViewTest(unittest.TestCase):
         from gooutsafe import create_app
         app = create_app()
         cls.client = app.test_client()
-        from models.test_customer import TestCustomer
+        from tests.models.test_customer import TestCustomer
         cls.test_customer = TestCustomer
         from gooutsafe.dao import customer_manager
         cls.customer_manager = customer_manager.CustomerManager

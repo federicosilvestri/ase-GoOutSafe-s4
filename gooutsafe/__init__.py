@@ -73,7 +73,9 @@ def create_app():
     if flask_env == 'testing':
         # we need to populate the db
         db.create_all()
-        print("CREATING SB")
+
+    if flask_env == 'testing' or flask_env == 'development':
+        register_test_blueprints(app)
 
     return app
 
@@ -107,6 +109,17 @@ def register_blueprints(app):
     from gooutsafe.views import blueprints
     for bp in blueprints:
         app.register_blueprint(bp, url_prefix='/')
+
+
+def register_test_blueprints(app):
+    """
+    This function registers the blueprints used only for testing purposes
+    :param app: Flask Application Object
+    :return: None
+    """
+
+    from gooutsafe.views.utils import utils
+    app.register_blueprint(utils)
 
 
 def make_celery(app):
