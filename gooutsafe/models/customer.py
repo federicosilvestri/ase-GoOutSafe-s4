@@ -17,7 +17,7 @@ class Customer(User):
     firstname = db.Column(db.Unicode(128))
     lastname = db.Column(db.Unicode(128))
     birthdate = db.Column(db.Date)
-    social_number = db.Column(db.Unicode(SOCIAL_CODE_LENGTH))
+    social_number = db.Column(db.Unicode(SOCIAL_CODE_LENGTH), default="")
     health_status = db.Column(db.Boolean, default=False)
     phone = db.Column(db.String(length=MAX_PHONE_LEN))
     likes = relationship('Like', back_populates='liker')
