@@ -17,6 +17,6 @@ class TestHome(ViewTest):
         assert rv.status_code == 200
 
     def test_search_restaurant(self):
-        data = {'keyword': 'ciao', 'filters': 'Name'}
+        data = dict(keyword='ciao', filters='Name')
         rv = self.client.get('/search', data=data)
         assert rv.status_code == 200
