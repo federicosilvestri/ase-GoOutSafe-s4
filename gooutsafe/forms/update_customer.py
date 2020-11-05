@@ -21,3 +21,12 @@ class UpdateCustomerForm(FlaskForm):
     )
 
     display = ['email', 'password', 'phone']
+    
+
+class AddSocialNumberForm(FlaskForm):
+    social_number = f.StringField(
+        'Social Number',
+        validators=[DataRequired()]
+    )
+
+    display = ['social_number']
