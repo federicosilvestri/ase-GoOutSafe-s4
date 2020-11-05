@@ -68,12 +68,27 @@ class TestReservation(ModelTest):
         self.assertEqual(reservation.user, user)
         self.assertEqual(reservation.table, table)
         self.assertEqual(reservation.start_time, start_time) 
+        self.assertEqual(reservation.end_time, start_time+timedelta(hours=reservation.MAX_TIME_RESERVATION))
 
+        
+    def test_set_end_time_by_avg_stay(self):
+        reservation, _ = TestReservation.generate_random_reservation()
+        restaurant = reservation.restaurant
+        restaurant.set_avg_stay(240)
+        end_time = reservation.start_time + timedelta(hours=4)
+        reservation.set_end_time_by_avg_stay(restaurant.avg_stay)
+        self.assertEqual(reservation.end_time, end_time)
     # def test_set_start_time(self):
     #     reservation, _ = TestReservation.generate_random_reservation()
     #     wrong_start_time = TestReservation.faker.date_time_between('-4y','now')
     #     with self.assertRaises(ValueError):
     #             reservation.set_start_time(wrong_start_time)
+
+    def test_set_user(self):
+        reservation,_= TestReservation.generate_random_reservation()
+        user = self.test_user.generate_random_user()
+        reservation.set_user(user)
+        self.test_user.assertUserEquals(user, reservation.user)
 
     def test_set_table(self):        
         reservation, _ = TestReservation.generate_random_reservation()
@@ -93,6 +108,13 @@ class TestReservation(ModelTest):
         people_number = self.faker.random_int(min=0, max=reservation.table.capacity)
         reservation.set_people_number(people_number)
         self.assertEqual(people_number, reservation.people_number)
+
+    def test_check_time(self):
+        reservation, _ = TestReservation.generate_random_reservation()
+        start_time = self.faker.date_time_between('now', '+14d')
+        end_time = self.faker.date_time_between('-3d', 'now')
+        with self.assertRaises(ValueError):
+            reservation.check_time(start_time, end_time)
 
     def test_set_end_time(self):
         reservation, _ = TestReservation.generate_random_reservation()
