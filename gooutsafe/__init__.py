@@ -1,7 +1,7 @@
 import os
 
 from celery import Celery
-from flask import Flask
+from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
 from flask_environments import Environments
@@ -25,6 +25,7 @@ def create_app():
     global celery
 
     app = Flask(__name__, instance_relative_config=True)
+    app.register_error_handler(404, page_not_found)
 
     flask_env = os.getenv('FLASK_ENV', 'None')
     if flask_env == 'development':
@@ -119,3 +120,6 @@ def make_celery(app):
 
     celery.Task = ContextTask
     return celery
+
+def page_not_found(e):
+  return render_template('404.html'), 404
