@@ -31,8 +31,11 @@ def create_app():
         config_object = 'config.DevConfig'
     elif flask_env == 'testing':
         config_object = 'config.TestConfig'
+    elif flask_env == 'production':
+        config_object = 'config.ProdConfig'
     else:
-        raise RuntimeError("%s is not recognized as valid app environment. You have to setup the environment!" % flask_env)
+        raise RuntimeError(
+            "%s is not recognized as valid app environment. You have to setup the environment!" % flask_env)
 
     # Load config
     env = Environments(app)
@@ -47,7 +50,6 @@ def create_app():
     celery = make_celery(app)
 
     # requiring the list of models
-    import gooutsafe.models
 
     register_extensions(app)
     register_blueprints(app)
@@ -103,19 +105,24 @@ def register_blueprints(app):
 
 
 def make_celery(app):
-    BACKEND = BROKER = 'redis://localhost:6379'
-    celery = Celery(
-        app.name,
-        broker=BROKER,
-        backend=BACKEND
-    )
-    celery.conf.timezone = 'Europe/Rome'
-    celery.conf.update(app.config)
+    redis_host = os.getenv('REDIS_HOST', 'localhost')
+    redis_port = os.getenv('REDIS_PORT', 6379)
 
-    class ContextTask(celery.Task):
+    backend = broker = 'redis://%s:%d' % (redis_host, redis_port)
+
+    _celery = Celery(
+        app.name,
+        broker=broker,
+        backend=backend
+    )
+    _celery.conf.timezone = 'Europe/Rome'
+    _celery.conf.update(app.config)
+
+    class ContextTask(_celery.Task):
         def __call__(self, *args, **kwargs):
             with app.app_context():
                 return self.run(*args, **kwargs)
 
-    celery.Task = ContextTask
-    return celery
+    _celery.Task = ContextTask
+
+    return _celery
