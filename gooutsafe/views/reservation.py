@@ -19,10 +19,8 @@ from gooutsafe.models.table import Table
 reservation = Blueprint('reservation', __name__)
 
 
-# TODO: only customer can create a new reservation
 @reservation.route('/create_reservation/<restaurant_id>', methods=['GET', 'POST'])
 @login_required
-# @roles_required('customer')
 def create_reservation(restaurant_id):
     if current_user.type == 'customer':
         form = ReservationForm()
@@ -35,7 +33,6 @@ def create_reservation(restaurant_id):
                 start_time_merged = datetime.combine(start_data, start_time)
                 table = validate_reservation(restaurant, start_time_merged, people_number)
                 if table != False:
-                    print("TAVOLO TROVATO")
                     reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
                     ReservationManager.create_reservation(reservation)
                     return redirect(url_for('reservation.customer_my_reservation'))
@@ -132,13 +129,13 @@ def check_time_interval(start_time1, end_time1, start_time2, end_time2):
     the intervall between startime2 and end_time2
 
     Args:
-        start_time1 (datetime): [description]
-        end_time1 (datetime): [description]
-        start_time2 (datetime): [description]
-        end_time2 (datetime): [description]
+        start_time1 (datetime)
+        end_time1 (datetime)
+        start_time2 (datetime)
+        end_time2 (datetime)
 
     Returns:
-        Boolean: [description]
+        Boolean
     """
     if start_time1 >= start_time2 and start_time1 < end_time2:
         print("OVERLAP 1")
@@ -263,7 +260,16 @@ def customer_my_reservation():
     return render_template('customer_reservations.html', reservations=reservations, form=form)
 
 @reservation.route('/reservation/confirm/<int:res_id>')
-def confirm_resercation(res_id):
+def confirm_reservation(res_id):
+    """
+    This method is used to confirm reservation
+
+    Args:
+        res_id (Integer): the restaurant id of the reservation
+
+    Returns:
+        redirect: redirects to the reservations operator page
+    """
     reservation = ReservationManager.retrieve_by_id(res_id)
     reservation.set_is_confirmed()
     ReservationManager.update_reservation(reservation)

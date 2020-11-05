@@ -1,7 +1,7 @@
 import os
 
 from celery import Celery
-from flask import Flask, render_template
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
 from flask_environments import Environments
@@ -18,6 +18,10 @@ celery = None
 
 
 def create_app():
+    """
+    This method create the Flask application.
+    :return: Flask App Object
+    """
     global db
     global app
     global migrate
@@ -25,15 +29,17 @@ def create_app():
     global celery
 
     app = Flask(__name__, instance_relative_config=True)
-    app.register_error_handler(404, page_not_found)
 
     flask_env = os.getenv('FLASK_ENV', 'None')
     if flask_env == 'development':
         config_object = 'config.DevConfig'
     elif flask_env == 'testing':
         config_object = 'config.TestConfig'
+    elif flask_env == 'production':
+        config_object = 'config.ProdConfig'
     else:
-        raise RuntimeError("%s is not recognized as valid app environment. You have to setup the environment!" % flask_env)
+        raise RuntimeError(
+            "%s is not recognized as valid app environment. You have to setup the environment!" % flask_env)
 
     # Load config
     env = Environments(app)
@@ -48,10 +54,10 @@ def create_app():
     celery = make_celery(app)
 
     # requiring the list of models
-    import gooutsafe.models
 
     register_extensions(app)
     register_blueprints(app)
+    register_handlers(app)
 
     # loading login manager
     import gooutsafe.auth as auth
@@ -104,22 +110,40 @@ def register_blueprints(app):
 
 
 def make_celery(app):
-    BACKEND = BROKER = 'redis://localhost:6379'
-    celery = Celery(
-        app.name,
-        broker=BROKER,
-        backend=BACKEND
-    )
-    celery.conf.timezone = 'Europe/Rome'
-    celery.conf.update(app.config)
+    """
+    This function create celery instance.
 
-    class ContextTask(celery.Task):
+    :param app: Application Object
+    :return: Celery instance
+    """
+    redis_host = os.getenv('REDIS_HOST', 'localhost')
+    redis_port = os.getenv('REDIS_PORT', 6379)
+
+    backend = broker = 'redis://%s:%d' % (redis_host, redis_port)
+
+    _celery = Celery(
+        app.name,
+        broker=broker,
+        backend=backend
+    )
+    _celery.conf.timezone = 'Europe/Rome'
+    _celery.conf.update(app.config)
+
+    class ContextTask(_celery.Task):
         def __call__(self, *args, **kwargs):
             with app.app_context():
                 return self.run(*args, **kwargs)
 
-    celery.Task = ContextTask
-    return celery
+    return _celery
 
-def page_not_found(e):
-  return render_template('404.html'), 404
+
+def register_handlers(app):
+    """
+    This function registers all handlers to application
+    :param app: application object
+    :return: None
+    """
+    from .handlers import page_404, error_500
+
+    app.register_error_handler(404, page_404)
+    app.register_error_handler(500, error_500)

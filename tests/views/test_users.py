@@ -1,5 +1,6 @@
 from .view_test import ViewTest
 from faker import Faker
+import datetime
 import unittest
 
 class TestUsers(ViewTest):
@@ -18,10 +19,10 @@ class TestUsers(ViewTest):
         #create a  new customer
         social_number = TestUsers.faker.ssn()
         email = TestUsers.faker.email()
-        complete_name = TestUsers.faker.name().split(' ')
-        name, surname = complete_name[::len(complete_name) - 1]
+        name = 'Charlie'
+        surname = 'Brown'
         password = TestUsers.faker.password()
-        birthdate = TestUsers.faker.date_of_birth()
+        birthdate = datetime.date(year=1992,month=12,day=12)
         phone = TestUsers.faker.phone_number()
         data = {'email': email, 'password': password, 'social_number': social_number, 'firstname': name, 'lastname': surname, 'birthdate': birthdate, 'phone':phone}
         rv = self.client.post('/create_user/customer', data=data, follow_redirects=True)
@@ -36,8 +37,10 @@ class TestUsers(ViewTest):
 
     def test_delete_user(self):
         #delete a customer
-        customer = self.login_test()
+        customer = self.login_test_customer()
         rv = self.client.post('/delete_user/'+str(customer.id), follow_redirects=True)
         assert rv.status_code == 200
         #delete an operator
+        operator = self.login_test_operator()
+        rv = self.client.post('/delete_user/'+str(operator.id), follow_redirects=True)
 
