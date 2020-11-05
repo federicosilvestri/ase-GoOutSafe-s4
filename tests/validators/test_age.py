@@ -39,7 +39,7 @@ class TestAgeValidator(ValidatorTest):
     def test_init_validity(self):
         with self.assertRaises(ValueError):
             self.age_validator.AgeValidator(
-                min_age=random.randint(100, 200),
+                min_age=random.randint(101, 200),
                 max_age=random.randint(0, 100)
             )
 
