@@ -63,7 +63,7 @@ def delete_user(id_):
 @users.route('/update_user/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update_user(id):
-    user = UserManager.retrieve_by_id(id)
+    user = UserManager.retrieve_by_id(id)   
     if user.type == "customer":
         form = UpdateCustomerForm()
     elif user.type == "operator":

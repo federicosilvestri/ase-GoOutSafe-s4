@@ -8,5 +8,5 @@ class TestHome(ViewTest):
         super(TestHome, self).setUp()
 
     def test_get_home(self):
-        rv = self.app.get('/')    
+        rv = self.app.get('/')
         assert rv.status_code == 200

@@ -37,6 +37,7 @@ def search():
 
     keyword = None if keyword is None or len(keyword) == 0 else keyword
 
+    json_list = []
     if keyword is not None and filters is None:
         # searching by name
         restaurants = search_by(keyword, form.DEFAULT_SEARCH_FILTER)
@@ -44,7 +45,6 @@ def search():
         restaurants = search_by(keyword, filters)
     else:
         restaurants = RestaurantManager.retrieve_all()
-        json_list = []
         #create a json object to show markers on a map
         for r in restaurants:
             json_list.append({"name": r.name, "lat": r.lat, "lon": r.lon })
