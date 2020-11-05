@@ -19,28 +19,29 @@ from gooutsafe.models.table import Table
 reservation = Blueprint('reservation', __name__)
 
 
-# TODO: only customer can create a new reservation
 @reservation.route('/create_reservation/<restaurant_id>', methods=['GET', 'POST'])
 @login_required
-# @roles_required('customer')
 def create_reservation(restaurant_id):
-    form = ReservationForm()
-    restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
-    if request.method == 'POST':
-        if form.is_submitted():
-            start_date = form.data['start_date']
-            start_time = form.data['start_time']
-            people_number = form.data['people_number']
-            start_time_merged = datetime.combine(start_date, start_time)
-            table = validate_reservation(restaurant, start_time_merged, people_number)
-            if table:
-                reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
-                ReservationManager.create_reservation(reservation)
-                return redirect(url_for('reservation.reservation_details',
-                                        restaurant_id=restaurant_id, reservation_id=reservation.id))
+    if current_user.type == 'customer':
+        form = ReservationForm()
+        restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                start_data = form.data['start_date']
+                start_time = form.data['start_time']
+                people_number = form.data['people_number']
+                start_time_merged = datetime.combine(start_data, start_time)
+                table = validate_reservation(restaurant, start_time_merged, people_number)
+                if table != False:
+                    reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
+                    ReservationManager.create_reservation(reservation)
+                    return redirect(url_for('reservation.customer_my_reservation'))
+                else:
+                    flash("There aren't free tables for that hour or the restaurant is close")
             else:
-                flash("There aren't free tables for that hour or the restaurant is closed")
-    return render_template('create_reservation.html', restaurant=restaurant, form=form)
+                flash("Take a look to the inserted data")
+        return render_template('create_reservation.html', restaurant=restaurant, form=form)
+    return redirect(url_for('home.index'))
 
 
 def validate_reservation(restaurant, start_datetime, people_number):
@@ -55,42 +56,47 @@ def validate_reservation(restaurant, start_datetime, people_number):
     Returns:
         Teble, Boolean: false in case there are overlap or a table if the restaurant is open and there aren't overlap
     """
-    end_datetime = start_datetime + timedelta(hours=Reservation.MAX_TIME_RESERVATION)
+    avg_stay = restaurant.avg_stay
+    if avg_stay is None:
+        end_datetime = start_datetime + timedelta(hours = 3)
+    else:
+        h_avg_stay = avg_stay//60
+        m_avg_stay = avg_stay - (h_avg_stay*60)
+        end_datetime = start_datetime + timedelta(hours=h_avg_stay, minutes=m_avg_stay)
+    print(start_datetime)
+    print(end_datetime)
     if check_rest_ava(restaurant, start_datetime, end_datetime):
-        print('RISTORANTE APERTO')
+        print("RISTO APERTO")
         tables = TableManager.retrieve_by_restaurant_id(restaurant.id).order_by(Table.capacity)
-
         for table in tables:
-            print('RICERCA TAVOLO')
             if table.capacity >= people_number:
-                print('TAVOLO ADATTO')
+                print("TAVOLO DISP")
                 reservation_table = table
                 table_reservations = ReservationManager.retrieve_by_table_id(table_id=table.id)
                 if len(table_reservations) != 0:
-                    print('\nRICERCA OVERLAP\n')
+                    print("CHECK OVERLAP")
                     for r in table_reservations:
                         old_start_datetime = r.start_time
                         old_end_datetime = r.end_time
                         print(old_start_datetime)
                         print(old_end_datetime)
                         if start_datetime.date() == old_start_datetime.date():
-                            print('OVERLAP DATA\n')
                             if check_time_interval(start_datetime.time(), end_datetime.time(),
                                                    old_start_datetime.time(), old_end_datetime.time()):
-                                print('OVERLAP PRENOTAZIONI')
-                                pass
+                                print("***OVERLAP***")
+                                continue
                             else:
-                                print('NON CI SONO PRENOTAZIONI - TAVOLO DISPONIBILE')
+                                print("NO OVERLAP TAVOLO DISPONIBILE")
                                 return reservation_table
                         else:
-                            print('NON CI SONO PRENOTAZIONI - TAVOLO DISPONIBILE')
+                            print("NO OVERLAP TAVOLO DISPONIBILE")
                             return reservation_table
                 else:
-                    print('NON CI SONO PRENOTAZIONI - TAVOLO DISPONIBILE')
+                    print("NO OVERLAP TAVOLO DISPONIBILE")
                     return reservation_table
             else:
-                print('NON CI SONO TAVOLI DISPONIBILE')
-                return False
+                print("TAVOLO NON ADATTO")
+                continue
     return False
 
 
@@ -109,14 +115,11 @@ def check_rest_ava(restaurant, start_datetime, end_datetime):
     availabilities = restaurant.availabilities
     week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     for ava in availabilities:
-        print(ava.start_time)
-        print(ava.end_time)
         ava_day = ava.day
         res_day = week_days[start_datetime.weekday()]
         if ava_day == res_day:
             if check_time_interval(start_datetime.time(), end_datetime.time(), ava.start_time, ava.end_time):
                 return True
-        print('RISTORANTE CHIUSO')
     return False
 
 
@@ -126,19 +129,19 @@ def check_time_interval(start_time1, end_time1, start_time2, end_time2):
     the intervall between startime2 and end_time2
 
     Args:
-        start_time1 (datetime): [description]
-        end_time1 (datetime): [description]
-        start_time2 (datetime): [description]
-        end_time2 (datetime): [description]
+        start_time1 (datetime)
+        end_time1 (datetime)
+        start_time2 (datetime)
+        end_time2 (datetime)
 
     Returns:
-        Boolean: [description]
+        Boolean
     """
     if start_time1 >= start_time2 and start_time1 < end_time2:
-        print('***OVERLAP 1***')
+        print("OVERLAP 1")
         return True
     elif end_time1 > start_time2 and end_time1 <= end_time2:
-        print('***OVERLAP 2***')
+        print("OVERLAP 2")
         return True
     return False
 
@@ -173,7 +176,8 @@ def reservation_all(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
     people = 0
     for r in reservations:
-        people = people + r.people_number
+        if r.is_confirmed:
+            people = people + r.people_number
 
     if request.method == 'POST':
         if filter_form.is_submitted():
@@ -189,14 +193,15 @@ def reservation_all(restaurant_id):
                 )
                 people = 0
                 for r in res:
-                    people = people + r.people_number
+                    if r.is_confirmed:
+                        people = people + r.people_number
 
                 return render_template("restaurant_reservation.html",
                                        restaurant=restaurant, reservations=res,
                                        filter_form=filter_form, people=people)
             else:
                 flash("The form is not correct")
-
+    reservations.sort(key=lambda reservation: reservation.start_time)
     return render_template("restaurant_reservation.html",
                            restaurant=restaurant, reservations=reservations,
                            filter_form=filter_form, people=people)
@@ -251,7 +256,24 @@ def edit_reservation(reservation_id, customer_id):
 def customer_my_reservation():
     form = ReservationForm()
     reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
+    reservations.sort(key=lambda reservation: reservation.timestamp, reverse=True)
     return render_template('customer_reservations.html', reservations=reservations, form=form)
+
+@reservation.route('/reservation/confirm/<int:res_id>')
+def confirm_reservation(res_id):
+    """
+    This method is used to confirm reservation
+
+    Args:
+        res_id (Integer): the restaurant id of the reservation
+
+    Returns:
+        redirect: redirects to the reservations operator page
+    """
+    reservation = ReservationManager.retrieve_by_id(res_id)
+    reservation.set_is_confirmed()
+    ReservationManager.update_reservation(reservation)
+    return redirect(url_for('reservation.my_reservations'))
 
 
 @reservation.route('/my_reservations')

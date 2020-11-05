@@ -18,6 +18,10 @@ celery = None
 
 
 def create_app():
+    """
+    This method create the Flask application.
+    :return: Flask App Object
+    """
     global db
     global app
     global migrate
@@ -53,6 +57,7 @@ def create_app():
 
     register_extensions(app)
     register_blueprints(app)
+    register_handlers(app)
 
     # loading login manager
     import gooutsafe.auth as auth
@@ -105,6 +110,12 @@ def register_blueprints(app):
 
 
 def make_celery(app):
+    """
+    This function create celery instance.
+
+    :param app: Application Object
+    :return: Celery instance
+    """
     redis_host = os.getenv('REDIS_HOST', 'localhost')
     redis_port = os.getenv('REDIS_PORT', 6379)
 
@@ -123,6 +134,16 @@ def make_celery(app):
             with app.app_context():
                 return self.run(*args, **kwargs)
 
-    _celery.Task = ContextTask
-
     return _celery
+
+
+def register_handlers(app):
+    """
+    This function registers all handlers to application
+    :param app: application object
+    :return: None
+    """
+    import handlers as ha
+
+    app.register_error_handler(404, ha.page_404)
+    app.register_error_handler(500, ha.error_500)

@@ -9,6 +9,7 @@ from gooutsafe.dao.restaurant_rating_manager import RestaurantRatingManager
 from gooutsafe.dao.table_manager import TableManager
 from gooutsafe.forms.add_measure import MeasureForm
 from gooutsafe.forms.add_table import TableForm
+from gooutsafe.forms.add_stay_time import StayTimeForm
 from gooutsafe.forms.add_times import TimesForm
 from gooutsafe.forms.restaurant import RestaurantForm
 from gooutsafe.models.restaurant import Restaurant
@@ -24,12 +25,6 @@ restaurants = Blueprint('restaurants', __name__)
 @restaurants.route('/my_restaurant')
 def my_restaurant():
     return details(current_user.id)
-
-
-@restaurants.route('/restaurants')
-def _restaurants(message=''):
-    all_restaurants = db.session.query(Restaurant)
-    return render_template("restaurants.html", message=message, restaurants=all_restaurants)
 
 
 @restaurants.route('/restaurants/<restaurant_id>')
@@ -90,6 +85,7 @@ def details(id_op):
     table_form = TableForm()
     time_form = TimesForm()
     measure_form = MeasureForm()
+    avg_time_form = StayTimeForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
 
     if restaurant is None:
@@ -98,11 +94,17 @@ def details(id_op):
     list_measure = restaurant.measures.split(',')
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
+    avg_stay = restaurant.avg_stay
+    h_avg_stay = avg_stay//60
+    m_avg_stay = avg_stay - (h_avg_stay*60)
+    avg_stay = "%dH:%dM"%(h_avg_stay, m_avg_stay)
 
     return render_template('add_restaurant_details.html',
                            restaurant=restaurant, tables=tables,
                            table_form=table_form, time_form=time_form,
-                           times=ava, measure_form=measure_form, list_measure=list_measure[1:])
+                           times=ava, measure_form=measure_form, avg_time_form = avg_time_form,
+                           avg_stay = avg_stay,
+                           list_measure=list_measure[1:])
 
 
 @restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
@@ -128,17 +130,25 @@ def save_details(id_op, rest_id):
 @login_required
 def save_time(id_op, rest_id):
     time_form = TimesForm()
-
+    restaurant = RestaurantManager.retrieve_by_id(rest_id)
+    availabilities = restaurant.availabilities
+    present = False
     if request.method == "POST":
         if time_form.is_submitted():
             day = time_form.data['day']
             start_time = time_form.data['start_time']
             end_time = time_form.data['end_time']
-
             if end_time > start_time:
-                time = RestaurantAvailability(rest_id, day, start_time, end_time)
-                RestaurantAvailabilityManager.create_availability(time)
-
+                for ava in availabilities:
+                    if ava.day == day:
+                        ava.set_times(start_time, end_time)
+                        RestaurantAvailabilityManager.update_availability(ava)
+                        present = True
+                
+                if not present:
+                    time = RestaurantAvailability(rest_id, day, start_time, end_time)    
+                    RestaurantAvailabilityManager.create_availability(time)   
+                         
     return redirect(url_for('restaurants.details', id_op=id_op))
 
 
@@ -159,6 +169,23 @@ def save_measure(id_op, rest_id):
             RestaurantManager.update_restaurant(restaurant)
 
     return redirect(url_for('restaurants.details', id_op=id_op))
+
+@restaurants.route('/restaurants/avgstay/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+@login_required
+def save_avg_stay(id_op, rest_id):
+    avg_time_form = StayTimeForm()
+    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+
+    if request.method == "POST":
+        if avg_time_form.validate_on_submit():
+            huors = avg_time_form.data['hours']
+            minute = avg_time_form.data['minutes']
+            minute = (huors * 60) + minute
+            restaurant.set_avg_stay(minute)
+            RestaurantManager.update_restaurant(restaurant)
+
+    return redirect(url_for('restaurants.details', id_op=id_op))
+
 
 
 @restaurants.route('/edit_restaurant/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])

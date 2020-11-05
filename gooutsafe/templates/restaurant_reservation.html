@@ -44,6 +44,7 @@
                     <th>Table #ID</th>
                     <th>People N&deg;</th>
                     <th>Schedule</th>
+                    <th>Customer</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -55,17 +56,25 @@
                             {{ r.table_id }}
                         </td>
                         <td>{{ r.people_number }}</td>
-                        <td><{{ r.start_time }} -- {{ r.end_time }}</td>
+                        <td>{{ r.start_time }} -- {{ r.end_time }}</td>
                         <td>
-                            <a type="button" class="btn btn-light"
-                               href="{{ url_for('reservation.reservation_details', restaurant_id=restaurant.id,
-                reservation_id=r.id ) }}">
-                                See details
+                            {{r.user.lastname}}
+                        </td>
+                        <td>
+                            {% if r.is_confirmed%}
+                                <a type="button" class="btn btn-light disable">
+                                Confirm
+                                </a>
+                            {% else %}
+                                <a type="button" class="btn btn-light active"
+                                href="{{ url_for('reservation.confirm_reservation', res_id=r.id ) }}">
+                                Confirm
                             </a>
+                            {% endif %}
                         </td>
                         <td>
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-light" data-toggle="modal"
+                            <button type="button" class="btn btn-danger active" data-toggle="modal"
                                     data-target="#deleteReservation">
                                 Delete
                             </button>

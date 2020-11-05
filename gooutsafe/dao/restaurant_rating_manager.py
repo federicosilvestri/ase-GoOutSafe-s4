@@ -28,6 +28,10 @@ class RestaurantRatingManager(Manager):
         return ratings.limit(max_ratings).all()
 
     @staticmethod
+    def retrieve_by_restaurant_customer(restaurant_id, user_id):
+        return RestaurantRating.query.filter_by(restaurant_id=restaurant_id, customer_id=user_id).first()
+
+    @staticmethod
     def calculate_average_rate(restaurant: Restaurant):
         base_query = Manager.db_session.query(
             func.avg(RestaurantRating.value)
