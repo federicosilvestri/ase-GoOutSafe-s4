@@ -4,15 +4,6 @@
 
 {% block content %}
 
-    <ul class="nav justify-content-end">
-        <li class="nav-item">
-            <a class="btn btn-outline-dark"
-                href="{{ url_for('auth.logout')}}">
-                Logout
-            </a>
-        </li>
-    </ul>
-
     <h2>Notifications</h2>        
     <ul>
         {% for notification in notifications %}

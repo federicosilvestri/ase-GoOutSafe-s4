@@ -50,11 +50,11 @@ def mark_positive(customer_id):
                 flash("Customer is already set to positive!")
             else:
                 customer.set_health_status(status=True)
-                CustomerManager.update_customer(customer)
-                #schedule_revert_customer_health_status(customer)
-                #notify_restaurant_owners_about_positive_past_customer(customer)
-                # notify_restaurant_owners_about_positive_booked_customer(customer)
-                # notify_customers_about_positive_contact(customer)
+                CustomerManager.update_customer(customer.id)
+                schedule_revert_customer_health_status(customer.id)
+                notify_restaurant_owners_about_positive_past_customer(customer.id)
+                notify_restaurant_owners_about_positive_booked_customer(customer.id)
+                notify_customers_about_positive_contact(customer.id)
                 flash("Customer set to positive!")
     return redirect(url_for('auth.authority', id=current_user.id, positive_id=0))
 
@@ -62,7 +62,7 @@ def mark_positive(customer_id):
 @authority.route('/ha/contact/<int:contact_id>', methods=['GET'])
 @login_required
 def contact_tracing(contact_id):
-    # only health authority can see the contacs of a positive customer (for privacy reason)
+    # only health authority can see the contacts of a positive customer (for privacy reason)
     if current_user is not None and current_user.type == 'authority':
         customer = CustomerManager.retrieve_by_id(id_=contact_id)
         if customer is not None:
@@ -73,14 +73,14 @@ def contact_tracing(contact_id):
             date_contacts = []
             for res in pos_reservations:
                 # all reservations that intersect with the positive one
-                contacs = ReservationManager.retrieve_all_contact_reservation_by_id(res.id)
-                for c in contacs:
+                contacts = ReservationManager.retrieve_all_contact_reservation_by_id(res.id)
+                for c in contacts:
                     cust = CustomerManager.retrieve_by_id(c.user_id)
                     cust_contacts.append(cust)
                     restaurant_contacts.append(RestaurantManager.retrieve_by_id(c.restaurant_id).name)
                     date_contacts.append(c.start_time.date())
-            return render_template('contact_tracing_positive.html', customer=customer, pos_contact=cust_contacs,
-                                   res_contact=restaurant_contacs, date_contact=date_contacts)
+            return render_template('contact_tracing_positive.html', customer=customer, pos_contact=cust_contacts,
+                                   res_contact=restaurant_contacts, date_contact=date_contacts)
         else:
             return redirect(url_for('auth.authority', id=current_user.id, positive_id=0))
     else:

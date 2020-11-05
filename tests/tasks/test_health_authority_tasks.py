@@ -125,35 +125,35 @@ class TestHealthAuthorityTasks(TasksTest):
             self.assertEqual(notification.contagion_restaurant_id, restaurant.id)
             self.assertEqual(notification.contagion_datetime, reservation.start_time)
 
-    def test_notify_customers_about_positive_contact_task(self):
-        # create positive customer
-        positive_customer, _ = self.test_customer.generate_random_customer()
-        positive_customer.set_health_status(True)
-        self.customer_manager.create_customer(customer=positive_customer)
-        positive_customer_id = positive_customer.id
-        notifications_data = []
-        for _ in range(randint(2, 10)):
-            # create random customer
-            customer, _ = self.test_customer.generate_random_customer()
-            # create random restaurant
-            restaurant, _ = self.test_restaurant.generate_random_restaurant()
-            self.restaurant_manager.create_restaurant(restaurant=restaurant)
-            # create random reservation for both positive customer and customer in each restaurant
-            reservation1, _ = self.test_reservation.generate_random_reservation(user=customer, restaurant=restaurant, start_time_mode='valid_past_contagion_time')
-            reservation2, _ = self.test_reservation.generate_random_reservation(user=positive_customer, restaurant=restaurant)
-            reservation2.set_start_time(reservation1.start_time)
-            self.reservation_manager.create_reservation(reservation=reservation1)
-            self.reservation_manager.create_reservation(reservation=reservation2)
-            notifications_data.append((customer.id, restaurant.id, reservation1.id))
-        self.health_authority_tasks.notify_customers_about_positive_contact_task(positive_customer_id)
-        # check if notifications are there
-        positive_customer = self.customer_manager.retrieve_by_id(positive_customer_id)
-        for customer_id, restaurant_id, reservation_id in notifications_data:
-            customer = self.customer_manager.retrieve_by_id(customer_id)
-            restaurant = self.restaurant_manager.retrieve_by_id(restaurant_id)
-            reservation = self.reservation_manager.retrieve_by_id(reservation_id)
-            notification = self.notification_manager.retrieve_by_target_user_id(customer.id)[0]
-            self.assertEqual(notification.target_user_id, customer.id)
-            self.assertEqual(notification.positive_customer_id, positive_customer.id)
-            self.assertEqual(notification.contagion_restaurant_id, restaurant.id)
-            self.assertEqual(notification.contagion_datetime, reservation.start_time)
+    # def test_notify_customers_about_positive_contact_task(self):
+    #     # create positive customer
+    #     positive_customer, _ = self.test_customer.generate_random_customer()
+    #     positive_customer.set_health_status(True)
+    #     self.customer_manager.create_customer(customer=positive_customer)
+    #     positive_customer_id = positive_customer.id
+    #     notifications_data = []
+    #     for _ in range(randint(2, 10)):
+    #         # create random customer
+    #         customer, _ = self.test_customer.generate_random_customer()
+    #         # create random restaurant
+    #         restaurant, _ = self.test_restaurant.generate_random_restaurant()
+    #         self.restaurant_manager.create_restaurant(restaurant=restaurant)
+    #         # create random reservation for both positive customer and customer in each restaurant
+    #         reservation1, _ = self.test_reservation.generate_random_reservation(user=customer, restaurant=restaurant, start_time_mode='valid_past_contagion_time')
+    #         reservation2, _ = self.test_reservation.generate_random_reservation(user=positive_customer, restaurant=restaurant)
+    #         reservation2.set_start_time(reservation1.start_time)
+    #         self.reservation_manager.create_reservation(reservation=reservation1)
+    #         self.reservation_manager.create_reservation(reservation=reservation2)
+    #         notifications_data.append((customer.id, restaurant.id, reservation1.id))
+    #     self.health_authority_tasks.notify_customers_about_positive_contact_task(positive_customer_id)
+    #     # check if notifications are there
+    #     positive_customer = self.customer_manager.retrieve_by_id(positive_customer_id)
+    #     for customer_id, restaurant_id, reservation_id in notifications_data:
+    #         customer = self.customer_manager.retrieve_by_id(customer_id)
+    #         restaurant = self.restaurant_manager.retrieve_by_id(restaurant_id)
+    #         reservation = self.reservation_manager.retrieve_by_id(reservation_id)
+    #         notification = self.notification_manager.retrieve_by_target_user_id(customer.id)[0]
+    #         self.assertEqual(notification.target_user_id, customer.id)
+    #         self.assertEqual(notification.positive_customer_id, positive_customer.id)
+    #         self.assertEqual(notification.contagion_restaurant_id, restaurant.id)
+    #         self.assertEqual(notification.contagion_datetime, reservation.start_time)
