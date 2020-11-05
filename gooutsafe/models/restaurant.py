@@ -50,6 +50,9 @@ class Restaurant(db.Model):
         db.Integer,
         db.ForeignKey('Operator.id'),
     )
+    avg_stay = db.Column(
+        db.Integer,
+    )
     owner = relationship('Operator', back_populates='restaurant')
     reservations = relationship("Reservation", back_populates="restaurant")
     tables = relationship("Table", back_populates="restaurant")
@@ -138,3 +141,6 @@ class Restaurant(db.Model):
 
     def likes_count(self):
         return len(self.likes)
+
+    def set_avg_stay(self, avg_stay):
+        self.avg_stay = avg_stay

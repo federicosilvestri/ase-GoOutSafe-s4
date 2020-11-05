@@ -29,10 +29,15 @@ class Reservation(db.Model):
         self.restaurant = restaurant
         self.people_number = people_number
         self.start_time = start_time
-
         if end_time is None:
             # end_time will be set automatically as start_time + 3 hours
-            self.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
+            if restaurant.avg_stay is None:
+                self.end_time = start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
+            else:
+                avg_stay = restaurant.avg_stay
+                h_avg_stay = avg_stay//60
+                m_avg_stay = avg_stay - (h_avg_stay*60)
+                self.end_time = start_time + timedelta(hours=h_avg_stay, minutes=m_avg_stay)
         else:
             Reservation.check_time(start_time, end_time)
             self.set_end_time(end_time)
