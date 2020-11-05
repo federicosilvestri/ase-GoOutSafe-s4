@@ -32,7 +32,6 @@ class ReservationManager(Manager):
         cond2 = db.and_(cond1, Reservation.start_time <= datetime.utcnow())
         return Reservation.query.filter(cond2).all()
     
-    # TODO: all future reservations or just the ones in the next 14 days?
     @staticmethod
     def retrieve_by_customer_id_in_future(user_id):
         Manager.check_none(user_id=user_id)
