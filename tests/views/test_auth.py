@@ -4,9 +4,10 @@ import unittest
 
 class TestAuth(ViewTest):
 
-    def setUp(self):
-        super(TestAuth, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestAuth, cls).setUpClass()
 
     def test_get_auth(self):
-        rv = self.app.get('/login')    
+        rv = self.client.get('/login')    
         assert rv.status_code == 200
