@@ -72,7 +72,8 @@ class Restaurant(db.Model):
         self.lon = lon
         self.phone = phone
         self.menu_type = menu_type
-        self.is_open = False
+        # this can be set to False by LHA
+        self.is_open = True
 
     @staticmethod
     def check_phone_number(phone):
