@@ -5,6 +5,9 @@ from wtforms.validators import DataRequired
 
 
 class UpdateCustomerForm(FlaskForm):
+    """Form created to allow the customers modify their personal information
+    """
+
     email = EmailField(
         'email',
         validators=[DataRequired()]
@@ -24,6 +27,10 @@ class UpdateCustomerForm(FlaskForm):
     
 
 class AddSocialNumberForm(FlaskForm):
+    """Form created to allow the customers insert, even after the sign up,
+    their personal Social Security Number
+    """
+
     social_number = f.StringField(
         'Social Number',
         validators=[DataRequired()]

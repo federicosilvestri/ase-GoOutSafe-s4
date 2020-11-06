@@ -7,6 +7,10 @@ from gooutsafe.validators.age import AgeValidator
 
 
 class UserForm(FlaskForm):
+    """Form created to allow the customers sign up to the application.
+    This form requires all the personal information, in order to create the account.
+    """
+
     social_number = f.StringField(
         'Social Number'
     )

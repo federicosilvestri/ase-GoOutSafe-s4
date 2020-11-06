@@ -4,6 +4,9 @@ from wtforms.validators import DataRequired
 
 
 class RestaurantForm(FlaskForm):
+    """Form created to allow the operators to add the information about their restaurant
+    """
+
     list_menu = ['Italian', 'Japanese', 'Chinese','Mexican','American', 'Vegan', 'Vegetarian']
 
     name = f.StringField('Name', validators=[DataRequired()])

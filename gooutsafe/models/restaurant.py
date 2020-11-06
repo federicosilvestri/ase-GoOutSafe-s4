@@ -1,8 +1,8 @@
+from geopy.geocoders import Nominatim
 from sqlalchemy.orm import relationship
-
+import datetime
 from gooutsafe import db
 
-from geopy.geocoders import Nominatim
 geolocator = Nominatim(user_agent="ASE-GOOUTSAFE-S4")
 
 
@@ -60,9 +60,6 @@ class Restaurant(db.Model):
     ratings = relationship('RestaurantRating', back_populates='restaurant')
     likes = relationship('Like', back_populates='restaurant')
 
-    # TODO: add hybrid property or method to calculate the number of likes
-    # TODO: add a method to add a new table 
-
     def __init__(self, name, address, city, lat, lon, phone, menu_type):
         Restaurant.check_phone_number(phone)
         self.name = name
@@ -72,7 +69,8 @@ class Restaurant(db.Model):
         self.lon = lon
         self.phone = phone
         self.menu_type = menu_type
-        self.is_open = False
+        # this can be set to False by LHA
+        self.is_open = True
 
     @staticmethod
     def check_phone_number(phone):
@@ -91,7 +89,7 @@ class Restaurant(db.Model):
     def set_address(self, address):
         Restaurant.check_string_attribute(address)
         self.address = address
-        location = geolocator.geocode(address+" "+self.city)
+        location = geolocator.geocode(address + " " + self.city)
         lat = 0
         lon = 0
         if location is not None:
@@ -99,12 +97,11 @@ class Restaurant(db.Model):
             lon = location.longitude
         self.set_lat(lat)
         self.set_lon(lon)
-            
 
     def set_city(self, city):
         Restaurant.check_string_attribute(city)
         self.city = city
-        location = geolocator.geocode(self.address+" "+city)
+        location = geolocator.geocode(self.address + " " + city)
         lat = 0
         lon = 0
         if location is not None:
@@ -144,3 +141,11 @@ class Restaurant(db.Model):
 
     def set_avg_stay(self, avg_stay):
         self.avg_stay = avg_stay
+
+    def is_open_date(self, when=datetime.datetime.now()):
+        for av in self.availabilities:
+            if av.day == av.week_days[when.weekday()]:
+                if av.start_time < when.time() < av.end_time:
+                    return True and self.is_open
+
+        return False
