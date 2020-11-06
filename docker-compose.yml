@@ -48,6 +48,7 @@ services:
     command: flask db upgrade
     depends_on:
       - db
+
   example_data_loader:
     extends:
       service: base
