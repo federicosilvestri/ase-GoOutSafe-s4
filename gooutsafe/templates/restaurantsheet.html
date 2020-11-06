@@ -43,7 +43,7 @@
                         <tr>
                             <th>Status</th>
                             <td>
-                                {% if restaurant.is_open() %}
+                                {% if restaurant.is_open_date() %}
                                     <span class="badge badge-success">Now Open</span>
                                 {% else %}
                                     <span class="badge badge-danger">Now Closed</span>
