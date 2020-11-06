@@ -30,7 +30,6 @@ class Reservation(db.Model):
         self.restaurant = restaurant
         self.people_number = people_number
         self.start_time = start_time        
-        # end_time will be set automatically as start_time + 3 hours
         self.set_end_time_by_avg_stay(restaurant.avg_stay)    
 
     @staticmethod
@@ -38,9 +37,6 @@ class Reservation(db.Model):
         actual_time = datetime.utcnow()
         if start_time >= end_time:
             raise ValueError('The start time cannot be greater than end_time')
-        # TODO: discuss the error below
-        # if start_time < actual_time:
-        #     raise ValueError('The reservation cannot be made in the past')
 
     def set_end_time_by_avg_stay(self, avg_stay):
         if avg_stay is None:

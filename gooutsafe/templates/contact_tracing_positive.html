@@ -21,6 +21,7 @@
                     <div>
                         <il>{{ customer.firstname }} {{ customer.lastname }} -- SSN: {{ customer.social_number }} | email: {{ customer.email }} | phone: {{ customer.phone }}</il>
                     </div>
+                    <br>
         <h3>Contacts of the positive customer</h3>
         {% if pos_contact|length != 0 %}
             {% for i in range(pos_contact|length) %}
@@ -33,7 +34,7 @@
                 </div>  
             {% endfor %}
         {% else %}
-                No contacs!
+                No contacts!
         {% endif %}
     {% endif %}
 {% endblock %}
