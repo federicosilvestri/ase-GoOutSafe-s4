@@ -27,10 +27,10 @@ def create_reservation(restaurant_id):
         restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
         if request.method == 'POST':
             if form.validate_on_submit():
-                start_data = form.data['start_date']
+                start_date = form.data['start_date']
                 start_time = form.data['start_time']
                 people_number = form.data['people_number']
-                start_time_merged = datetime.combine(start_data, start_time)
+                start_time_merged = datetime.combine(start_date, start_time)
                 table = validate_reservation(restaurant, start_time_merged, people_number)
                 if table != False:
                     reservation = Reservation(current_user, table, restaurant, people_number, start_time_merged)
