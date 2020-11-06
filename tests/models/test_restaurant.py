@@ -207,7 +207,7 @@ class TestRestaurant(ModelTest):
 
     def test_is_open_default(self):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
-        self.assertEqual(restaurant.is_open, False)
+        self.assertEqual(restaurant.is_open, True)
 
     def test_is_open_false(self):
         restaurant, _ = TestRestaurant.generate_random_restaurant()
