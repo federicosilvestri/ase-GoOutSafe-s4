@@ -99,7 +99,6 @@ def details(id_op):
     ava = restaurant.availabilities
     avg_stay = restaurant.avg_stay
 
-    print(avg_stay)
     if avg_stay is not None:
         h_avg_stay = avg_stay // 60
         m_avg_stay = avg_stay - (h_avg_stay * 60)
