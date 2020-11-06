@@ -134,11 +134,12 @@ class TestRestaurantViews(ViewTest):
         assert rv.status_code == 200
     
     def test_save_avg_stay_post(self):
-        customer = self.login_test_operator()
+        operator = self.login_test_operator()
         restaurant, _ = self.test_restaurant.generate_random_restaurant()
+        restaurant.owner_id = operator.id
         self.restaurant_manager.create_restaurant(restaurant)
         data = {'hours': 1, 'minutes': 10}
-        rv = self.client.post('/restaurants/avgstay/' + str(customer.id) + '/' + str(restaurant.id), data=data, follow_redirects=True)
+        rv = self.client.post('/restaurants/avgstay/' + str(operator.id) + '/' + str(restaurant.id), data=data, follow_redirects=True)
         assert rv.status_code == 200
 
 

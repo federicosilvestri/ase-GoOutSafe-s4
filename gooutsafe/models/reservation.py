@@ -39,7 +39,7 @@ class Reservation(db.Model):
             raise ValueError('The start time cannot be greater than end_time')
 
     def set_end_time_by_avg_stay(self, avg_stay):
-        if avg_stay is None:
+        if avg_stay is None or avg_stay == 0:
             self.end_time = self.start_time + timedelta(hours=self.MAX_TIME_RESERVATION)
         else:
             avg_stay = self.restaurant.avg_stay
