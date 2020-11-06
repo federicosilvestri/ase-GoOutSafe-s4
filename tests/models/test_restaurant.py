@@ -215,6 +215,11 @@ class TestRestaurant(ModelTest):
         self.assertEqual(restaurant.is_open, False)
 
     def test_is_open_true(self):
+        import datetime
+
         restaurant, _ = TestRestaurant.generate_random_restaurant()
         restaurant.set_is_open(True)
         self.assertEqual(restaurant.is_open, True)
+        self.assertEqual(restaurant.is_open_date(when=datetime.datetime(1999, 10, 12, 10, 22, 11)), False)
+
+
