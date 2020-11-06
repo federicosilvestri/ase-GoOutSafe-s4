@@ -10,7 +10,7 @@ class TestAuth(ViewTest):
     def setUpClass(cls):
         super(TestAuth, cls).setUpClass()
 
-    def test_get_auth(self):
+    def test_login(self):
         #login for a customer
         customer = self.login_test_customer()
         #login with a wrong email
@@ -23,4 +23,17 @@ class TestAuth(ViewTest):
         assert self.client.post('/login', data=data, follow_redirects=True).status_code == 200
         #login for an authority
         self.login_test_authority()
+
+    def test_get_relogin(self):
+        rv = self.client.get('/relogin')
+        assert rv.status_code == 200
+
+    def test_get_profile_another_customer(self):
+        customer = self.login_test_customer()
+        self.login_test_customer()
+        #redirect to your home page if you try to see a profile of another customer (for privacy)
+        rv = self.client.get('/profile/'+str(customer.id), follow_redirects=True)
+        assert rv.status_code == 200
+    
+
 
