@@ -70,6 +70,7 @@ class Restaurant(db.Model):
         self.phone = phone
         self.menu_type = menu_type
         self.is_open = False
+        self.avg_stay = 0
 
     @staticmethod
     def check_phone_number(phone):

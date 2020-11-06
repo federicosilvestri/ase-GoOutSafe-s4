@@ -9,10 +9,12 @@ class TimesForm(FlaskForm):
 
     day = f.SelectField('Week Day', choices=week_days, validators=[DataRequired()])
     start_time = TimeField('Start time',
+                            format='%H:%M:%S',
                            validators=[
                                DataRequired()
                            ])
     end_time = TimeField('End time',
+                        format='%H:%M:%S',
                          validators=[
                              DataRequired()
                          ])

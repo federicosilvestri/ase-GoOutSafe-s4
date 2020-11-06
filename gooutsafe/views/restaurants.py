@@ -54,9 +54,9 @@ def like_toggle(restaurant_id):
 @login_required
 def add(id_op):
     form = RestaurantForm()
-
     if request.method == 'POST':
         if form.validate_on_submit():
+            print("ADD POST OKAY 60-77")
             name = form.data['name']
             address = form.data['address']
             city = form.data['city']
@@ -75,7 +75,6 @@ def add(id_op):
             RestaurantManager.create_restaurant(restaurant)
 
             return redirect(url_for('auth.operator', id=id_op))
-
     return render_template('create_restaurant.html', form=form)
 
 
@@ -90,7 +89,7 @@ def details(id_op):
 
     if restaurant is None:
         return add(current_user.id)
-
+    print("DETAILS OKAY 94-102")
     list_measure = restaurant.measures.split(',')
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
@@ -138,14 +137,12 @@ def save_time(id_op, rest_id):
             day = time_form.data['day']
             start_time = time_form.data['start_time']
             end_time = time_form.data['end_time']
-            print(time_form)
             if end_time > start_time:
                 for ava in availabilities:
                     if ava.day == day:
                         ava.set_times(start_time, end_time)
                         RestaurantAvailabilityManager.update_availability(ava)
                         present = True
-
                 if not present:
                     time = RestaurantAvailability(rest_id, day, start_time, end_time)
                     RestaurantAvailabilityManager.create_availability(time)
@@ -180,9 +177,9 @@ def save_avg_stay(id_op, rest_id):
 
     if request.method == "POST":
         if avg_time_form.validate_on_submit():
-            huors = avg_time_form.data['hours']
+            hours = avg_time_form.data['hours']
             minute = avg_time_form.data['minutes']
-            minute = (huors * 60) + minute
+            minute = (hours * 60) + minute
             restaurant.set_avg_stay(minute)
             RestaurantManager.update_restaurant(restaurant)
 
