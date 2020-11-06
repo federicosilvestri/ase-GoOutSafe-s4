@@ -152,16 +152,6 @@ def delete_reservation(id, restaurant_id):
     return redirect(url_for('reservation.reservation_all', restaurant_id=restaurant_id))
 
 
-@reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
-def reservation_details(restaurant_id, reservation_id):
-    reservation = ReservationManager.retrieve_by_id(reservation_id)
-    user = CustomerManager.retrieve_by_id(reservation.user.id)
-    table = reservation.table
-    restaurant = reservation.restaurant
-    return render_template("reservation_details.html", reservation=reservation,
-                           user=user, table=table, restaurant=restaurant)
-
-
 @reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
 def reservation_all(restaurant_id):
     """Returns the whole list of reservations, given a restaurant.
@@ -255,6 +245,7 @@ def edit_reservation(reservation_id, customer_id):
 @reservation.route('/customer/my_reservations')
 def customer_my_reservation():
     form = ReservationForm()
+    print("MUSCA")
     reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
     reservations.sort(key=lambda reservation: reservation.timestamp, reverse=True)
     return render_template('customer_reservations.html', reservations=reservations, form=form)

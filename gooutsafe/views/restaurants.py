@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import (login_required, current_user)
 
 from gooutsafe import db
@@ -95,9 +95,13 @@ def details(id_op):
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
     avg_stay = restaurant.avg_stay
-    h_avg_stay = avg_stay//60
-    m_avg_stay = avg_stay - (h_avg_stay*60)
-    avg_stay = "%dH:%dM"%(h_avg_stay, m_avg_stay)
+    print(avg_stay)
+    if avg_stay is not None:
+        h_avg_stay = avg_stay//60
+        m_avg_stay = avg_stay - (h_avg_stay*60)
+        avg_stay = "%dH:%dM"%(h_avg_stay, m_avg_stay)
+    else:
+        avg_stay = 0
 
     return render_template('add_restaurant_details.html',
                            restaurant=restaurant, tables=tables,
@@ -180,9 +184,11 @@ def save_avg_stay(id_op, rest_id):
         if avg_time_form.validate_on_submit():
             huors = avg_time_form.data['hours']
             minute = avg_time_form.data['minutes']
-            minute = (huors * 60) + minute
-            restaurant.set_avg_stay(minute)
+            minutes = (huors * 60) + minute
+            restaurant.set_avg_stay(minutes)
             RestaurantManager.update_restaurant(restaurant)
+        else:
+            flash("Insert positive values")
 
     return redirect(url_for('restaurants.details', id_op=id_op))
 

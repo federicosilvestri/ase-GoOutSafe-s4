@@ -5,16 +5,15 @@ from wtforms.validators import DataRequired,NumberRange
 
 
 class StayTimeForm(FlaskForm):
-    hours = IntegerField('Hours', default=0, validators=[DataRequired()])
+    hours = IntegerField('Hours', default=1, validators=[DataRequired()])
     minutes = IntegerField('Minutes', default=0,validators=[DataRequired()])
     display = ['hours', 'minutes']
 
     
     def validate_on_submit(self):
-        result = super(StayTimeForm, self).validate()
         hours = self.hours.data
         minutes = self.minutes.data
-        if hours >= 0 and minutes >= 0:
-            return result
-        else:
+        if hours < 0 or minutes < 0:
             return False
+        else:
+            return True
