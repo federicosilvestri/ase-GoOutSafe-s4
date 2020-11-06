@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 74c02f0411b6
+Revision ID: f05b6d3fee61
 Revises: 
-Create Date: 2020-11-05 17:14:04.396157
+Create Date: 2020-11-06 00:28:46.724162
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '74c02f0411b6'
+revision = 'f05b6d3fee61'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -67,6 +67,7 @@ def upgrade():
     sa.Column('measures', sa.Unicode(), nullable=True),
     sa.Column('is_open', sa.Boolean(), nullable=True),
     sa.Column('owner_id', sa.Integer(), nullable=True),
+    sa.Column('avg_stay', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['owner_id'], ['Operator.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -103,7 +104,7 @@ def upgrade():
     sa.Column('customer_id', sa.Integer(), nullable=False),
     sa.Column('restaurant_id', sa.Integer(), nullable=False),
     sa.Column('value', sa.SmallInteger(), nullable=False),
-    sa.Column('review', sa.Text(length=200), nullable=True),
+    sa.Column('review', sa.String(length=200), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['customer_id'], ['Customer.id'], ),
     sa.ForeignKeyConstraint(['restaurant_id'], ['Restaurant.id'], ),
@@ -125,6 +126,7 @@ def upgrade():
     sa.Column('people_number', sa.Integer(), nullable=True),
     sa.Column('start_time', sa.DateTime(), nullable=True),
     sa.Column('end_time', sa.DateTime(), nullable=True),
+    sa.Column('is_confirmed', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['restaurant_id'], ['Restaurant.id'], ),
     sa.ForeignKeyConstraint(['table_id'], ['Table.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_id'], ['User.id'], ondelete='CASCADE'),

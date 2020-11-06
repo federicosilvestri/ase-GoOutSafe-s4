@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
-from flask_login import (login_user, login_required)
+from flask_login import (login_user, login_required, current_user)
 
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.user_manager import UserManager
@@ -68,12 +68,14 @@ def delete_user(id_):
     Returns:
         Redirects the view to the home page
     """
-    user = UserManager.retrieve_by_id(id_)
-    if user.type == "operator":
-        restaurant = RestaurantManager.retrieve_by_operator_id(id_)
-        RestaurantManager.delete_restaurant(restaurant)
-
-    UserManager.delete_user_by_id(id_)
+    if current_user.id == id_:
+        user = UserManager.retrieve_by_id(id_)
+        if user is not None and user.type == "operator":
+            restaurant = RestaurantManager.retrieve_by_operator_id(id_)
+            if restaurant is not None:
+                RestaurantManager.delete_restaurant(restaurant)
+        
+        UserManager.delete_user_by_id(id_)
     return redirect(url_for('home.index'))
 
 

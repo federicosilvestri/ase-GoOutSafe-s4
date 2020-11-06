@@ -30,11 +30,9 @@ def login(re=False):
         Redirects the view to the personal page of the user
     """
     form = LoginForm()
-
     if form.is_submitted():
         email, password = form.data['email'], form.data['password']
         user = UserManager.retrieve_by_email(email)
-
         if user is None:
             flash('The user does not exist!')
         elif user.authenticate(password) is True:

@@ -13,15 +13,15 @@ class TestReservationManager(DaoTest):
     def setUpClass(cls):
         super(TestReservationManager, cls).setUpClass()
 
-        from models.test_customer import TestCustomer
+        from tests.models.test_customer import TestCustomer
         cls.test_customer = TestCustomer
-        from models.test_reservation import TestReservation
+        from tests.models.test_reservation import TestReservation
         cls.test_reservation = TestReservation
-        from models.test_restaurant import TestRestaurant
+        from tests.models.test_restaurant import TestRestaurant
         cls.test_restaurant = TestRestaurant
-        from models.test_table import TestTable
+        from tests.models.test_table import TestTable
         cls.test_table = TestTable
-        from models.test_user import TestUser
+        from tests.models.test_user import TestUser
         cls.test_user = TestUser
 
         from gooutsafe.dao import reservation_manager

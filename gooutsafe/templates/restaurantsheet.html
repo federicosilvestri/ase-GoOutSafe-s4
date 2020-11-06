@@ -121,7 +121,7 @@
             <h3 class="display-5 text-primary">Safety Information</h3>
 
             <h5 class="text">Precautions measures</h5>
-            {% if list_measures is defined and list_mesaures|length %}
+            {% if list_measures is defined %}
                 <ul class="list-group list-group-flush">
                     {% for m in list_measures %}
                         <li class="list-group-item">{{ m }} </li>

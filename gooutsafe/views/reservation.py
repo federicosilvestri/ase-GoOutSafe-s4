@@ -18,6 +18,10 @@ from gooutsafe.models.table import Table
 
 reservation = Blueprint('reservation', __name__)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8435a4d3df23e41b3c1b4416e5dbf94550620a49
 @reservation.route('/create_reservation/<restaurant_id>', methods=['GET', 'POST'])
 @login_required
 def create_reservation(restaurant_id):
@@ -132,6 +136,8 @@ def check_time_interval(start_time1, end_time1, start_time2, end_time2):
         start_time2 (datetime)
         end_time2 (datetime)
 
+    Returns:
+        Boolean
     """
     if start_time1 >= start_time2 and start_time1 < end_time2:
         return True
@@ -280,12 +286,22 @@ def customer_my_reservation():
 
     """
     form = ReservationForm()
+    print("MUSCA")
     reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
     reservations.sort(key=lambda reservation: reservation.timestamp, reverse=True)
     return render_template('customer_reservations.html', reservations=reservations, form=form)
 
 @reservation.route('/reservation/confirm/<int:res_id>')
-def confirm_resercation(res_id):
+def confirm_reservation(res_id):
+    """
+    This method is used to confirm reservation
+
+    Args:
+        res_id (Integer): the restaurant id of the reservation
+
+    Returns:
+        redirect: redirects to the reservations operator page
+    """
     reservation = ReservationManager.retrieve_by_id(res_id)
     reservation.set_is_confirmed()
     ReservationManager.update_reservation(reservation)

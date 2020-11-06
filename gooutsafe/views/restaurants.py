@@ -1,13 +1,13 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash, abort
 from flask_login import (login_required, current_user)
 
-from gooutsafe import db
 from gooutsafe.dao.like_manager import LikeManager
 from gooutsafe.dao.restaurant_availability_manager import RestaurantAvailabilityManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.dao.restaurant_rating_manager import RestaurantRatingManager
 from gooutsafe.dao.table_manager import TableManager
 from gooutsafe.forms.add_measure import MeasureForm
+from gooutsafe.forms.add_stay_time import StayTimeForm
 from gooutsafe.forms.add_table import TableForm
 from gooutsafe.forms.add_times import TimesForm
 from gooutsafe.forms.restaurant import RestaurantForm
@@ -16,7 +16,6 @@ from gooutsafe.models.restaurant import geolocator
 from gooutsafe.models.restaurant_availability import RestaurantAvailability
 from gooutsafe.models.restaurant_rating import RestaurantRating
 from gooutsafe.models.table import Table
-
 
 restaurants = Blueprint('restaurants', __name__)
 
@@ -41,6 +40,10 @@ def restaurant_sheet(restaurant_id):
         restaurant_id (int): univocal identifier of the restaurant
     """
     restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)
+
+    if restaurant is None:
+        return abort(404)
+
     list_measure = restaurant.measures.split(',')
     average_rate = RestaurantRatingManager.calculate_average_rate(restaurant)
 
@@ -95,7 +98,7 @@ def add(id_op):
             if location is not None:
                 lat = location.latitude
                 lon = location.longitude
-            restaurant = Restaurant(name, address, city, lat , lon , phone, menu_type)
+            restaurant = Restaurant(name, address, city, lat, lon, phone, menu_type)
             restaurant.owner_id = id_op
 
             RestaurantManager.create_restaurant(restaurant)
@@ -119,6 +122,7 @@ def details(id_op):
     table_form = TableForm()
     time_form = TimesForm()
     measure_form = MeasureForm()
+    avg_time_form = StayTimeForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
 
     if restaurant is None:
@@ -127,11 +131,21 @@ def details(id_op):
     list_measure = restaurant.measures.split(',')
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
+    avg_stay = restaurant.avg_stay
+
+    if avg_stay is not None:
+        h_avg_stay = avg_stay // 60
+        m_avg_stay = avg_stay - (h_avg_stay * 60)
+        avg_stay = "%dH:%dM" % (h_avg_stay, m_avg_stay)
+    else:
+        avg_stay = 0
 
     return render_template('add_restaurant_details.html',
                            restaurant=restaurant, tables=tables,
                            table_form=table_form, time_form=time_form,
-                           times=ava, measure_form=measure_form, list_measure=list_measure[1:])
+                           times=ava, measure_form=measure_form, avg_time_form=avg_time_form,
+                           avg_stay=avg_stay,
+                           list_measure=list_measure[1:])
 
 
 @restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
@@ -189,11 +203,11 @@ def save_time(id_op, rest_id):
                         ava.set_times(start_time, end_time)
                         RestaurantAvailabilityManager.update_availability(ava)
                         present = True
-                
+
                 if not present:
-                    time = RestaurantAvailability(rest_id, day, start_time, end_time)    
-                    RestaurantAvailabilityManager.create_availability(time)   
-                         
+                    time = RestaurantAvailability(rest_id, day, start_time, end_time)
+                    RestaurantAvailabilityManager.create_availability(time)
+
     return redirect(url_for('restaurants.details', id_op=id_op))
 
 
@@ -222,6 +236,25 @@ def save_measure(id_op, rest_id):
             string = ','.join(list_measure)
             restaurant.set_measures(string)
             RestaurantManager.update_restaurant(restaurant)
+
+    return redirect(url_for('restaurants.details', id_op=id_op))
+
+
+@restaurants.route('/restaurants/avgstay/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
+@login_required
+def save_avg_stay(id_op, rest_id):
+    avg_time_form = StayTimeForm()
+    restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
+
+    if request.method == "POST":
+        if avg_time_form.validate_on_submit():
+            huors = avg_time_form.data['hours']
+            minute = avg_time_form.data['minutes']
+            minutes = (huors * 60) + minute
+            restaurant.set_avg_stay(minutes)
+            RestaurantManager.update_restaurant(restaurant)
+        else:
+            flash("Insert positive values")
 
     return redirect(url_for('restaurants.details', id_op=id_op))
 
