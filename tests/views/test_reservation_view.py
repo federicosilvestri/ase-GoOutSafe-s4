@@ -131,9 +131,24 @@ class TestReservationView(ViewTest):
         rv = self.client.get('/edit/' + str(reservation.id) +'/'+ str(customer.id))
         assert rv.status_code == 200
 
-
-
     def test_delete_reservation_customer(self):
         customer = self.login_test_customer()
         reservation,_ = TestReservation.generate_random_reservation()
+        self.reservation_manager.create_reservation(reservation)
         rv = self.client.get('/delete/'+ str(reservation.id) +'/'+ str(customer.id),follow_redirects=True)
+        assert rv.status_code == 200
+    
+    def test_delete_reservation(self):
+        customer = self.login_test_customer()
+        restaurant,_ = self.restaurant_test.generate_random_restaurant()
+        self.restaurant_manager.create_restaurant(restaurant)
+        reservation,_ = TestReservation.generate_random_reservation(restaurant=restaurant)
+        self.reservation_manager.create_reservation(reservation)
+        rv = self.client.get('/delete/'+ str(reservation.id) +'/'+ str(customer.id),follow_redirects=True)
+        assert rv.status_code == 200
+    
+    def test_reservation_all(self):
+        customer = self.login_test_customer()
+        restaurant,_ = self.restaurant_test.generate_random_restaurant()
+        rv = self.client.get('/reservations/'+ str(restaurant.id))
+        assert rv.status_code == 200

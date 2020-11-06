@@ -157,7 +157,27 @@ def delete_reservation(id, restaurant_id):
     return redirect(url_for('reservation.reservation_all', restaurant_id=restaurant_id))
 
 
+@reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
+def reservation_details(restaurant_id, reservation_id):
+    """ Given a restaurant, this method returns all its reservations
+
+    Args:
+        restaurant_id (int): univocal identifier of the restaurant
+        reservation_id (int): univocal identifier of the reservations
+
+    Returns:
+        [type]: [description]
+    """
+    reservation = ReservationManager.retrieve_by_id(reservation_id)
+    user = CustomerManager.retrieve_by_id(reservation.user.id)
+    table = reservation.table
+    restaurant = reservation.restaurant
+    return render_template("reservation_details.html", reservation=reservation,
+                           user=user, table=table, restaurant=restaurant)
+
+
 @reservation.route('/reservations/<restaurant_id>', methods=['GET', 'POST'])
+@login_required
 def reservation_all(restaurant_id):
     """Returns the whole list of reservations, given a restaurant.
     It also gives to the operator the opportunity to filter reservations

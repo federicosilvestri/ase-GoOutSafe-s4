@@ -22,7 +22,7 @@ restaurants = Blueprint('restaurants', __name__)
 
 @restaurants.route('/my_restaurant')
 @login_required
-def my_restaurant():
+def my_restaurant(methods=['GET','POST']):
     """Given the operator, this method allows him to see the details of his restaurant
 
     Returns:
