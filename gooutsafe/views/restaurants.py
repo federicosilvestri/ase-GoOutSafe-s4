@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash, abort
 from flask_login import (login_required, current_user)
 
 from gooutsafe.dao.like_manager import LikeManager
@@ -29,6 +29,10 @@ def my_restaurant():
 @restaurants.route('/restaurants/<restaurant_id>')
 def restaurant_sheet(restaurant_id):
     restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)
+
+    if restaurant is None:
+        return abort(404)
+
     list_measure = restaurant.measures.split(',')
     average_rate = RestaurantRatingManager.calculate_average_rate(restaurant)
 
@@ -94,19 +98,14 @@ def details(id_op):
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
     avg_stay = restaurant.avg_stay
-<<<<<<< HEAD
+
     print(avg_stay)
     if avg_stay is not None:
-        h_avg_stay = avg_stay//60
-        m_avg_stay = avg_stay - (h_avg_stay*60)
-        avg_stay = "%dH:%dM"%(h_avg_stay, m_avg_stay)
+        h_avg_stay = avg_stay // 60
+        m_avg_stay = avg_stay - (h_avg_stay * 60)
+        avg_stay = "%dH:%dM" % (h_avg_stay, m_avg_stay)
     else:
         avg_stay = 0
-=======
-    h_avg_stay = avg_stay // 60
-    m_avg_stay = avg_stay - (h_avg_stay * 60)
-    avg_stay = "%dH:%dM" % (h_avg_stay, m_avg_stay)
->>>>>>> a99c628b4260e379ab51f5fd72cc85e8d67fb9be
 
     return render_template('add_restaurant_details.html',
                            restaurant=restaurant, tables=tables,
