@@ -48,3 +48,11 @@ services:
     command: flask db upgrade
     depends_on:
       - db
+  example_data_loader:
+    extends:
+      service: base
+    env_file:
+      - env_file
+    command: python load_example_data.py
+    depends_on:
+      - db
