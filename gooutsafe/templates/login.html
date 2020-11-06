@@ -50,7 +50,8 @@
             </label>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        <a type="button" class="btn btn-lg btn-secondary btn-block" href="{{ url_for('home.index') }}">Go back</a>
+        <a class="btn btn-lg btn-secondary btn-block" 
+                href="{{ url_for('home.index') }}">Go back</a>
         {% if re_login %}
             <br/>
             <div class="alert alert-warning" role="alert">

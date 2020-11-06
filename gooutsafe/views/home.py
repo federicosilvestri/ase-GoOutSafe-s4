@@ -11,26 +11,17 @@ home = Blueprint('home', __name__)
 
 @home.route('/', methods=['GET', 'POST'])
 def index():
-    """form = RestaurantSearchForm()
-    if request.method == 'POST':
-        if form.is_submitted():
-            print(form.data)
-            search_field = form.data['search_field']
-            search_filter = form.data['filters']
-            if not search_field:
-                restaurants = RestaurantManager.retrieve_all()
-                print("MOSTRA TUTTI I RISTORANTI")
-            else:
-                restaurants = search_by(search_field, search_filter).all()
-                if not restaurants:
-                    flash("There aren't restaurants for this search")
-            return render_template("index.html", restaurants=restaurants, form=form, current_user=current_user)"""
+    """General route for the index page
+    """
     return render_template("index.html")
 
 
 @home.route('/search', methods=['GET'])
 def search():
-    # this variable will not be used to retrieve data, because we use GET type and not POST
+    """This method allows customers to search restaurants, using a search bar.
+    It's possible to retrieve restaurants based on their name, city or cuisine's type.
+
+    """
     form = RestaurantSearchForm()
 
     keyword = request.args.get('keyword', default=None, type=str)
@@ -39,13 +30,11 @@ def search():
     keyword = None if keyword is None or len(keyword) == 0 else keyword
     json_list = []
     if keyword is not None and filters is None:
-        # searching by name
         restaurants = search_by(keyword, form.DEFAULT_SEARCH_FILTER)
     elif keyword is not None and filters is not None:
         restaurants = search_by(keyword, filters)
     else:
         restaurants = RestaurantManager.retrieve_all()
-        #create a json object to show markers on a map
         for r in restaurants:
             json_list.append({"name": r.name, "lat": r.lat, "lon": r.lon })
         json_list = json.dumps(json_list)
@@ -54,6 +43,13 @@ def search():
 
 
 def search_by(search_field, search_filter):
+    """Implements the research of the restaurants
+
+    Args:
+        search_field (string)
+        search_filter (string)
+
+    """
     if search_filter == "Name":
         restaurants = RestaurantManager.retrieve_by_restaurant_name(search_field)
         return restaurants

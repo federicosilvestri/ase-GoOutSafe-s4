@@ -6,4 +6,6 @@ from .reservation import reservation
 from .health_authority import authority
 from .review import review
 
+"""List of the views to be visible through the project
+"""
 blueprints = [home, auth, users, restaurants, reservation, authority, review]

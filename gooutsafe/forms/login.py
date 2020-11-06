@@ -4,6 +4,9 @@ from wtforms.validators import DataRequired
 
 
 class LoginForm(FlaskForm):
+    """Form created to allow users to login
+    """
+
     email = f.StringField(
         'Email',
         validators=[DataRequired()],

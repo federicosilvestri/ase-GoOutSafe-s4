@@ -6,6 +6,10 @@ from gooutsafe.models.restaurant_rating import RestaurantRating
 
 
 class ReviewForm(FlaskForm):
+    """Form created to allow the customers to insert a new review: an integer value
+    along with a comment
+    """
+
     value = f.IntegerField(
         'Rate',
         validators=[NumberRange(

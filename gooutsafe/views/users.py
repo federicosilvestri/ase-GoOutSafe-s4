@@ -13,6 +13,15 @@ users = Blueprint('users', __name__)
 
 @users.route('/create_user/<string:type_>', methods=['GET', 'POST'])
 def create_user_type(type_):
+    """This method allows the creation of a new user into the database
+
+    Args:
+        type_ (string): as a parameter takes a string that defines the
+        type of the new user
+
+    Returns:
+        Redirects the user into his profile page, once he's logged in
+    """
     form = LoginForm()
     if type_ == "customer":
         form = UserForm()
@@ -51,6 +60,14 @@ def create_user_type(type_):
 @users.route('/delete_user/<int:id_>', methods=['GET', 'POST'])
 @login_required
 def delete_user(id_):
+    """Deletes the data of the user from the database.
+
+    Args:
+        id_ (int): takes the unique id as a parameter
+
+    Returns:
+        Redirects the view to the home page
+    """
     user = UserManager.retrieve_by_id(id_)
     if user.type == "operator":
         restaurant = RestaurantManager.retrieve_by_operator_id(id_)
@@ -63,6 +80,14 @@ def delete_user(id_):
 @users.route('/update_user/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update_user(id):
+    """This method allows the user to edit their personal information.
+
+    Args:
+        id (int): the univocal id for the user
+
+    Returns:
+        Redirects the view to the personal page of the user
+    """
     user = UserManager.retrieve_by_id(id)
     if user.type == "customer":        
         form = UpdateCustomerForm()
@@ -98,6 +123,14 @@ def update_user(id):
 @users.route('/add_social_number/<int:id>', methods=['GET', 'POST'])
 @login_required
 def add_social_number(id):
+    """Allows the user to insert their SSN.
+
+    Args:
+        id (int): the univocal id for the user
+
+    Returns:
+        Redirects the view to the personal page of the user
+    """
     social_form = AddSocialNumberForm()
     user = UserManager.retrieve_by_id(id)
     if request.method == "POST":
@@ -105,4 +138,5 @@ def add_social_number(id):
             social_number = social_form.data['social_number']
             user.set_social_number(social_number)
             UserManager.update_user(user)
+            
     return redirect(url_for('auth.profile', id=user.id))
