@@ -42,8 +42,12 @@
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td><span class="badge badge-success">Open</span> o <span
-                                    class="badge badge-danger">Closed</span>
+                            <td>
+                                {% if restaurant.is_open_date() %}
+                                    <span class="badge badge-success">Now Open</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Now Closed</span>
+                                {% endif %}
                             </td>
                         </tr>
                         <tr>
@@ -100,12 +104,12 @@
             <h3 class="display-5 text-primary">Reservations</h3>
             {% if current_user.is_authenticated %}
                 {% if restaurant.tables|length and restaurant.availabilities|length and current_user.type == "customer" %}
-                <p>Are you <b>hungry</b>?
-                    <a type="button" class="btn btn-primary active"
-                        href="{{ url_for('reservation.create_reservation', restaurant_id=restaurant.id) }}">
-                        Book a Table
-                    </a>
-                </p>
+                    <p>Are you <b>hungry</b>?
+                        <a type="button" class="btn btn-primary active"
+                           href="{{ url_for('reservation.create_reservation', restaurant_id=restaurant.id) }}">
+                            Book a Table
+                        </a>
+                    </p>
                 {% else %}
                     <p>Are you <b>hungry</b>?
                         <button type="button" class="btn btn-outline-primary disabled">
@@ -121,7 +125,7 @@
             <h3 class="display-5 text-primary">Safety Information</h3>
 
             <h5 class="text">Precautions measures</h5>
-            {% if list_measures is defined and list_mesaures|length %}
+            {% if list_measures is defined %}
                 <ul class="list-group list-group-flush">
                     {% for m in list_measures %}
                         <li class="list-group-item">{{ m }} </li>
@@ -137,7 +141,11 @@
     <div class="row">
         <div class="col-sm-12">
             <h3 class="display-5 text-primary">User reviews</h3>
-            Do you want to contribute? <button class="btn btn-sm btn-primary" onclick="location.href='{{ url_for('review.write_review', restaurant_id=restaurant.id) }}'">Write a review</button>
+            Do you want to contribute?
+            <button class="btn btn-sm btn-primary"
+                    onclick="location.href='{{ url_for('review.write_review', restaurant_id=restaurant.id) }}'">Write a
+                review
+            </button>
         </div>
     </div>
     <div class="row">
@@ -174,6 +182,6 @@
             {% endif %}
         </div>
     </div>
-    {% endblock %}
+{% endblock %}
 {% block footer %}
 {% endblock %}

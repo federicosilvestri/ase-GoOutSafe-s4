@@ -20,6 +20,15 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login(re=False):
+    """Allows the user to log into the system
+
+    Args:
+        re (bool, optional): boolean value that describes whenever
+        the user's session is new or needs to be reloaded. Defaults to False.
+
+    Returns:
+        Redirects the view to the personal page of the user
+    """
     form = LoginForm()
     if form.is_submitted():
         email, password = form.data['email'], form.data['password']
@@ -42,12 +51,23 @@ def login(re=False):
 
 @auth.route('/relogin')
 def re_login():
+    """Method that is being called after the user's session is expired.
+
+    """
     return login(re_login=True)
 
 
 @auth.route('/profile/<int:id>', methods=['GET', 'POST'])
 @login_required
 def profile(id):
+    """This method allows the customer to see its personal page
+
+    Args:
+        id (int): univocal identifier of the customer
+
+    Returns:
+        Redirects the view to personal page of the customer
+    """
     if current_user.id == id:
         reservations = ReservationManager.retrieve_by_customer_id(id)
         form = ReservationForm()
@@ -64,6 +84,11 @@ def profile(id):
 @auth.route('/my_profile')
 @login_required
 def my_profile():
+    """This method allows the customer to see its personal page
+
+    Returns:
+        Redirects the view to personal page of the customer
+    """
     reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
     form = ReservationForm()
     social_form = AddSocialNumberForm()
@@ -78,6 +103,14 @@ def my_profile():
 @auth.route('/operator/<int:id>', methods=['GET', 'POST'])
 @login_required
 def operator(id):
+    """This method allows the operator to access the page of its personal info
+
+    Args:
+        id (int): univocal identifier of the operator
+
+    Returns:
+        Redirects the view to personal page of the operator
+    """
     if current_user.id == id:
         filter_form = FilterForm()
         restaurant = Restaurant.query.filter_by(owner_id=id).first()
@@ -90,6 +123,11 @@ def operator(id):
 @auth.route('/my_operator')
 @login_required
 def my_operator():
+    """This method allows the operator to access the page of its personal info
+
+    Returns:
+        Redirects the view to personal page of the operator
+    """
     filter_form = FilterForm()
     restaurant = Restaurant.query.filter_by(owner_id=current_user.id).first()
     return render_template('operator_profile.html',
@@ -100,19 +138,34 @@ def my_operator():
 @auth.route('/authority/<int:id>/<int:positive_id>', methods=['GET', 'POST'])
 @login_required
 def authority(id, positive_id):
+    """This method allows the Health Authority to see its personal page.
+
+    Args:
+        id (int): the univocal identifier for the Health Authority
+        positive_id (int): the identifier of the positive user
+
+    Returns:
+        Redirects to the page of the Health Authority
+    """
     if current_user.id == id:
         authority = AuthorityManager.retrieve_by_id(id)
         ha_form = AuthorityForm()
         pos_customers = CustomerManager.retrieve_all_positive()
         search_customer = CustomerManager.retrieve_by_id(positive_id)
         return render_template('authority_profile.html', current_user=authority,
-                               form=ha_form, pos_customers=pos_customers, search_customer=search_customer)
+                               form=ha_form, pos_customers=pos_customers, 
+                               search_customer=search_customer)
     return redirect(url_for('home.index'))
 
 
 @auth.route('/logout')
 @login_required
 def logout():
+    """This method allows the users to log out of the system
+
+    Returns:
+        Redirects the view to the home page
+    """
     logout_user()
     return redirect('/')
 
@@ -120,6 +173,11 @@ def logout():
 @auth.route('/notifications', methods=['GET'])
 @login_required
 def notifications():
+    """[summary]
+
+    Returns:
+        [type]: [description]
+    """
     notifications = NotificationManager.retrieve_by_target_user_id(current_user.id)
     processed_notification_info = []
     if current_user.type == "customer":

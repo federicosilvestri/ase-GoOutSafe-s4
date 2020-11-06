@@ -43,4 +43,28 @@ class TestUsers(ViewTest):
         #delete an operator
         operator = self.login_test_operator()
         rv = self.client.post('/delete_user/'+str(operator.id), follow_redirects=True)
+        assert rv.status_code == 200
 
+    def test_update_user(self):
+        #update a customer
+        customer = self.login_test_customer()
+        data = {'email': TestUsers.faker.email(), 'password': TestUsers.faker.password(), 'phone': TestUsers.faker.phone_number()}
+        rv = self.client.post('/update_user/'+str(customer.id),data=data, follow_redirects=True)
+        assert rv.status_code == 200
+        #update a customer with an existing email
+        customer2 = self.login_test_customer()
+        rv = self.client.post('/update_user/'+str(customer2.id),data=data)
+        #get request for update_user
+        rv = self.client.get('/update_user/'+str(customer2.id),data=data)
+        #update an operator
+        operator = self.login_test_operator()
+        data = {'email': TestUsers.faker.email(), 'password': TestUsers.faker.password()}
+        rv = self.client.post('/update_user/'+str(operator.id), data=data, follow_redirects=True)
+        assert rv.status_code == 200
+
+
+    def test_update_ssn(self):
+        customer = self.login_test_customer()
+        data = {'social_number': TestUsers.faker.ssn()}
+        rv = self.client.post('/add_social_number/'+str(customer.id), data=data, follow_redirects=True)
+        assert rv.status_code == 200

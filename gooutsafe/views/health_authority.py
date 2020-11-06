@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
+
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.forms.authority import AuthorityForm
-from gooutsafe.models.customer import Customer
-from gooutsafe.models.reservation import Reservation
 from gooutsafe.tasks.health_authority_tasks import (
     notify_restaurant_owners_about_positive_booked_customer,
     notify_restaurant_owners_about_positive_past_customer,
@@ -18,7 +17,13 @@ authority = Blueprint('authority', __name__)
 @authority.route('/ha/search_customer', methods=['POST'])
 @login_required
 def search_customer():
-    # only health_autority can search a customer
+    """Method that the health authority uses to search through the users.
+
+    Returns:
+        Redirects the view to the home page of the health authority.
+        If this method is accessed by an unathorized user, it redirects the
+        view to the index page
+    """
     if current_user is not None and current_user.type == 'authority':
         form = AuthorityForm()
         customer = None
@@ -35,20 +40,28 @@ def search_customer():
                 flash("The customer doesn't exist")
                 return redirect(url_for('auth.authority', id=current_user.id, positive_id=0))
         return redirect(url_for('auth.authority', id=current_user.id, positive_id=customer.id))
-    # unauthorized access
     else:
         return redirect(url_for('home.index'))
 
-@authority.route('/ha/mark_positive/<int:customer_id>', methods = ['GET','POST'])
+
+@authority.route('/ha/mark_positive/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def mark_positive(customer_id):
-    # only health authority can mark a customer as positive
+    """Through this method the health authority can set the health status
+    of a specific user to "positive".
+
+    Args:
+        customer_id ([int]): univocal id of the user
+
+    Returns:
+        Redirects the view to the health authority's home page
+    """
     if current_user is not None and current_user.type == 'authority':
         if request.method == 'POST':
             customer = CustomerManager.retrieve_by_id(id_=customer_id)
-            if customer.health_status:
+            if customer is not None and customer.health_status:
                 flash("Customer is already set to positive!")
-            else:
+            elif customer is not None:
                 customer.set_health_status(status=True)
                 CustomerManager.update_customer(customer.id)
                 schedule_revert_customer_health_status(customer.id)
@@ -62,17 +75,23 @@ def mark_positive(customer_id):
 @authority.route('/ha/contact/<int:contact_id>', methods=['GET'])
 @login_required
 def contact_tracing(contact_id):
-    # only health authority can see the contacts of a positive customer (for privacy reason)
+    """This method allows the health authority to retrieve the list of
+    contacts, given a positive user
+
+    Args:
+        contact_id (id): univocal id of the user
+
+    Returns:
+        Redirects the view to the health authority's home page
+    """
     if current_user is not None and current_user.type == 'authority':
         customer = CustomerManager.retrieve_by_id(id_=contact_id)
         if customer is not None:
-            # retrieve all the reservations for the positive customer
             pos_reservations = ReservationManager.retrieve_by_customer_id(user_id=customer.id)
             cust_contacts = []
             restaurant_contacts = []
             date_contacts = []
             for res in pos_reservations:
-                # all reservations that intersect with the positive one
                 contacts = ReservationManager.retrieve_all_contact_reservation_by_id(res.id)
                 for c in contacts:
                     cust = CustomerManager.retrieve_by_id(c.user_id)

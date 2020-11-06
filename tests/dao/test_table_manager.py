@@ -12,9 +12,9 @@ class TestTableManager(DaoTest):
     @classmethod
     def setUpClass(cls):
         super(TestTableManager, cls).setUpClass()
-        from models.test_restaurant import TestRestaurant
+        from tests.models.test_restaurant import TestRestaurant
         cls.test_restaurant = TestRestaurant
-        from models.test_table import TestTable
+        from tests.models.test_table import TestTable
         cls.test_table = TestTable
         from gooutsafe.dao import table_manager
         from gooutsafe.models import table

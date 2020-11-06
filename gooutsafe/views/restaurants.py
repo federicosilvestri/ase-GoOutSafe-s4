@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash, abort
 from flask_login import (login_required, current_user)
 
 from gooutsafe.dao.like_manager import LikeManager
@@ -23,25 +23,47 @@ restaurants = Blueprint('restaurants', __name__)
 @restaurants.route('/my_restaurant')
 @login_required
 def my_restaurant():
+    """Given the operator, this method allows him to see the details of his restaurant
+
+    Returns:
+        Returns the page of the restaurant's details
+    """
     return details(current_user.id)
 
 
 @restaurants.route('/restaurants/<restaurant_id>')
 @login_required
 def restaurant_sheet(restaurant_id):
+    """This method returns the single page for a restaurant
+
+    Args:
+        restaurant_id (int): univocal identifier of the restaurant
+    """
     restaurant = RestaurantManager.retrieve_by_id(id_=restaurant_id)
+
+    if restaurant is None:
+        return abort(404)
+
     list_measure = restaurant.measures.split(',')
     average_rate = RestaurantRatingManager.calculate_average_rate(restaurant)
 
     return render_template("restaurantsheet.html",
                            restaurant=restaurant, list_measures=list_measure[1:],
-                           average_rate=average_rate, max_rate=RestaurantRating.MAX_VALUE
+                           average_rate=average_rate, max_rate=RestaurantRating.MAX_VALUE,
                            )
 
 
 @restaurants.route('/restaurants/like/<restaurant_id>')
 @login_required
 def like_toggle(restaurant_id):
+    """Updates the like count
+
+    Args:
+        restaurant_id (int): univocal identifier of the restaurant
+
+    Returns:
+        Redirects to the single page for a restaurant
+    """
     if LikeManager.like_exists(current_user.id, restaurant_id):
         LikeManager.delete_like(current_user.id, restaurant_id)
     else:
@@ -53,6 +75,14 @@ def like_toggle(restaurant_id):
 @restaurants.route('/restaurants/add/<int:id_op>', methods=['GET', 'POST'])
 @login_required
 def add(id_op):
+    """Given an operator, this method allows him to add a restaurant
+
+    Args:
+        id_op (int): univocal identifier for the customer
+
+    Returns:
+        Redirects the view to the operator's page
+    """
     form = RestaurantForm()
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -62,8 +92,7 @@ def add(id_op):
             city = form.data['city']
             phone = form.data['phone']
             menu_type = form.data['menu_type']
-            location = geolocator.geocode(address + " " + city)
-            # assigned zero if the location is not valid
+            location = geolocator.geocode(address+" "+city)
             lat = 0
             lon = 0
             if location is not None:
@@ -81,6 +110,14 @@ def add(id_op):
 @restaurants.route('/restaurants/details/<int:id_op>', methods=['GET', 'POST'])
 @login_required
 def details(id_op):
+    """Given an operator, this method allows him to see the details of his restaurant
+
+    Args:
+        id_op (int): univocal identifier of the operator
+
+    Returns:
+        Returns the page of the restaurant's details
+    """
     table_form = TableForm()
     time_form = TimesForm()
     measure_form = MeasureForm()
@@ -94,9 +131,13 @@ def details(id_op):
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
     avg_stay = restaurant.avg_stay
-    h_avg_stay = avg_stay // 60
-    m_avg_stay = avg_stay - (h_avg_stay * 60)
-    avg_stay = "%dH:%dM" % (h_avg_stay, m_avg_stay)
+
+    if avg_stay is not None:
+        h_avg_stay = avg_stay // 60
+        m_avg_stay = avg_stay - (h_avg_stay * 60)
+        avg_stay = "%dH:%dM" % (h_avg_stay, m_avg_stay)
+    else:
+        avg_stay = 0
 
     return render_template('add_restaurant_details.html',
                            restaurant=restaurant, tables=tables,
@@ -109,6 +150,15 @@ def details(id_op):
 @restaurants.route('/restaurants/save/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
 @login_required
 def save_details(id_op, rest_id):
+    """This method gives the operator the possibility to add tables to his restaurant
+
+    Args:
+        id_op (int): univocal identifier of the operator
+        rest_id (int): univocal identifier of the restaurant
+
+    Returns:
+        Returns the page of the restaurant's details
+    """
     table_form = TableForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
 
@@ -128,6 +178,15 @@ def save_details(id_op, rest_id):
 @restaurants.route('/restaurants/savetime/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
 @login_required
 def save_time(id_op, rest_id):
+    """This method gives the operator the possibility to add opening hours to his restaurant
+
+    Args:
+        id_op (int): univocal identifier of the operator
+        rest_id (int): univocal identifier of the restaurant
+
+    Returns:
+        Returns the page of the restaurant's details
+    """
     time_form = TimesForm()
     restaurant = RestaurantManager.retrieve_by_id(rest_id)
     availabilities = restaurant.availabilities
@@ -153,6 +212,16 @@ def save_time(id_op, rest_id):
 @restaurants.route('/restaurants/savemeasure/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
 @login_required
 def save_measure(id_op, rest_id):
+    """This method gives the operator the possibility to add precaution meausures 
+    to his restaurant
+
+    Args:
+        id_op (int): univocal identifier of the operator
+        rest_id (int): univocal identifier of the restaurant
+
+    Returns:
+        Returns the page of the restaurant's details
+    """
     measure_form = MeasureForm()
     restaurant = RestaurantManager.retrieve_by_operator_id(id_op)
 
@@ -182,6 +251,8 @@ def save_avg_stay(id_op, rest_id):
             minute = (hours * 60) + minute
             restaurant.set_avg_stay(minute)
             RestaurantManager.update_restaurant(restaurant)
+        else:
+            flash("Insert positive values")
 
     return redirect(url_for('restaurants.details', id_op=id_op))
 
@@ -189,6 +260,15 @@ def save_avg_stay(id_op, rest_id):
 @restaurants.route('/edit_restaurant/<int:id_op>/<int:rest_id>', methods=['GET', 'POST'])
 @login_required
 def edit_restaurant(id_op, rest_id):
+    """This method allows the operator to edit the information about his restaurant
+
+    Args:
+        id_op (int): univocal identifier of the operator
+        rest_id (int): univocal identifier of the restaurant
+
+    Returns:
+        Returns the page of the restaurant's details
+    """
     form = RestaurantForm()
     restaurant = RestaurantManager.retrieve_by_id(rest_id)
 

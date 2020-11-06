@@ -11,6 +11,13 @@ review = Blueprint('review', __name__)
 @review.route('/restaurants/<int:restaurant_id>/review', methods=['GET', 'POST'])
 @login_required
 def write_review(restaurant_id):
+    """This method allows a customer to leave a review in a restaurant that he has been in.
+    Only one review is possible.
+
+    Args:
+        restaurant_id (int): univocal identifier of the restaurant
+
+    """
     form = ReviewForm()
 
     if RestaurantRatingManager.check_existence(restaurant_id, current_user.id):

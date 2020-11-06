@@ -7,6 +7,10 @@ from wtforms.validators import DataRequired, NumberRange
 
 
 class ReservationForm(FlaskForm):
+    """Form created to allow the customers to book a table in a restaurant,
+    specifying the date, the time and the number of people
+    """
+
     start_date = DateField('Date', validators=[DataRequired()])
     start_time = TimeField('Time', validators=[DataRequired()])
     people_number = IntegerField('Number of Persons',

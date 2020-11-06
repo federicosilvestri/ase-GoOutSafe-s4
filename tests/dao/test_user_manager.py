@@ -9,7 +9,7 @@ class TestUserManager(DaoTest):
     @classmethod
     def setUpClass(cls):
         super(TestUserManager, cls).setUpClass()
-        from models.test_user import TestUser
+        from tests.models.test_user import TestUser
         cls.test_user = TestUser
         from gooutsafe.dao import user_manager
         cls.user_manager = user_manager.UserManager

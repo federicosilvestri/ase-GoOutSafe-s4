@@ -18,10 +18,16 @@ from gooutsafe.models.table import Table
 
 reservation = Blueprint('reservation', __name__)
 
-
 @reservation.route('/create_reservation/<restaurant_id>', methods=['GET', 'POST'])
 @login_required
 def create_reservation(restaurant_id):
+    """This method allows the customer to create a new reservation, on a specific restaurant,
+    depending on its opening hours and the available tables
+
+    Args:
+        restaurant_id (int): univocal identifier of the restaurant
+    
+    """
     if current_user.type == 'customer':
         form = ReservationForm()
         restaurant = RestaurantManager.retrieve_by_id(restaurant_id)
@@ -66,15 +72,12 @@ def validate_reservation(restaurant, start_datetime, people_number):
     print(start_datetime)
     print(end_datetime)
     if check_rest_ava(restaurant, start_datetime, end_datetime):
-        print("RISTO APERTO")
         tables = TableManager.retrieve_by_restaurant_id(restaurant.id).order_by(Table.capacity)
         for table in tables:
             if table.capacity >= people_number:
-                print("TAVOLO DISP")
                 reservation_table = table
                 table_reservations = ReservationManager.retrieve_by_table_id(table_id=table.id)
                 if len(table_reservations) != 0:
-                    print("CHECK OVERLAP")
                     for r in table_reservations:
                         old_start_datetime = r.start_time
                         old_end_datetime = r.end_time
@@ -83,19 +86,14 @@ def validate_reservation(restaurant, start_datetime, people_number):
                         if start_datetime.date() == old_start_datetime.date():
                             if check_time_interval(start_datetime.time(), end_datetime.time(),
                                                    old_start_datetime.time(), old_end_datetime.time()):
-                                print("***OVERLAP***")
                                 continue
                             else:
-                                print("NO OVERLAP TAVOLO DISPONIBILE")
                                 return reservation_table
                         else:
-                            print("NO OVERLAP TAVOLO DISPONIBILE")
                             return reservation_table
                 else:
-                    print("NO OVERLAP TAVOLO DISPONIBILE")
                     return reservation_table
             else:
-                print("TAVOLO NON ADATTO")
                 continue
     return False
 
@@ -138,22 +136,38 @@ def check_time_interval(start_time1, end_time1, start_time2, end_time2):
         Boolean
     """
     if start_time1 >= start_time2 and start_time1 < end_time2:
-        print("OVERLAP 1")
         return True
     elif end_time1 > start_time2 and end_time1 <= end_time2:
-        print("OVERLAP 2")
         return True
     return False
 
 
 @reservation.route('/delete/<int:id>/<restaurant_id>')
 def delete_reservation(id, restaurant_id):
+    """This method deletes a specific reservation for a restaurant
+
+    Args:
+        id (int): univocal identifier of the reservation
+        restaurant_id (int): univocal identifier of the restaurant
+
+    Returns:
+        Redirects the view to the general page of the reservation
+    """
     ReservationManager.delete_reservation_by_id(id)
     return redirect(url_for('reservation.reservation_all', restaurant_id=restaurant_id))
 
 
 @reservation.route('/reservations/<restaurant_id>/<reservation_id>', methods=['GET', 'POST'])
 def reservation_details(restaurant_id, reservation_id):
+    """ Given a restaurant, this method returns all its reservations
+
+    Args:
+        restaurant_id (int): univocal identifier of the restaurant
+        reservation_id (int): univocal identifier of the reservations
+
+    Returns:
+        [type]: [description]
+    """
     reservation = ReservationManager.retrieve_by_id(reservation_id)
     user = CustomerManager.retrieve_by_id(reservation.user.id)
     table = reservation.table
@@ -167,6 +181,9 @@ def reservation_all(restaurant_id):
     """Returns the whole list of reservations, given a restaurant.
     It also gives to the operator the opportunity to filter reservations
     by date, so it's possible to count people.
+
+    Args:
+        restaurant_id (int): univocal identifier of the restaurant
 
     Returns:
         The template of the reservations.
@@ -212,11 +229,14 @@ def delete_reservation_customer(id, customer_id):
     """Given a customer and a reservation id,
     this function delete the reservation from the database.
 
+    Args:
+        id (int): univocal identifier for the reservation
+
     Returns:
         Redirects the view to the customer profile page.
     """
     ReservationManager.delete_reservation_by_id(id)
-    return redirect(url_for('auth.profile', id=id))
+    return redirect(url_for('auth.profile', id=customer_id))
 
 
 @reservation.route('/edit/<int:reservation_id>/<int:customer_id>', methods=['GET', 'POST'])
@@ -224,6 +244,10 @@ def edit_reservation(reservation_id, customer_id):
     """Allows the customer to edit a single reservation,
     if there's an available table within the opening hours
     of the restaurant.
+
+    Args:
+        reservation_id (int): univocal identifier of the reservation
+        customer_id (int): univocal identifier of the customer
 
     Returns:
         Redirects the view to the customer profile page.
@@ -254,7 +278,11 @@ def edit_reservation(reservation_id, customer_id):
 
 @reservation.route('/customer/my_reservations')
 def customer_my_reservation():
+    """Given the current user, this method returns all its reservations
+
+    """
     form = ReservationForm()
+    print("MUSCA")
     reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
     reservations.sort(key=lambda reservation: reservation.timestamp, reverse=True)
     return render_template('customer_reservations.html', reservations=reservations, form=form)
@@ -278,6 +306,9 @@ def confirm_reservation(res_id):
 
 @reservation.route('/my_reservations')
 def my_reservations():
+    """Given a restaurant operator, this method returns all its reservations
+
+    """
     restaurant = RestaurantManager.retrieve_by_operator_id(current_user.id)
 
     if restaurant is None:
