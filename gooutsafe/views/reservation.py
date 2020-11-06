@@ -18,10 +18,6 @@ from gooutsafe.models.table import Table
 
 reservation = Blueprint('reservation', __name__)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8435a4d3df23e41b3c1b4416e5dbf94550620a49
 @reservation.route('/create_reservation/<restaurant_id>', methods=['GET', 'POST'])
 @login_required
 def create_reservation(restaurant_id):
