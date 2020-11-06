@@ -54,7 +54,7 @@ def re_login():
     """Method that is being called after the user's session is expired.
 
     """
-    return login(re_login=True)
+    return login(re=True)
 
 
 @auth.route('/profile/<int:id>', methods=['GET', 'POST'])
