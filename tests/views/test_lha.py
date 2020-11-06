@@ -58,8 +58,13 @@ class TestLHA(ViewTest):
         self.assertEqual(rv.status_code, 200)
 
     def test_mark_positive_authorized_inex(self):
-        self.login_test_authority()
-        rv = self.client.post('ha/mark_positive/2',follow_redirects=True)
+        authority = self.login_test_authority()
+        from tests.models.test_customer import TestCustomer
+        from gooutsafe.dao.customer_manager import CustomerManager
+        customer, _ = TestCustomer.generate_random_customer()
+        customer.set_health_status(True)
+        CustomerManager.create_customer(customer=customer)
+        rv = self.client.post('ha/mark_positive/'+str(customer.id))
         self.assertEqual(rv.status_code, 200)
 
     def test_mark_positive(self):
