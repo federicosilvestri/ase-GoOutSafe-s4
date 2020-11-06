@@ -179,7 +179,6 @@ def notifications():
         [type]: [description]
     """
     notifications = NotificationManager.retrieve_by_target_user_id(current_user.id)
-    # TODO: erase them after 14 days?
     processed_notification_info = []
     if current_user.type == "customer":
         for notification in notifications:

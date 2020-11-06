@@ -33,7 +33,3 @@ class TestOperatorManager(DaoTest):
         self.operator_manager.create_operator(operator=base_operator)
         self.operator_manager.delete_operator_by_id(base_operator.id)
         self.assertIsNone(self.operator_manager.retrieve_by_id(base_operator.id))
-
-    def test_update_operator(self):
-        # @TODO: if we want to add other fields to operator
-        pass

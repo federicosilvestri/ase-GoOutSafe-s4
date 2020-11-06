@@ -13,6 +13,6 @@ class RestaurantForm(FlaskForm):
     address = f.StringField('Address', validators=[DataRequired()])
     city = f.StringField('City', validators=[DataRequired()])
     phone = f.StringField('Phone', validators=[DataRequired()])
-    menu_type = f.SelectField('Menu type', choices=list_menu, default=1)
+    menu_type = f.SelectField('Menu type', choices=list_menu, default='Italian')
 
     display = ['name', 'address', 'city', 'phone', 'menu_type']

@@ -69,6 +69,7 @@ class Restaurant(db.Model):
         self.lon = lon
         self.phone = phone
         self.menu_type = menu_type
+        self.avg_stay = 0
         # this can be set to False by LHA
         self.is_open = True
 
