@@ -10,9 +10,9 @@ class TestRestaurantManager(DaoTest):
     def setUpClass(cls):
         super(TestRestaurantManager, cls).setUpClass()
         
-        from models.test_restaurant import TestRestaurant
+        from tests.models.test_restaurant import TestRestaurant
         cls.test_restaurant = TestRestaurant
-        from models.test_operator import TestOperator
+        from tests.models.test_operator import TestOperator
         cls.test_operator = TestOperator
         from gooutsafe.dao import restaurant_manager
         cls.restaurant_manager = restaurant_manager.RestaurantManager

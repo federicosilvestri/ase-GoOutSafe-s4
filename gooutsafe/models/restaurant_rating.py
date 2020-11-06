@@ -36,7 +36,7 @@ class RestaurantRating(db.Model):
     )
 
     review = db.Column(
-        db.Text(
+        db.String(
             length=REVIEW_MAX_LENGTH,
         ),
         nullable=True

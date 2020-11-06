@@ -11,15 +11,15 @@ class TestHealthAuthorityTasks(TasksTest):
     def setUpClass(cls):
         super(TestHealthAuthorityTasks, cls).setUpClass()
 
-        from models.test_authority import TestAuthority
+        from tests.models.test_authority import TestAuthority
         cls.test_authority = TestAuthority
-        from models.test_customer import TestCustomer
+        from tests.models.test_customer import TestCustomer
         cls.test_customer = TestCustomer
-        from models.test_operator import TestOperator
+        from tests.models.test_operator import TestOperator
         cls.test_operator = TestOperator
-        from models.test_restaurant import TestRestaurant
+        from tests.models.test_restaurant import TestRestaurant
         cls.test_restaurant = TestRestaurant
-        from models.test_reservation import TestReservation
+        from tests.models.test_reservation import TestReservation
         cls.test_reservation = TestReservation
 
         from gooutsafe.dao import health_authority_manager

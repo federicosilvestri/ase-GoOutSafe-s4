@@ -55,10 +55,10 @@ def delete_user(id_):
         user = UserManager.retrieve_by_id(id_)
         if user is not None and user.type == "operator":
             restaurant = RestaurantManager.retrieve_by_operator_id(id_)
-            RestaurantManager.delete_restaurant(restaurant)
+            if restaurant is not None:
+                RestaurantManager.delete_restaurant(restaurant)
         
         UserManager.delete_user_by_id(id_)
-        print("ARRIVATO")
     return redirect(url_for('home.index'))
 
 

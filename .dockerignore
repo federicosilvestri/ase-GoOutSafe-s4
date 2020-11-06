@@ -1,0 +1,8 @@
+*.md
+LICENSE
+load_example_data.py
+erase_db.sh
+run.sh
+.travis.yml
+*.sqlite
+*.coverage

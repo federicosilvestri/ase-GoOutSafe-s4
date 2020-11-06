@@ -12,9 +12,9 @@ class TestNotificationManager(DaoTest):
     def setUpClass(cls):
         super(TestNotificationManager, cls).setUpClass()
 
-        from models.test_notification import TestNotification
+        from tests.models.test_notification import TestNotification
         cls.test_notification = TestNotification
-        from models.test_user import TestUser
+        from tests.models.test_user import TestUser
         cls.test_user = TestUser
 
         from gooutsafe.dao import user_manager

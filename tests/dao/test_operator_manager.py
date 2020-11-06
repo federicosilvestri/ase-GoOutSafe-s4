@@ -10,7 +10,7 @@ class TestOperatorManager(DaoTest):
     def setUpClass(cls):
         super(TestOperatorManager, cls).setUpClass()
 
-        from models.test_operator import TestOperator
+        from tests.models.test_operator import TestOperator
         cls.test_operator = TestOperator
 
         from gooutsafe.dao import operator_manager
