@@ -46,10 +46,13 @@ class TestReservationView(ViewTest):
         end_ava = datetime.time(hour=16)
         ava = RestaurantAvailability(restaurant.id, 'Monday', start_time=start_ava, end_time=end_ava)
         rv = self.client.get('/create_reservation/' + str(restaurant.id))
-        assert rv.status_code == 200    
+        assert rv.status_code == 200
+        self.login_test_operator()
+        rv = self.client.get('/create_reservation/' + str(restaurant.id))
+        assert rv.status_code == 200
+        self.login_test_customer()
         start_date = datetime.date(year=2020, month=11, day=9)
         start_time = datetime.time(hour=13, minute=30)
-        
         data = dict(start_date=start_date, start_time=start_time,people_number=1)
         rv = self.client.post('/create_reservation/' + str(restaurant.id), 
                             data=data, 
@@ -64,9 +67,9 @@ class TestReservationView(ViewTest):
                             follow_redirects=True
                             )
         assert rv.status_code == 200
+
         start_date = datetime.date(year=2020, month=11, day=9)
         start_time = datetime.time(hour=12, minute=30)
-        
         data = dict(start_date=start_date, start_time=start_time,people_number=50)
         rv = self.client.post('/create_reservation/' + str(restaurant.id), 
                             data=data, 
@@ -74,10 +77,21 @@ class TestReservationView(ViewTest):
                             )
         assert rv.status_code == 200
 
-        
+    def test_check_time_interval(self):
+        from gooutsafe.views.reservation import check_time_interval
+        start1 = datetime.datetime(year=2020, month=11, day=9)
+        end1 = datetime.datetime(year=2020, month=11, day=15)
+        start2 = datetime.datetime(year=2020, month=11, day=20)
+        end2 = datetime.datetime(year=2020, month=11, day=22)
+        self.assertFalse(check_time_interval(start1, end1, start2, end2))
 
+        start2 = datetime.datetime(year=2020, month=11, day=8)
+        end2 = datetime.datetime(year=2020, month=11, day=11)
+        self.assertTrue(check_time_interval(start1, end1, start2, end2))
 
-
+        start2 = datetime.datetime(year=2020, month=11, day=12)
+        end2 = datetime.datetime(year=2020, month=11, day=25)
+        self.assertTrue(check_time_interval(start1, end1, start2, end2))
 
     def test_customer_my_reservation(self):
         rv = self.client.get('/customer/my_reservations')
@@ -96,3 +110,10 @@ class TestReservationView(ViewTest):
         self.reservation_manager.create_reservation(reservation)
         rv = self.client.get('/edit/' + str(reservation.id) +'/'+ str(customer.id))
         assert rv.status_code == 200
+
+
+
+    def test_delete_reservation_customer(self):
+        customer = self.login_test_customer()
+        reservation,_ = TestReservation.generate_random_reservation()
+        rv = self.client.get('/delete/'+ str(reservation.id) +'/'+ str(customer.id),follow_redirects=True)
