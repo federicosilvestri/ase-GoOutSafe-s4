@@ -83,5 +83,5 @@ class TestLHA(ViewTest):
         from gooutsafe.dao.customer_manager import CustomerManager
         customer, _ = TestCustomer.generate_random_customer()
         CustomerManager.create_customer(customer=customer)
-        rv = self.client.post('ha/mark_positive/'+str(customer.id))
+        rv = self.client.get('ha/contact/'+str(customer.id))
         self.assertEqual(rv.status_code, 200)
