@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
+
 from gooutsafe.dao.customer_manager import CustomerManager
 from gooutsafe.dao.reservation_manager import ReservationManager
 from gooutsafe.dao.restaurant_manager import RestaurantManager
 from gooutsafe.forms.authority import AuthorityForm
-from gooutsafe.models.customer import Customer
-from gooutsafe.models.reservation import Reservation
 from gooutsafe.tasks.health_authority_tasks import (
     notify_restaurant_owners_about_positive_booked_customer,
     notify_restaurant_owners_about_positive_past_customer,
@@ -44,7 +43,8 @@ def search_customer():
     else:
         return redirect(url_for('home.index'))
 
-@authority.route('/ha/mark_positive/<int:customer_id>', methods = ['GET','POST'])
+
+@authority.route('/ha/mark_positive/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def mark_positive(customer_id):
     """Through this method the health authority can set the health status
@@ -59,9 +59,9 @@ def mark_positive(customer_id):
     if current_user is not None and current_user.type == 'authority':
         if request.method == 'POST':
             customer = CustomerManager.retrieve_by_id(id_=customer_id)
-            if customer.health_status:
+            if customer is not None and customer.health_status:
                 flash("Customer is already set to positive!")
-            else:
+            elif customer is not None:
                 customer.set_health_status(status=True)
                 CustomerManager.update_customer(customer.id)
                 schedule_revert_customer_health_status(customer.id)

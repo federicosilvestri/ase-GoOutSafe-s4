@@ -26,8 +26,11 @@ class ViewTest(unittest.TestCase):
         from gooutsafe.dao import health_authority_manager
         cls.authority_manager = health_authority_manager.AuthorityManager
 
-    #simulate the customer login for testing the views with @login_required
     def login_test_customer(self):
+        """
+        Simulate the customer login for testing the views with @login_required
+        :return: customer
+        """
         customer, _ = self.test_customer.generate_random_customer()
         psw = customer.password
         customer.set_password(customer.password)
@@ -36,8 +39,11 @@ class ViewTest(unittest.TestCase):
         assert self.client.post('/login', data=data, follow_redirects=True).status_code == 200
         return customer
 
-    #simulate the operator login for testing the views with @login_required
     def login_test_operator(self):
+        """
+        Simulate the operator login for testing the views with @login_required
+        :return: operator
+        """
         operator, _ = self.test_operator.generate_random_operator()
         psw = operator.password
         operator.set_password(operator.password)
@@ -46,8 +52,11 @@ class ViewTest(unittest.TestCase):
         assert self.client.post('/login', data=data, follow_redirects=True).status_code == 200
         return operator
 
-    #simulate the authority login for testing the views with @login_required
     def login_test_authority(self):
+        """
+        Simulate the authority login for testing the views with @login_required
+        :return: authority
+        """
         authority, _ = self.test_authority.generate_random_authority()
         psw = authority.password
         authority.set_password(authority.password)
@@ -55,7 +64,3 @@ class ViewTest(unittest.TestCase):
         data = {'email': authority.email, 'password': psw}
         assert self.client.post('/login', data=data, follow_redirects=True).status_code == 200
         return authority
-    
-        
-
-    
