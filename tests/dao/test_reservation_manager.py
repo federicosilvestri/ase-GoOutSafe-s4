@@ -184,10 +184,10 @@ class TestReservationManager(DaoTest):
         start_interval = datetime(year=2020, month=11, day=30, hour=0)
         end_interval = start_interval + timedelta(hours=23)
         reservations = []
-        for _ in range(0, self.faker.random_int(min=1, max=10)):
+        for i in range(0, self.faker.random_int(min=1, max=10)):
             table,_ = self.test_table.generate_random_table(fixed_restaurant=restaurant)
             self.table_manager.create_table(table)
-            start_time = datetime(year=2020, month=11, day=30, hour=self.faker.random_int(min=0,max=23))
+            start_time = datetime(year=2020, month=11, day=30, hour=i+1)
             user = self.test_user.generate_random_user()
             self.user_manager.create_user(user)
             reservation = Reservation(user, table, restaurant, 1, start_time)
