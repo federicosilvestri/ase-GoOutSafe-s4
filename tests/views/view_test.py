@@ -17,11 +17,11 @@ class ViewTest(unittest.TestCase):
         cls.test_customer = TestCustomer
         from gooutsafe.dao import customer_manager
         cls.customer_manager = customer_manager.CustomerManager
-        from models.test_operator import TestOperator
+        from tests.models.test_operator import TestOperator
         cls.test_operator = TestOperator
         from gooutsafe.dao import operator_manager
         cls.operator_manager = operator_manager.OperatorManager
-        from models.test_authority import TestAuthority
+        from tests.models.test_authority import TestAuthority
         cls.test_authority = TestAuthority
         from gooutsafe.dao import health_authority_manager
         cls.authority_manager = health_authority_manager.AuthorityManager
