@@ -94,7 +94,6 @@ def details(id_op):
     tables = TableManager.retrieve_by_restaurant_id(restaurant.id)
     ava = restaurant.availabilities
     avg_stay = restaurant.avg_stay
-<<<<<<< HEAD
     print(avg_stay)
     if avg_stay is not None:
         h_avg_stay = avg_stay//60
@@ -102,11 +101,6 @@ def details(id_op):
         avg_stay = "%dH:%dM"%(h_avg_stay, m_avg_stay)
     else:
         avg_stay = 0
-=======
-    h_avg_stay = avg_stay // 60
-    m_avg_stay = avg_stay - (h_avg_stay * 60)
-    avg_stay = "%dH:%dM" % (h_avg_stay, m_avg_stay)
->>>>>>> a99c628b4260e379ab51f5fd72cc85e8d67fb9be
 
     return render_template('add_restaurant_details.html',
                            restaurant=restaurant, tables=tables,
