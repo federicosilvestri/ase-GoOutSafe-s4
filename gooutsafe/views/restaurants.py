@@ -49,7 +49,7 @@ def restaurant_sheet(restaurant_id):
 
     return render_template("restaurantsheet.html",
                            restaurant=restaurant, list_measures=list_measure[1:],
-                           average_rate=average_rate, max_rate=RestaurantRating.MAX_VALUE
+                           average_rate=average_rate, max_rate=RestaurantRating.MAX_VALUE,
                            )
 
 
