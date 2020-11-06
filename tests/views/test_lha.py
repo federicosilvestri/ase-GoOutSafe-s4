@@ -8,12 +8,12 @@ class TestLHA(ViewTest):
 
     def test_search_customer_redirect(self):
         self.login_test_customer()
-        rv = self.client.post('/ha/search_customer')
+        rv = self.client.post('/ha/search_customer', follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
 
     def test_search_customer_none(self):
         self.login_test_authority()
-        rv = self.client.post('/ha/search_customer', data=dict(track_type='SSN', customer_ident='ldl'))
+        rv = self.client.post('/ha/search_customer', data=dict(track_type='SSN', customer_ident='ldl'),follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
 
     def test_search_customer_with_ssn(self):
@@ -24,7 +24,7 @@ class TestLHA(ViewTest):
         CustomerManager.create_customer(customer=customer)
 
         self.login_test_authority()
-        rv = self.client.post('/ha/search_customer', data=dict(track_type='SSN', customer_ident=ssn))
+        rv = self.client.post('/ha/search_customer', data=dict(track_type='SSN', customer_ident=ssn),follow_redirects=True)
 
         self.assertEqual(rv.status_code, 200)
 
@@ -36,7 +36,7 @@ class TestLHA(ViewTest):
         CustomerManager.create_customer(customer=customer)
 
         self.login_test_authority()
-        rv = self.client.post('/ha/search_customer', data=dict(track_type='email', customer_ident=email))
+        rv = self.client.post('/ha/search_customer', data=dict(track_type='email', customer_ident=email),follow_redirects=True)
 
         self.assertEqual(rv.status_code, 200)
 
@@ -48,18 +48,18 @@ class TestLHA(ViewTest):
         CustomerManager.create_customer(customer=customer)
 
         self.login_test_authority()
-        rv = self.client.post('/ha/search_customer', data=dict(track_type='email', customer_ident=phone))
+        rv = self.client.post('/ha/search_customer', data=dict(track_type='email', customer_ident=phone),follow_redirects=True)
 
         self.assertEqual(rv.status_code, 200)
 
     def test_mark_positive_unauthorized(self):
         self.login_test_customer()
-        rv = self.client.post('ha/mark_positive/2')
+        rv = self.client.post('ha/mark_positive/2', follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
 
     def test_mark_positive_authorized_inex(self):
         self.login_test_authority()
-        rv = self.client.post('ha/mark_positive/2')
+        rv = self.client.post('ha/mark_positive/2',follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
 
     def test_mark_positive(self):
@@ -83,5 +83,5 @@ class TestLHA(ViewTest):
         from gooutsafe.dao.customer_manager import CustomerManager
         customer, _ = TestCustomer.generate_random_customer()
         CustomerManager.create_customer(customer=customer)
-        rv = self.client.get('ha/contact/'+str(customer.id))
+        rv = self.client.get('ha/contact/'+str(customer.id), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)

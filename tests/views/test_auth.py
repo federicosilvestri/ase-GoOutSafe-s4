@@ -69,10 +69,10 @@ class TestAuth(ViewTest):
         assert rv.status_code == 200
 
     def test_notifications(self):
-        customer = self.login_test_customer()
+        self.login_test_customer()
         rv = self.client.get('/notifications', follow_redirects=True)
         assert rv.status_code == 200
-        operator = self.login_test_operator()
+        self.login_test_operator()
         rv = self.client.get('/notifications', follow_redirects=True)
         assert rv.status_code == 200
 

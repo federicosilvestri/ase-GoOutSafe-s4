@@ -12,7 +12,7 @@ class ReservationForm(FlaskForm):
     """
 
     start_date = DateField('Date', validators=[DataRequired()])
-    start_time = TimeField('Time', format='%H:%M:%S',validators=[DataRequired()])
+    start_time = TimeField('Time', format='%H:%M',validators=[DataRequired()])
     people_number = IntegerField('Number of Persons',
                                  validators=[
                                      NumberRange(min=1, max=20),
