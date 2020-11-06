@@ -33,7 +33,7 @@ class ViewTest(unittest.TestCase):
         customer.set_password(customer.password)
         self.customer_manager.create_customer(customer=customer)
         data = {'email': customer.email, 'password': psw}
-        self.client.post('/login', data=data)
+        assert self.client.post('/login', data=data, follow_redirects=True).status_code == 200
         return customer
 
     #simulate the operator login for testing the views with @login_required
@@ -43,8 +43,18 @@ class ViewTest(unittest.TestCase):
         operator.set_password(operator.password)
         self.operator_manager.create_operator(operator=operator)
         data = {'email': operator.email, 'password': psw}
-        self.client.post('/login', data=data)
+        assert self.client.post('/login', data=data, follow_redirects=True).status_code == 200
         return operator
+
+    #simulate the authority login for testing the views with @login_required
+    def login_test_authority(self):
+        authority, _ = self.test_authority.generate_random_authority()
+        psw = authority.password
+        authority.set_password(authority.password)
+        self.authority_manager.create_authority(authority=authority)
+        data = {'email': authority.email, 'password': psw}
+        assert self.client.post('/login', data=data, follow_redirects=True).status_code == 200
+        return authority
     
         
 
