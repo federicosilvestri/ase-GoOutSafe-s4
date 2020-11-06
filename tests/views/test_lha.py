@@ -73,6 +73,15 @@ class TestLHA(ViewTest):
 
         self.login_test_authority()
         rv = self.client.post('ha/mark_positive/1')
-        self.assertEqual(rv.status_code, 302)
+        self.assertEqual(rv.status_code, 200)
         """
         pass
+
+    def test_contact_tracing(self):
+        self.login_test_authority()
+        from tests.models.test_customer import TestCustomer
+        from gooutsafe.dao.customer_manager import CustomerManager
+        customer, _ = TestCustomer.generate_random_customer()
+        CustomerManager.create_customer(customer=customer)
+        rv = self.client.post('ha/mark_positive/'+str(customer.id))
+        self.assertEqual(rv.status_code, 200)
