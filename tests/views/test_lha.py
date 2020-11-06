@@ -64,7 +64,7 @@ class TestLHA(ViewTest):
         customer, _ = TestCustomer.generate_random_customer()
         customer.set_health_status(True)
         CustomerManager.create_customer(customer=customer)
-        rv = self.client.post('ha/mark_positive/'+str(customer.id))
+        rv = self.client.post('ha/mark_positive/'+str(customer.id),follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
 
     def test_mark_positive(self):

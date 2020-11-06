@@ -283,7 +283,6 @@ def customer_my_reservation():
 
     """
     form = ReservationForm()
-    print("MUSCA")
     reservations = ReservationManager.retrieve_by_customer_id(current_user.id)
     reservations.sort(key=lambda reservation: reservation.timestamp, reverse=True)
     return render_template('customer_reservations.html', reservations=reservations, form=form)
