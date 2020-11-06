@@ -52,13 +52,31 @@ class TestAuth(ViewTest):
 
     def test_my_operator_profile(self):
         self.login_test_operator()
-        rv = self.client.get('/my_operator')
+        rv = self.client.get('/my_operator', follow_redirects=True)
         assert rv.status_code == 200
 
     def test_logout(self):
         self.login_test_customer()
         rv = self.client.get('/logout',follow_redirects=True)
         assert rv.status_code == 200
+
+    def test_auth_profile(self):
+        authority = self.login_test_authority()
+        rv = self.client.get('/authority/'+str(authority.id)+"/0", follow_redirects=True)
+        assert rv.status_code == 200
+        self.login_test_authority()
+        rv = self.client.get('/authority/'+str(authority.id)+"/0", follow_redirects=True)
+        assert rv.status_code == 200
+
+    def test_notifications(self):
+        customer = self.login_test_customer()
+        rv = self.client.get('/notifications', follow_redirects=True)
+        assert rv.status_code == 200
+        operator = self.login_test_operator()
+        rv = self.client.get('/notifications', follow_redirects=True)
+        assert rv.status_code == 200
+
+
 
 
     
