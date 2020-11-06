@@ -45,7 +45,7 @@ class TestTable(ModelTest):
         self.assertEqual(table.restaurant.name, restaurant.name)
 
     def test_set_capacity(self):
-        wrong_capacity = TestTable.faker.random_int()
+        wrong_capacity = TestTable.faker.random_int(min=50)
         table, _ = TestTable.generate_random_table()
         with self.assertRaises(ValueError):
             table.set_capacity(wrong_capacity)
